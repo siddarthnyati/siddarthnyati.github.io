@@ -33,21 +33,6 @@
     });
   }
 
-  var rail = document.querySelector('[data-rail]');
-  if (rail && 'IntersectionObserver' in window) {
-    var links = {};
-    Array.prototype.forEach.call(rail.querySelectorAll('[data-rail-link]'), function (a) { links[a.getAttribute('data-rail-link')] = a; });
-    var io = new IntersectionObserver(function (entries) {
-      entries.forEach(function (en) {
-        if (en.isIntersecting) {
-          Object.keys(links).forEach(function (k) { links[k].classList.toggle('is-on', k === en.target.id); });
-          rail.classList.toggle('rail--light', en.target.id === 'about');
-        }
-      });
-    }, { rootMargin: '-40% 0px -55% 0px' });
-    Object.keys(links).forEach(function (k) { var el = document.getElementById(k); if (el) io.observe(el); });
-  }
-
   if (!window.matchMedia('(prefers-reduced-motion: reduce)').matches) {
     var first = document.querySelectorAll('.group--lead .tile');
     Array.prototype.slice.call(first, 0, 3).forEach(function (tile, i) {
