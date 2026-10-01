@@ -340,3 +340,17 @@ a.tile__link:focus-visible { outline-offset: 6px; border-radius: var(--radius); 
 .error-page { min-height: 60svh; display: grid; align-content: center; gap: var(--s3); padding-block: var(--s7); justify-items: start; }
 .error-page h1 { font-size: clamp(2rem, 1.2rem + 3vw, 3.375rem); font-weight: 750; }
 @media (max-width: 560px) { .agent-fab { right: 14px; bottom: 14px; font-size: 0.9375rem; padding: 11px 16px 11px 13px; } }
+
+/* ---------- compressed top (1 Oct, pass 8): the first agentic row shows at first glance ---------- */
+.site-header .wrap { min-height: 56px; }
+.top__grid { padding-top: clamp(22px, 3.2vh, 34px); row-gap: 6px; }
+.top__copy { gap: 8px; }
+.statement { font-size: clamp(1.625rem, 0.8rem + 2.2vw, 2.75rem); max-width: 34ch; line-height: 1.04; }
+.status { font-size: 1rem; }
+.curve { height: 118px; margin-top: clamp(8px, 1.4vh, 14px); }
+.curve .fig b { font-size: 1.125rem; }
+.journey { padding-bottom: clamp(14px, 2vh, 20px); }
+.journey__cap { min-height: 2.5em; margin-top: 4px; font-size: 0.9rem; }
+.group--lead { padding-top: clamp(28px, 4vh, 40px); }
+.group--lead .group__grid { row-gap: 22px; }
+@media (max-width: 1000px) { .journey__cap { min-height: 0; } }
