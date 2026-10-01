@@ -1,0 +1,414 @@
+<!doctype html><html lang="en"><head><meta charset=utf8><meta name=viewport content="width=device-width,initial-scale=1"><style>:root{color-scheme:light}body{margin:0;padding:0;font:14px -apple-system,BlinkMacSystemFont,sans-serif;background:#faf9f5;color:#141413}img{max-width:100%}</style></head><body><!--sn-backbar--><div style="all:initial;display:block;background:#1B2B4B;padding:11px 20px"><a href="/work/document-automation/" style="all:initial;cursor:pointer;color:#FBFCFD;font:600 15px/1.3 'Gill Sans','Segoe UI',sans-serif;text-decoration:underline;text-underline-offset:3px">Back to the summary on Siddarth Nyati's portfolio</a></div><!--/sn-backbar-->
+<title>The 4.5 Million Fax Problem</title>
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Spectral:ital,wght@0,500;0,600;1,500&family=Hanken+Grotesk:wght@400;500;600;700;800&family=IBM+Plex+Mono:wght@400;500;600&display=swap">
+<style>
+  :root{
+    --paper:#F4F6F4;--card:#FFFFFF;--card-2:#E9EEEA;
+    --ink:#13201D;--ink-soft:#41514C;--ink-faint:#78877F;
+    --line:#DFE5E0;--line-2:#C9D2CB;
+    --teal:#0E6D62;--teal-deep:#0A4F47;--teal-soft:#D9E9E5;
+    --amber:#A96E12;--amber-soft:#F1E6CE;
+    --rust:#A93C2B;--rust-soft:#F0D9D3;
+    --pos:#2C7A54;
+    --shadow:0 1px 2px rgba(19,32,29,.05),0 10px 30px rgba(19,32,29,.07);
+    --shadow-lg:0 2px 6px rgba(19,32,29,.06),0 22px 50px rgba(19,32,29,.12);
+  }
+  @media (prefers-color-scheme:dark){:root:not([data-theme="light"]){
+    --paper:#0D1412;--card:#141D1A;--card-2:#1C2724;
+    --ink:#E9F0EC;--ink-soft:#AAB7B1;--ink-faint:#788680;
+    --line:#22302B;--line-2:#334139;
+    --teal:#4FBFB0;--teal-deep:#7FD9CC;--teal-soft:#0D2A26;
+    --amber:#D6A051;--amber-soft:#2A2012;
+    --rust:#E27860;--rust-soft:#2E1611;
+    --pos:#63B98C;
+    --shadow:0 1px 2px rgba(0,0,0,.4),0 12px 34px rgba(0,0,0,.34);
+    --shadow-lg:0 2px 6px rgba(0,0,0,.45),0 26px 56px rgba(0,0,0,.44);
+  }}
+  :root[data-theme="dark"]{
+    --paper:#0D1412;--card:#141D1A;--card-2:#1C2724;
+    --ink:#E9F0EC;--ink-soft:#AAB7B1;--ink-faint:#788680;
+    --line:#22302B;--line-2:#334139;
+    --teal:#4FBFB0;--teal-deep:#7FD9CC;--teal-soft:#0D2A26;
+    --amber:#D6A051;--amber-soft:#2A2012;
+    --rust:#E27860;--rust-soft:#2E1611;
+    --pos:#63B98C;
+    --shadow:0 1px 2px rgba(0,0,0,.4),0 12px 34px rgba(0,0,0,.34);
+    --shadow-lg:0 2px 6px rgba(0,0,0,.45),0 26px 56px rgba(0,0,0,.44);
+  }
+  *{box-sizing:border-box;margin:0;padding:0}
+  html{scroll-behavior:smooth}
+  @media (prefers-reduced-motion:reduce){html{scroll-behavior:auto}}
+  body{background:var(--paper);color:var(--ink);font-family:"Hanken Grotesk",system-ui,-apple-system,Segoe UI,sans-serif;font-size:17px;line-height:1.62;-webkit-font-smoothing:antialiased;font-variant-numeric:tabular-nums}
+  .wrap{max-width:768px;margin:0 auto;padding:0 24px 128px}
+
+  .eyebrow{font-family:"IBM Plex Mono",monospace;font-size:12px;font-weight:500;letter-spacing:.15em;text-transform:uppercase;color:var(--teal)}
+  .rule-top{border-top:2px solid var(--ink);padding-top:15px}
+
+  /* hero */
+  header.hero{padding:60px 0 26px}
+  header.hero .eyebrow{margin-bottom:22px}
+  h1{font-family:"Spectral",Georgia,serif;font-weight:600;font-size:clamp(2.35rem,6.4vw,3.75rem);line-height:1.02;letter-spacing:-.015em;text-wrap:balance;margin-bottom:22px}
+  h1 .big{display:block;font-family:"Hanken Grotesk",sans-serif;font-weight:800;font-size:clamp(3.6rem,13vw,6.6rem);line-height:.9;letter-spacing:-.04em;color:var(--teal);margin-bottom:6px}
+  .standfirst{font-size:1.19rem;line-height:1.55;color:var(--ink-soft);max-width:60ch}
+  .standfirst b{color:var(--ink);font-weight:600}
+  .frame-note{margin-top:24px;display:flex;gap:11px;flex-wrap:wrap}
+  .chip{font-family:"IBM Plex Mono",monospace;font-size:11.5px;font-weight:500;padding:6px 12px;border-radius:999px;border:1px solid var(--line-2);background:var(--card);color:var(--ink-soft)}
+  .chip b{color:var(--ink)}
+
+  /* KPI band */
+  .kpis{display:grid;grid-template-columns:repeat(4,1fr);gap:1px;background:var(--line);border:1px solid var(--line);border-radius:16px;overflow:hidden;margin:38px 0 8px;box-shadow:var(--shadow)}
+  .kpi{background:var(--card);padding:20px 18px}
+  .kpi .n{font-family:"Hanken Grotesk";font-weight:800;font-size:clamp(1.5rem,4vw,2rem);letter-spacing:-.02em;line-height:1;color:var(--ink)}
+  .kpi .n .arr{color:var(--ink-faint);font-weight:600}
+  .kpi .n.good{color:var(--teal)}
+  .kpi .l{font-size:.82rem;color:var(--ink-soft);margin-top:9px;line-height:1.35}
+  .kpi .d{font-family:"IBM Plex Mono",monospace;font-size:10px;letter-spacing:.04em;text-transform:uppercase;color:var(--ink-faint);margin-top:7px}
+  @media(max-width:620px){.kpis{grid-template-columns:repeat(2,1fr)}}
+
+  /* sections */
+  section{padding-top:56px;scroll-margin-top:24px}
+  .sec-head{margin-bottom:20px}
+  .sec-head .eyebrow{display:block;margin-bottom:11px}
+  h2{font-family:"Spectral",Georgia,serif;font-weight:600;font-size:clamp(1.6rem,4vw,2.15rem);line-height:1.1;letter-spacing:-.01em;text-wrap:balance}
+  h3{font-family:"Hanken Grotesk";font-weight:700;font-size:1.14rem;margin:26px 0 8px;letter-spacing:-.01em}
+  p{margin-bottom:15px}
+  p.lead{font-size:1.1rem;color:var(--ink-soft)}
+  p.lead b{color:var(--ink);font-weight:600}
+  strong{font-weight:700;color:var(--ink)}
+  em{font-style:italic}
+  a{color:var(--teal);text-decoration:underline;text-underline-offset:2px}
+
+  .pains{list-style:none;display:flex;flex-direction:column;gap:11px;margin:8px 0 6px}
+  .pains li{display:flex;gap:13px;align-items:flex-start;padding:14px 16px;background:var(--card);border:1px solid var(--line);border-left:3px solid var(--rust);border-radius:11px}
+  .pains li .ic{flex:0 0 auto;font-family:"IBM Plex Mono",monospace;font-size:11px;font-weight:600;color:var(--rust);background:var(--rust-soft);border-radius:6px;padding:3px 8px;margin-top:2px}
+  .pains li b{color:var(--ink)}
+  .pains li span.t{color:var(--ink-soft)}
+
+  /* business case pillars */
+  .pillars{display:grid;grid-template-columns:1fr 1fr;gap:14px;margin:18px 0 6px}
+  @media(max-width:600px){.pillars{grid-template-columns:1fr}}
+  .pillar{background:var(--card);border:1px solid var(--line);border-radius:14px;padding:19px 20px;box-shadow:var(--shadow)}
+  .pillar .top{display:flex;align-items:center;gap:9px;margin-bottom:9px}
+  .pillar .tag{font-family:"IBM Plex Mono",monospace;font-size:10px;font-weight:600;letter-spacing:.06em;text-transform:uppercase;padding:3px 8px;border-radius:6px}
+  .pillar.money .tag{background:var(--amber-soft);color:var(--amber)}
+  .pillar.deny .tag{background:var(--rust-soft);color:var(--rust)}
+  .pillar.grow .tag{background:var(--teal-soft);color:var(--teal-deep)}
+  .pillar.moat .tag{background:var(--card-2);color:var(--ink-soft)}
+  .pillar h4{font-family:"Hanken Grotesk";font-weight:700;font-size:1.05rem;letter-spacing:-.01em}
+  .pillar p{font-size:.94rem;color:var(--ink-soft);margin:0}
+  .pillar .fig{font-family:"Hanken Grotesk";font-weight:800;font-size:1.55rem;letter-spacing:-.02em;color:var(--amber);margin:2px 0 8px;line-height:1}
+
+  .mathbox{background:var(--amber-soft);border:1px solid color-mix(in srgb,var(--amber) 32%,transparent);border-radius:13px;padding:18px 20px;margin:20px 0}
+  .mathbox .tag{font-family:"IBM Plex Mono",monospace;font-size:10.5px;font-weight:600;letter-spacing:.06em;text-transform:uppercase;color:var(--amber);margin-bottom:11px}
+  .mathrow{font-family:"IBM Plex Mono",monospace;font-size:.9rem;line-height:1.9;color:var(--ink)}
+  .mathrow .op{color:var(--ink-faint)}
+  .mathrow .res{color:var(--amber);font-weight:600}
+  .mathbox p.note{font-size:.86rem;color:var(--ink-soft);margin:11px 0 0}
+
+  /* diagram */
+  figure{margin:24px 0 6px}
+  .figwrap{overflow-x:auto;border:1px solid var(--line);border-radius:16px;background:var(--card);box-shadow:var(--shadow);padding:22px 18px}
+  figure svg{display:block;max-width:100%;height:auto;color:var(--ink)}
+  figcaption{font-size:.88rem;color:var(--ink-faint);margin-top:12px;line-height:1.5;text-align:center}
+
+  /* action / owned cards */
+  .owned{display:flex;flex-direction:column;gap:12px;margin:8px 0 6px;counter-reset:o}
+  .owned .item{counter-increment:o;position:relative;background:var(--card);border:1px solid var(--line);border-radius:13px;padding:17px 19px 17px 58px;box-shadow:var(--shadow)}
+  .owned .item::before{content:counter(o);position:absolute;left:16px;top:16px;width:30px;height:30px;border-radius:9px;background:var(--teal-soft);color:var(--teal-deep);font-family:"IBM Plex Mono",monospace;font-weight:600;font-size:14px;display:flex;align-items:center;justify-content:center}
+  .owned .item h4{font-family:"Hanken Grotesk";font-weight:700;font-size:1.04rem;margin-bottom:4px}
+  .owned .item p{font-size:.94rem;color:var(--ink-soft);margin:0}
+  .owned .item .verb{font-family:"IBM Plex Mono",monospace;font-size:10px;letter-spacing:.05em;text-transform:uppercase;color:var(--teal);font-weight:600}
+
+  .hero-call{background:var(--ink);color:var(--paper);border-radius:16px;padding:26px 26px;margin:22px 0 6px;box-shadow:var(--shadow-lg)}
+  .hero-call .tag{font-family:"IBM Plex Mono",monospace;font-size:11px;font-weight:600;letter-spacing:.08em;text-transform:uppercase;color:var(--amber);margin-bottom:12px}
+  .hero-call .q{font-family:"Spectral",Georgia,serif;font-weight:500;font-style:italic;font-size:1.32rem;line-height:1.42;color:#fff}
+  .hero-call p.sub{color:color-mix(in srgb,var(--paper) 82%,transparent);font-size:.96rem;margin:14px 0 0}
+  .hero-call p.sub b{color:#fff}
+
+  /* result */
+  .results{display:flex;flex-direction:column;gap:12px;margin:8px 0 6px}
+  .results .r{display:flex;gap:15px;align-items:flex-start;padding:16px 18px;background:var(--card);border:1px solid var(--line);border-left:3px solid var(--pos);border-radius:12px;box-shadow:var(--shadow)}
+  .results .r .big{font-family:"Hanken Grotesk";font-weight:800;font-size:1.7rem;letter-spacing:-.02em;color:var(--teal);flex:0 0 auto;line-height:1.05;min-width:96px}
+  .results .r .big small{display:block;font-size:.72rem;font-weight:600;letter-spacing:.03em;text-transform:uppercase;color:var(--ink-faint);margin-top:4px}
+  .results .r .tx{color:var(--ink-soft);font-size:.96rem}
+  .results .r .tx b{color:var(--ink)}
+
+  /* before-after bars */
+  .ba{margin:20px 0 6px;background:var(--card);border:1px solid var(--line);border-radius:14px;padding:20px 20px;box-shadow:var(--shadow)}
+  .ba .row{display:flex;align-items:center;gap:14px;margin-bottom:13px}
+  .ba .row:last-child{margin-bottom:0}
+  .ba .lbl{flex:0 0 78px;font-family:"IBM Plex Mono",monospace;font-size:11px;letter-spacing:.04em;text-transform:uppercase;color:var(--ink-faint)}
+  .ba .bar{height:26px;border-radius:7px;display:flex;align-items:center;padding:0 12px;font-weight:700;font-size:.86rem;color:#fff;white-space:nowrap}
+  .ba .bar.was{background:var(--rust);width:100%}
+  .ba .bar.now{background:var(--teal);width:17%}
+  .ba .cap{font-size:.85rem;color:var(--ink-faint);margin-top:14px;text-align:center}
+
+  /* metrics table */
+  .tbl{overflow-x:auto;border:1px solid var(--line);border-radius:13px;box-shadow:var(--shadow);margin:18px 0 6px}
+  table{border-collapse:collapse;width:100%;min-width:580px;background:var(--card);font-size:.92rem}
+  th,td{text-align:left;padding:13px 16px;border-bottom:1px solid var(--line);vertical-align:top}
+  th{font-family:"IBM Plex Mono",monospace;font-size:10px;letter-spacing:.05em;text-transform:uppercase;color:var(--ink-faint);font-weight:600;background:var(--card-2)}
+  tr:last-child td{border-bottom:none}
+  td:first-child{font-weight:700;color:var(--ink);white-space:nowrap}
+  td .f{font-family:"IBM Plex Mono",monospace;font-size:.82rem;color:var(--teal-deep);background:var(--teal-soft);padding:1px 6px;border-radius:5px;display:inline-block;margin-top:4px}
+  td.plain{color:var(--ink-soft)}
+
+  /* tell-it tiers */
+  .tier{background:var(--card);border:1px solid var(--line);border-radius:14px;padding:18px 20px;margin:14px 0;box-shadow:var(--shadow)}
+  .tier .th{display:flex;align-items:baseline;gap:10px;margin-bottom:9px}
+  .tier .th .t{font-family:"IBM Plex Mono",monospace;font-size:11px;font-weight:600;letter-spacing:.05em;text-transform:uppercase;color:var(--teal);background:var(--teal-soft);padding:3px 9px;border-radius:6px}
+  .tier .th h4{font-family:"Hanken Grotesk";font-weight:700;font-size:1.04rem}
+  .tier p{font-size:1rem;line-height:1.55;margin:0;color:var(--ink)}
+  .tier p em{color:var(--ink-soft)}
+
+  /* questions */
+  .qa{border-top:1px solid var(--line);margin-top:8px}
+  .qa .row{padding:16px 0;border-bottom:1px solid var(--line)}
+  .qa .q{font-weight:700;color:var(--ink);font-size:1.01rem;display:flex;gap:10px}
+  .qa .q .m{font-family:"IBM Plex Mono",monospace;font-size:11px;color:var(--rust);flex:0 0 auto;padding-top:3px}
+  .qa .a{font-size:.95rem;color:var(--ink-soft);margin-top:6px;padding-left:26px;line-height:1.55}
+  .qa .a b{color:var(--ink)}
+
+  .box{border-radius:13px;padding:17px 20px;margin:18px 0}
+  .box .tag{font-family:"IBM Plex Mono",monospace;font-size:10.5px;font-weight:600;letter-spacing:.06em;text-transform:uppercase;margin-bottom:8px}
+  .box p:last-child{margin-bottom:0}
+  .note-box{background:var(--card-2);border:1px solid var(--line)}
+  .note-box .tag{color:var(--ink-faint)}
+  .note-box p{font-size:.92rem;color:var(--ink-soft)}
+  .note-box b{color:var(--ink)}
+
+  .closer{margin-top:44px;background:linear-gradient(150deg,var(--teal-deep),var(--teal));color:#fff;border-radius:18px;padding:30px 28px;box-shadow:var(--shadow-lg)}
+  .closer h2{color:#fff;font-size:1.5rem;margin-bottom:13px}
+  .closer p{color:rgba(255,255,255,.9)}
+  .closer p:last-child{margin-bottom:0}
+  .closer b{color:#fff}
+  .foot{margin-top:30px;font-size:.82rem;color:var(--ink-faint);line-height:1.6}
+  ::selection{background:var(--teal-soft)}
+  :focus-visible{outline:2px solid var(--teal);outline-offset:3px;border-radius:4px}
+</style>
+
+<div class="wrap">
+
+  <header class="hero">
+    <p class="eyebrow">Case study · Machine learning in a regulated domain</p>
+    <h1><span class="big">4.5 million</span>faxes a year, every one keyed by hand.</h1>
+    <p class="standfirst">That was patient intake at a national DME platform — millions of faxed referrals, typed into the system one field at a time. I led the product side of an <b>Intelligent Document Automation platform</b> that reads the fax, extracts the fields, and creates the patient and the order automatically — <b>from problem definition through launch</b>, in a HIPAA-regulated pipeline where a wrong billing field is a denied claim.</p>
+    <div class="frame-note">
+      <span class="chip">Role: <b>Product, end-to-end</b></span>
+      <span class="chip">Domain: <b>Healthcare / DME · HIPAA</b></span>
+      <span class="chip">Tech: <b>OCR + ML extraction + human-in-loop</b></span>
+    </div>
+  </header>
+
+  <div class="kpis">
+    <div class="kpi"><div class="n">30<span class="arr"> → </span>5<span style="font-size:.6em"> min</span></div><div class="l">Patient intake, per patient</div><div class="d">−80% time</div></div>
+    <div class="kpi"><div class="n good">~95%</div><div class="l">Field-level extraction accuracy</div><div class="d">correct ÷ total fields</div></div>
+    <div class="kpi"><div class="n">10%<span class="arr"> → </span>1%</div><div class="l">Claim denials from bad intake data</div><div class="d">−90% of the error class</div></div>
+    <div class="kpi"><div class="n good">New line</div><div class="l">Monetized as a usage-priced add-on</div><div class="d">revenue, not just savings</div></div>
+  </div>
+
+  <!-- SITUATION -->
+  <section id="situation">
+    <div class="sec-head rule-top"><span class="eyebrow">01 · The situation</span><h2>A 4.5-million-document bottleneck, run entirely by people</h2></div>
+    <p class="lead">Every patient starts with a document — a faxed referral, a prescription, a chart note. On this platform, roughly <b>4.5 million of them a year</b> arrived as faxes, and medical admins keyed each one in by hand to start the patient and bill the order. Manual intake at that scale isn't just slow — it leaks money and risk from four directions at once:</p>
+    <ul class="pains">
+      <li><span class="ic">01</span><span class="t"><b>High labor cost.</b> Every patient is minutes of skilled admin time on pure data entry — a cost that scales linearly with volume and never goes away.</span></li>
+      <li><span class="ic">02</span><span class="t"><b>Compliance risk from errors.</b> Hand-keying PHI invites mistakes, and in a regulated setting a mistake isn't a typo — it's an audit and a compliance exposure.</span></li>
+      <li><span class="ic">03</span><span class="t"><b>Intake inefficiency.</b> Slow, manual onboarding delays the patient getting equipment and delays the supplier getting paid.</span></li>
+      <li><span class="ic">04</span><span class="t"><b>Lost revenue from missing documentation.</b> Incomplete paperwork means claims that can't be billed — revenue that quietly falls through the cracks.</span></li>
+    </ul>
+    <p>I saw a workflow that was expensive, error-prone, and perfectly shaped for machine learning: high-volume, structured-enough documents doing a repetitive extraction job. So I took it on — product ownership of an ML platform to automate it, from the problem statement to the launch.</p>
+  </section>
+
+  <!-- BUSINESS CASE -->
+  <section id="case">
+    <div class="sec-head rule-top"><span class="eyebrow">02 · The business case</span><h2>Why it was worth building — four ways it pays</h2></div>
+    <p class="lead">A platform play only gets funded if the money is real. I made the case on <b>four fronts</b>, and the labor math alone carried it.</p>
+
+    <div class="pillars">
+      <div class="pillar money">
+        <div class="top"><span class="tag">Cost saved</span></div>
+        <div class="fig">~$200K / supplier</div>
+        <h4>Labor cost elimination</h4>
+        <p>Onboarding one patient took ~30 min of admin time — roughly $20 a patient. For a supplier onboarding 10,000 patients, that's ~$200K in manual-labor cost, straight off the top.</p>
+      </div>
+      <div class="pillar grow">
+        <div class="top"><span class="tag">Revenue</span></div>
+        <div class="fig">New line</div>
+        <h4>Platform revenue + upsell</h4>
+        <p>Automation isn't only a cost cut — it's a product. We could monetize it as a usage-priced add-on: a new revenue line that grows with every document a customer runs through it.</p>
+      </div>
+      <div class="pillar deny">
+        <div class="top"><span class="tag">Revenue protected</span></div>
+        <div class="fig">10% of denials</div>
+        <h4>Fewer claim denials</h4>
+        <p>Inaccurate, hand-keyed data drove ~10% of rejected claims. Cleaner extraction protects the supplier's revenue — and reduces the rework and resubmission that eats their staff time.</p>
+      </div>
+      <div class="pillar moat">
+        <div class="top"><span class="tag">Retention</span></div>
+        <div class="fig">Competitive parity</div>
+        <h4>Defend the base</h4>
+        <p>A competitor was bringing this capability to market. Shipping it protected supplier satisfaction and retention — table stakes we couldn't afford to cede.</p>
+      </div>
+    </div>
+
+    <div class="mathbox">
+      <div class="tag">◆ The unit economics</div>
+      <div class="mathrow">
+        10,000 patients <span class="op">×</span> ~30 min <span class="op">×</span> ~$20 / patient <span class="op">=</span> <span class="res">~$200K saved / supplier / year</span><br>
+        <span class="op">then</span> × every supplier on the platform <span class="op">=</span> <span class="res">savings in the millions</span>
+      </div>
+      <p class="note">Illustrative. The assumptions are 30 minutes of admin time per patient at a loaded cost of about $20. One supplier is a six-figure saving, and the platform multiplies it.</p>
+    </div>
+  </section>
+
+  <!-- WHAT IT DOES -->
+  <section id="how">
+    <div class="sec-head rule-top"><span class="eyebrow">03 · What the platform does</span><h2>Fax in, patient and order out — with a human where it counts</h2></div>
+    <p class="lead">The pipeline takes an unstructured document and turns it into two structured business objects: a <b>patient record</b> and an <b>order</b>. The model does the reading; a confidence threshold decides what a human still touches.</p>
+
+    <figure>
+      <div class="figwrap">
+        <svg viewBox="0 0 900 300" role="img" aria-label="Pipeline: a faxed document is classified by type, then fields are extracted by the ML model, then a confidence gate routes high-confidence documents straight to auto-processing and low-confidence ones to a human reviewer; both paths converge to create a patient record, demographics, and an order.">
+          <defs>
+            <marker id="ar" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M0 0 L10 5 L0 10 z" fill="currentColor"/></marker>
+          </defs>
+          <g font-family="Hanken Grotesk, sans-serif">
+            <!-- 1 fax -->
+            <rect x="20" y="112" width="120" height="72" rx="11" style="fill:var(--card-2);stroke:var(--line-2)" stroke-width="1.5"/>
+            <text x="80" y="140" text-anchor="middle" font-size="13" font-weight="700" fill="currentColor">Faxed doc</text>
+            <text x="80" y="159" text-anchor="middle" font-size="10.5" fill="currentColor" opacity="0.6">referral · Rx · note</text>
+            <!-- 2 classify -->
+            <rect x="178" y="112" width="128" height="72" rx="11" style="fill:var(--teal-soft);stroke:var(--teal)" stroke-width="1.6"/>
+            <text x="242" y="135" text-anchor="middle" font-size="11" font-family="IBM Plex Mono, monospace" style="fill:var(--teal-deep)">STEP 1</text>
+            <text x="242" y="154" text-anchor="middle" font-size="13" font-weight="700" fill="currentColor">Classify</text>
+            <text x="242" y="171" text-anchor="middle" font-size="10.5" fill="currentColor" opacity="0.65">identify doc type</text>
+            <!-- 3 extract -->
+            <rect x="344" y="112" width="128" height="72" rx="11" style="fill:var(--teal-soft);stroke:var(--teal)" stroke-width="1.6"/>
+            <text x="408" y="135" text-anchor="middle" font-size="11" font-family="IBM Plex Mono, monospace" style="fill:var(--teal-deep)">STEP 2</text>
+            <text x="408" y="154" text-anchor="middle" font-size="13" font-weight="700" fill="currentColor">Extract fields</text>
+            <text x="408" y="171" text-anchor="middle" font-size="10.5" fill="currentColor" opacity="0.65">key patient + order data</text>
+            <!-- 4 gate -->
+            <path d="M556 148 L598 116 L640 148 L598 180 Z" style="fill:var(--amber-soft);stroke:var(--amber)" stroke-width="1.6"/>
+            <text x="598" y="144" text-anchor="middle" font-size="10.5" font-weight="700" fill="currentColor">Confidence</text>
+            <text x="598" y="159" text-anchor="middle" font-size="10.5" font-weight="700" fill="currentColor">gate</text>
+            <!-- high conf -> auto -->
+            <rect x="700" y="46" width="176" height="60" rx="11" style="fill:var(--card);stroke:var(--teal)" stroke-width="1.5"/>
+            <text x="788" y="70" text-anchor="middle" font-size="12" font-weight="700" style="fill:var(--teal-deep)">Auto-process</text>
+            <text x="788" y="88" text-anchor="middle" font-size="10.5" fill="currentColor" opacity="0.65">above threshold · no touch</text>
+            <!-- low conf -> review -->
+            <rect x="700" y="192" width="176" height="60" rx="11" style="fill:var(--card);stroke:var(--rust)" stroke-width="1.5"/>
+            <text x="788" y="216" text-anchor="middle" font-size="12" font-weight="700" style="fill:var(--rust)">Human review</text>
+            <text x="788" y="234" text-anchor="middle" font-size="10.5" fill="currentColor" opacity="0.65">below threshold · verify</text>
+            <!-- output -->
+            <rect x="326" y="238" width="248" height="46" rx="11" style="fill:var(--ink);stroke:var(--ink)" stroke-width="1.5"/>
+            <text x="450" y="266" text-anchor="middle" font-size="12.5" font-weight="700" fill="var(--paper)">Patient record + demographics + order</text>
+
+            <!-- arrows -->
+            <g stroke="currentColor" stroke-width="1.6" fill="none" opacity="0.8">
+              <line x1="140" y1="148" x2="176" y2="148" marker-end="url(#ar)"/>
+              <line x1="306" y1="148" x2="342" y2="148" marker-end="url(#ar)"/>
+              <line x1="472" y1="148" x2="553" y2="148" marker-end="url(#ar)"/>
+            </g>
+            <g stroke="var(--teal)" stroke-width="1.6" fill="none">
+              <path d="M640 132 C 672 100, 676 82, 698 76" marker-end="url(#ar)"/>
+            </g>
+            <g stroke="var(--rust)" stroke-width="1.6" fill="none">
+              <path d="M640 164 C 672 196, 676 214, 698 222" marker-end="url(#ar)"/>
+            </g>
+            <g stroke="currentColor" stroke-width="1.4" fill="none" opacity="0.55" stroke-dasharray="4 4">
+              <path d="M788 106 C 788 150, 640 200, 574 250" marker-end="url(#ar)"/>
+              <path d="M788 192 C 788 170, 660 262, 574 261" marker-end="url(#ar)"/>
+            </g>
+          </g>
+        </svg>
+      </div>
+      <figcaption>The model reads and scores every field. High-confidence documents flow straight through; anything below the bar is routed to a reviewer before it becomes a patient or an order. <em>The threshold is the product decision — see §04.</em></figcaption>
+    </figure>
+  </section>
+
+  <!-- WHAT I OWNED -->
+  <section id="owned">
+    <div class="sec-head rule-top"><span class="eyebrow">04 · What I owned</span><h2>The product decisions that made it work</h2></div>
+    <p class="lead">The data scientists built the model. <b>I owned everything that decided whether the model became a product</b> — what it extracts, where a human steps in, what "good enough to launch" means, and the trade-off that governs all of it.</p>
+
+    <div class="owned">
+      <div class="item"><span class="verb">Defined</span><h4>The document types and the fields</h4><p>What gets extracted and where each field populates — prioritizing the document types that <b>start a patient and bill the order</b>, because that's where the money and the risk concentrate.</p></div>
+      <div class="item"><span class="verb">Owned</span><h4>The compliance requirement</h4><p>PHI protected, every access audited. I owned the requirement; engineering built the security controls, and we validated them with the compliance team — not an afterthought, a launch gate.</p></div>
+      <div class="item"><span class="verb">Shaped</span><h4>The pipeline and the human-review policy</h4><p>When and where a reviewer steps in, keyed to the <b>confidence threshold</b> — the rule that decides which documents a human still verifies and which flow straight through.</p></div>
+      <div class="item"><span class="verb">Set</span><h4>The success metrics</h4><p>The accuracy bar required to launch, the automation rate, and time saved — defined up front and <b>tracked every release</b>, so "is it working?" had a number, not an opinion.</p></div>
+      <div class="item"><span class="verb">Decided</span><h4>The core trade-off</h4><p>Bias toward accuracy over automation — the call that shaped the threshold, the review policy, and the launch bar all at once.</p></div>
+    </div>
+
+    <div class="hero-call">
+      <div class="tag">◆ The judgment call</div>
+      <p class="q">"I biased the system toward accuracy over automation. A missed automation just means a human still does that one — a cost. But a <span style="color:var(--amber)">wrong billing field is a denied claim</span> — it breaks the customer's revenue and our trust. So I set the confidence bar high and sent anything uncertain to a reviewer. I'd rather automate less and be right."</p>
+      <p class="sub">In a regulated domain the errors are not symmetric, so I spent automation to buy correctness.</p>
+    </div>
+  </section>
+
+  <!-- RESULT -->
+  <section id="result">
+    <div class="sec-head rule-top"><span class="eyebrow">05 · The result</span><h2>What launched, and what it moved</h2></div>
+
+    <div class="ba">
+      <div class="row"><span class="lbl">Before</span><div class="bar was">30 min / patient — manual entry</div></div>
+      <div class="row"><span class="lbl">After</span><div class="bar now">5 min</div></div>
+      <p class="cap">Intake time per patient, before and after — an ~80% reduction, with a review step still in the loop.</p>
+    </div>
+
+    <div class="results">
+      <div class="r"><div class="big">−80%<small>Intake time</small></div><div class="tx"><b>30 minutes to 5</b>, per patient, review included — direct labor savings that run into the millions across the platform's suppliers.</div></div>
+      <div class="r"><div class="big">~95%<small>Accuracy</small></div><div class="tx"><b>Field-level extraction accuracy</b> — staff spend less time fixing mistakes, and claim rejections from inaccurate intake data dropped to <b>~1%</b>.</div></div>
+      <div class="r"><div class="big">+$<small>New revenue</small></div><div class="tx">Monetized as a <b>usage-priced add-on</b>, charged by volume — a new revenue line, not just a cost saving.</div></div>
+    </div>
+  </section>
+
+  <!-- METRICS -->
+  <section id="metrics">
+    <div class="sec-head rule-top"><span class="eyebrow">06 · The metrics</span><h2>What I tracked — and exactly how it was measured</h2></div>
+    <p class="lead">Five numbers, three jobs: one for <b>model quality</b>, one for <b>business value</b>, and a <b>guardrail</b> that keeps the automation honest.</p>
+    <div class="tbl"><table>
+      <thead><tr><th>Metric</th><th>What it tells you</th><th>How it's calculated</th></tr></thead>
+      <tbody>
+        <tr><td>Extraction accuracy</td><td class="plain">Model quality — is the data it pulls correct?<div class="f">correct fields ÷ total fields</div></td><td class="plain">Field-level, not document-level: of every field it needed to pull, the share it got right. ~95%.</td></tr>
+        <tr><td>Automation rate</td><td class="plain">Business value — how much work actually left the humans?<div class="f">auto-processed ÷ total docs</div></td><td class="plain">The share of documents processed with no human touch — i.e. everything that cleared the confidence threshold.</td></tr>
+        <tr><td>Error rate <span style="font-weight:400;color:var(--rust)">(guardrail)</span></td><td class="plain">Safety — is the automation trustworthy?<div class="f">errors ÷ auto-processed</div></td><td class="plain">The error rate <em>on auto-processed docs only</em>. This is the number that justifies the threshold — push automation too high and this creeps up.</td></tr>
+        <tr><td>Time to patient + PO</td><td class="plain">The outcome customers feel<div class="f">avg minutes, intake → order</div></td><td class="plain">Average time to create a patient record and a purchase order. The 30→5 min headline.</td></tr>
+        <tr><td>Add-on volume</td><td class="plain">Monetization — is it earning?<div class="f">billable docs × price</div></td><td class="plain">Usage of the add-on, charged by volume — ties the platform directly to revenue.</td></tr>
+      </tbody>
+    </table></div>
+    <div class="box note-box">
+      <div class="tag">◆ Why the guardrail matters</div>
+      <p><b>Automation rate and error rate pull against each other</b> — that tension <em>is</em> the accuracy-over-automation trade-off, made measurable. Raise the threshold and error rate falls but automation rate drops; lower it and you automate more but risk denied claims.</p>
+    </div>
+  </section>
+
+  <!-- QUESTIONS -->
+  <section id="questions">
+    <div class="sec-head rule-top"><span class="eyebrow">07 · Questions I get asked</span><h2>The six that come up every time</h2></div>
+    <div class="qa">
+      <div class="row"><div class="q"><span class="m">Q</span>Did you build the model?</div><div class="a"><b>No.</b> The data scientists built and trained the model. I owned the product: the document types and fields, the compliance requirement, the human-review policy, the success metrics, and the accuracy-over-automation trade-off.</div></div>
+      <div class="row"><div class="q"><span class="m">Q</span>How do you get to 95%, and is that good?</div><div class="a">It is <b>field-level extraction accuracy</b> (correct fields ÷ total fields). Whether it is good depends on the field: for the billing fields that drive a claim, 95% was not good enough to auto-submit blind, which is exactly why the <b>confidence threshold and human review</b> exist. Accuracy sets the bar; the threshold decides what still gets a person.</div></div>
+      <div class="row"><div class="q"><span class="m">Q</span>It is PHI. How did you handle HIPAA?</div><div class="a"><b>As a launch gate, not a feature.</b> PHI protected in transit and at rest, every access audited, validated with the compliance team. I set the requirement; engineering built the controls. In a regulated pipeline, "it works" and "it is compliant" are two different launch bars.</div></div>
+      <div class="row"><div class="q"><span class="m">Q</span>Why accuracy over automation? Isn't more automation the point?</div><div class="a">Because <b>the errors are not symmetric.</b> A missed automation costs one person a few minutes. A wrong billing field costs a denied claim: the customer's revenue and our credibility. I would rather automate less and be right, and let the threshold move up as the model earns trust.</div></div>
+      <div class="row"><div class="q"><span class="m">Q</span>How was the time saved measured?</div><div class="a"><b>Average time to create a patient record and a purchase order</b>, before and after: 30 minutes manual to about 5 with review. The savings figure is that time delta × loaded admin cost × volume, with the per-patient assumptions shown above.</div></div>
+      <div class="row"><div class="q"><span class="m">Q</span>What happens when the model is wrong or unsure?</div><div class="a">It never silently ships. Anything <b>below the confidence threshold goes to a reviewer</b> before it becomes a patient or an order, and the <b>error rate on auto-processed documents</b> is the guardrail I watched to keep the threshold honest.</div></div>
+    </div>
+  </section>
+
+  <div class="closer">
+    <h2>What I would keep</h2>
+    <p>Four things moved at once: labor cost, compliance risk, protected revenue and competitive position. The decision underneath all of them was one threshold: <b>accuracy over automation, with a person on everything uncertain.</b></p>
+  </div>
+
+  <div class="foot">
+    The data-science team built and trained the model; I led the product. The $200K unit economics is illustrative, with its assumptions shown. About 95% accuracy, 30 to 5 minutes and 10% to 1% denials are the figures at launch. The platform is described generically.
+  </div>
+
+</div>
+
+</body></html>

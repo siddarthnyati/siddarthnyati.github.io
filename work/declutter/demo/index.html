@@ -1,0 +1,1233 @@
+<!doctype html><html lang="en"><head><meta charset=utf8><meta name=viewport content="width=device-width,initial-scale=1,viewport-fit=cover"><style>:root{color-scheme:light;box-sizing:border-box;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}html{scroll-padding-top:env(safe-area-inset-top,0px)}body{margin:0;padding:0;font:14px -apple-system,BlinkMacSystemFont,sans-serif;background:#faf9f5;color:#141413}img{max-width:100%}[hidden]:not([hidden=until-found i]){display:none!important}</style></head><body><!--sn-backbar--><div style="all:initial;display:block;background:#1B2B4B;padding:11px 20px"><a href="/work/declutter/" style="all:initial;cursor:pointer;color:#FBFCFD;font:600 15px/1.3 'Gill Sans','Segoe UI',sans-serif;text-decoration:underline;text-underline-offset:3px">Back to the summary on Siddarth Nyati's portfolio</a></div><!--/sn-backbar-->
+<title>DoorDash Declutter</title>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans:wght@400;500;600;700&family=IBM+Plex+Mono:wght@500;600&display=swap">
+<style>
+:root{
+  --bg:#F6F4EE; --surface:#FFFFFF; --ink:#1B1A17; --muted:#6A665C; --line:#E4E0D6; --soft:#EEEBE3;
+  --before:#B42318; --after:#0F766E; --before-soft:#F9E3DF; --after-soft:#DCEFEC; --brand:#FE3008;
+  --dim:rgba(27,26,23,0.52); --shadow:0 14px 34px rgba(27,26,23,0.14); --s:1;
+  color-scheme:light;
+}
+@media (prefers-color-scheme: dark){
+  :root:not([data-theme="light"]){
+    --bg:#151412; --surface:#1E1C19; --ink:#F3F0E8; --muted:#A8A295; --line:#34312B; --soft:#262420;
+    --before:#E2543E; --after:#2FA89B; --before-soft:#3A1F1B; --after-soft:#173431;
+    --dim:rgba(0,0,0,0.58); --shadow:0 14px 34px rgba(0,0,0,0.55);
+    color-scheme:dark;
+  }
+}
+:root[data-theme="dark"]{
+  --bg:#151412; --surface:#1E1C19; --ink:#F3F0E8; --muted:#A8A295; --line:#34312B; --soft:#262420;
+  --before:#E2543E; --after:#2FA89B; --before-soft:#3A1F1B; --after-soft:#173431;
+  --dim:rgba(0,0,0,0.58); --shadow:0 14px 34px rgba(0,0,0,0.55);
+  color-scheme:dark;
+}
+html,body{height:100%}
+body{margin:0;background:var(--bg);color:var(--ink);font-family:'IBM Plex Sans',system-ui,-apple-system,sans-serif;font-size:14px;line-height:1.45;display:flex;flex-direction:column;overflow:hidden;-webkit-font-smoothing:antialiased}
+*{box-sizing:border-box}
+button{font-family:inherit}
+h1,h2,h3{margin:0;text-wrap:balance}
+.mono{font-family:'IBM Plex Mono',ui-monospace,SFMono-Regular,Menlo,monospace}
+
+/* header */
+.top{display:flex;align-items:center;gap:18px;padding:10px 20px;border-bottom:1px solid var(--line);background:var(--surface);flex-wrap:wrap;position:relative;z-index:5}
+.brand{display:flex;align-items:center;gap:10px;min-width:0}
+.brand-dot{width:10px;height:10px;border-radius:5px;background:var(--brand);flex-shrink:0}
+.brand h1{font-size:16px;font-weight:700;white-space:nowrap}
+.brand .sub{font-size:12px;color:var(--muted);white-space:nowrap}
+.tabs{display:flex;gap:4px;margin-left:auto;overflow-x:auto;scrollbar-width:none;max-width:100%}
+.tabs::-webkit-scrollbar{display:none}
+.tab{padding:8px 14px;border-radius:8px;border:0;background:transparent;font-size:13px;font-weight:600;color:var(--muted);cursor:pointer;white-space:nowrap;display:flex;align-items:center;gap:8px}
+.tab .k{font-family:'IBM Plex Mono',monospace;font-size:11px;opacity:0.7}
+.tab:hover{background:var(--soft);color:var(--ink)}
+.tab[aria-selected="true"]{background:var(--ink);color:var(--bg)}
+.tab:focus-visible,.item:focus-visible,.mark:focus-visible,.btn:focus-visible,.seg button:focus-visible{outline:2px solid var(--after);outline-offset:2px}
+.who{font-size:12px;color:var(--muted);white-space:nowrap}
+.btn{height:32px;padding:0 12px;border-radius:8px;border:1px solid var(--line);background:var(--surface);color:var(--ink);font-size:12px;font-weight:600;cursor:pointer;display:inline-flex;align-items:center;gap:6px}
+.btn:hover{background:var(--soft)}
+.btn[disabled]{opacity:0.4;cursor:default}
+.btn.primary{background:var(--ink);color:var(--bg);border-color:var(--ink)}
+.btn[aria-pressed="true"]{background:var(--after);color:#FFFFFF;border-color:var(--after)}
+.chip{display:none;margin-left:8px;padding:1px 6px;border-radius:4px;background:var(--after-soft);color:var(--after);font-family:'IBM Plex Mono',monospace;font-size:10px;letter-spacing:0.5px;vertical-align:middle}
+body.short .item.star .chip{display:inline-block}
+body.short .item:not(.star){opacity:0.45}
+body.short .mark:not(.star){opacity:0.35}
+body.short .mark.on{opacity:1}
+
+/* screen sections */
+.screen{flex:1;min-height:0;display:flex;flex-direction:column}
+.stage{flex:1;min-height:0;display:grid;grid-template-columns:auto auto minmax(340px,560px);justify-content:center;column-gap:36px;row-gap:20px;padding:16px 24px;align-items:start}
+.phone-col{display:flex;flex-direction:column;align-items:center;gap:8px;min-width:0}
+.phone-label{font-family:'IBM Plex Mono',monospace;font-size:11px;font-weight:600;letter-spacing:1.2px;color:var(--muted);display:flex;align-items:center;gap:8px;height:18px;text-transform:uppercase}
+.phone-label i{width:9px;height:9px;border-radius:5px;display:inline-block}
+.phone-label.b i{background:var(--before)} .phone-label.a i{background:var(--after)}
+.phone-scale{width:calc(390px * var(--s));height:calc(844px * var(--s));position:relative}
+.phone{width:390px;height:844px;transform:scale(var(--s));transform-origin:top left;border-radius:34px;overflow:hidden;background:#FFFFFF;box-shadow:var(--shadow);position:relative;border:1px solid var(--line);isolation:isolate}
+.phone-scroll{position:absolute;inset:0;overflow-y:auto;overflow-x:hidden;scrollbar-width:none;overscroll-behavior:contain}
+.phone-scroll::-webkit-scrollbar{display:none}
+.phone-content{width:390px;height:1300px;position:relative;overflow:hidden;background:#FFFFFF;color:#1C1B18;font-family:'IBM Plex Sans',system-ui,sans-serif;font-size:14px;line-height:1.3}
+.phone-fixed{position:absolute;inset:0;pointer-events:none;color:#1C1B18;font-family:'IBM Plex Sans',system-ui,sans-serif;font-size:14px;line-height:1.3}
+.spot{position:absolute;border-radius:10px;box-shadow:0 0 0 2400px var(--dim);border:2px solid #FFFFFF;outline:2px solid var(--before);outline-offset:0;transition:left .35s ease,top .35s ease,width .35s ease,height .35s ease;pointer-events:none}
+.phone[data-side="after"] .spot{outline-color:var(--after)}
+.marks{position:absolute;inset:0;pointer-events:none}
+.mark{position:absolute;width:28px;height:28px;border-radius:14px;border:0;padding:0;color:#FFFFFF;font-family:'IBM Plex Mono',monospace;font-size:13px;font-weight:600;display:grid;place-items:center;cursor:pointer;pointer-events:auto;box-shadow:0 0 0 3px #FFFFFF,0 4px 10px rgba(0,0,0,0.35);transition:transform .2s ease;transform:translate(-2px,-2px)}
+.mark.b{background:var(--before)} .mark.a{background:var(--after)}
+.mark:hover{transform:translate(-2px,-2px) scale(1.12)}
+.mark.on{transform:translate(-6px,-6px) scale(1.3);box-shadow:0 0 0 3px #FFFFFF,0 0 0 7px rgba(255,255,255,0.35),0 6px 14px rgba(0,0,0,0.4);z-index:2}
+
+/* reason panel */
+.panel{background:var(--surface);border:1px solid var(--line);border-radius:14px;display:flex;flex-direction:column;min-height:0;height:100%;overflow:hidden}
+.panel-head{padding:16px 18px 12px;border-bottom:1px solid var(--line);display:flex;flex-direction:column;gap:6px}
+.panel-head h2{font-size:18px;font-weight:700}
+.thesis{font-size:14px;color:var(--muted);line-height:1.45;max-width:62ch}
+.legend{display:flex;gap:14px;font-family:'IBM Plex Mono',monospace;font-size:10px;letter-spacing:1px;color:var(--muted);text-transform:uppercase;margin-top:2px}
+.legend span{display:flex;align-items:center;gap:6px}
+.legend i{width:9px;height:9px;border-radius:5px;display:inline-block}
+.items{flex:1;min-height:0;overflow-y:auto;padding:8px;display:flex;flex-direction:column;gap:2px}
+.item{display:grid;grid-template-columns:auto 1fr;gap:12px;padding:10px 10px;border-radius:10px;cursor:pointer;border:0;background:transparent;text-align:left;width:100%;color:inherit;font:inherit;align-items:start}
+.item:hover{background:var(--soft)}
+.item[aria-current="true"]{background:var(--bg)}
+.nums{display:flex;gap:3px;padding-top:1px}
+.num{width:22px;height:22px;border-radius:11px;color:#FFFFFF;font-family:'IBM Plex Mono',monospace;font-size:11px;font-weight:600;display:grid;place-items:center}
+.num.b{background:var(--before)} .num.a{background:var(--after)}
+.item-title{font-weight:600;font-size:15px;line-height:1.3}
+.item-body{display:none;margin-top:8px;font-size:14px;line-height:1.5;color:var(--ink)}
+.item[aria-current="true"] .item-body{display:block}
+.pair{display:grid;gap:8px;max-width:60ch}
+.pair p{margin:0}
+.pair b{font-family:'IBM Plex Mono',monospace;font-size:10px;letter-spacing:1px;text-transform:uppercase;padding:2px 6px;border-radius:4px;margin-right:6px;color:#FFFFFF}
+.pair b.b{background:var(--before)} .pair b.a{background:var(--after)} .pair b.w{background:var(--ink);color:var(--bg)}
+.meta{font-family:'IBM Plex Mono',monospace;font-size:11px;color:var(--muted);margin-top:10px;line-height:1.5}
+.kept{margin:6px 8px 8px;padding:12px 14px;border-radius:10px;background:var(--soft);font-size:12px;line-height:1.5}
+.kept b{display:block;font-size:12px;margin-bottom:3px}
+.panel-foot{display:flex;align-items:center;gap:8px;padding:10px 12px;border-top:1px solid var(--line)}
+.counter{font-family:'IBM Plex Mono',monospace;font-size:12px;color:var(--muted);margin:0 auto}
+.hint{font-size:11px;color:var(--muted);padding:0 14px 10px;text-align:center}
+.seg{display:none;gap:4px;padding:4px;border-radius:10px;background:var(--soft);margin:12px 20px 0;align-self:center}
+.seg button{border:0;background:transparent;padding:8px 16px;border-radius:7px;font-size:13px;font-weight:600;color:var(--muted);cursor:pointer}
+.seg button[aria-pressed="true"]{background:var(--surface);color:var(--ink);box-shadow:0 1px 3px rgba(0,0,0,0.12)}
+
+/* case tab */
+.case{flex:1;min-height:0;overflow-y:auto;padding:24px 20px 40px}
+.case-inner{max-width:1120px;margin:0 auto;display:flex;flex-direction:column;gap:36px}
+.case h2{font-size:22px;font-weight:700;margin-bottom:6px}
+.case .lead{font-size:13px;color:var(--muted);max-width:70ch;margin:0 0 16px}
+.grid3{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:12px}
+.grid2{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:12px}
+.card{padding:14px 16px;border-radius:10px;background:var(--surface);border:1px solid var(--line);display:flex;flex-direction:column;gap:6px;font-size:13px;line-height:1.5}
+.card h3{font-size:14px;font-weight:600}
+.card .def{color:var(--muted);font-size:12px}
+.card p{margin:0}
+.jumps{display:flex;flex-wrap:wrap;gap:6px;margin-top:2px}
+.jump{border:1px solid var(--line);background:transparent;color:var(--ink);border-radius:6px;padding:2px 8px;font-family:'IBM Plex Mono',monospace;font-size:11px;cursor:pointer}
+.jump:hover{background:var(--soft)}
+.eyebrow{font-family:'IBM Plex Mono',monospace;font-size:11px;letter-spacing:1px;color:var(--muted);text-transform:uppercase}
+.rule{padding:14px 16px;border-radius:10px;background:var(--soft);font-size:13px;line-height:1.5;max-width:80ch}
+table{width:100%;border-collapse:collapse;font-size:13px;background:var(--surface);border:1px solid var(--line);border-radius:10px;overflow:hidden}
+th,td{padding:8px 12px;text-align:left;border-top:1px solid var(--line);vertical-align:top}
+th{background:var(--soft);font-weight:600;border-top:0}
+.tablewrap{overflow-x:auto;border-radius:10px}
+.src{font-size:12px;color:var(--muted)}
+.quote{font-weight:600}
+
+@media (max-width: 899px){
+  .top{gap:10px;padding:10px 16px}
+  .who{display:none}
+  .fs{display:none}
+  .seg{display:flex}
+  .stage{display:flex;flex-direction:column;overflow-y:auto;padding:12px 16px 24px;gap:14px}
+  .phone-col[data-side="before"],.phone-col[data-side="after"]{display:none;align-self:center}
+  .stage[data-view="before"] .phone-col[data-side="before"]{display:flex}
+  .stage[data-view="after"] .phone-col[data-side="after"]{display:flex}
+  .panel{height:auto;max-height:none;overflow:visible}
+  .items{overflow:visible}
+  .grid3,.grid2{grid-template-columns:1fr}
+}
+@media (max-width: 1180px) and (min-width: 900px){
+  .grid3{grid-template-columns:repeat(2,minmax(0,1fr))}
+}
+@media (prefers-reduced-motion: reduce){
+  .spot,.mark{transition:none}
+}
+</style>
+
+<header class="top">
+  <div class="brand">
+    <span class="brand-dot" aria-hidden="true"></span>
+    <div>
+      <h1>DoorDash Declutter</h1>
+      <div class="sub">Consumer app · today vs proposed · 27 Sep 2026 build</div>
+    </div>
+  </div>
+  <nav class="tabs" role="tablist" aria-label="Screens">
+    <button class="tab" role="tab" data-tab="home" aria-selected="true"><span class="k">1</span>Home</button>
+    <button class="tab" role="tab" data-tab="store" aria-selected="false"><span class="k">2</span>Store page</button>
+    <button class="tab" role="tab" data-tab="menu" aria-selected="false"><span class="k">3</span>Menu</button>
+    <button class="tab" role="tab" data-tab="case" aria-selected="false"><span class="k">4</span>The case</button>
+  </nav>
+  <span class="who">Siddarth Nyati</span>
+  <button class="btn" type="button" id="shortbtn" aria-pressed="false" title="Step through only the three strongest points per screen">3-min version</button>
+  <button class="btn fs" type="button" id="fsbtn" title="Full screen">Full screen</button>
+</header>
+
+<!-- HOME -->
+<section class="screen" data-screen="home" role="tabpanel">
+  <div class="seg" role="group" aria-label="Which phone to show">
+    <button type="button" data-view="before" aria-pressed="true">Today</button>
+    <button type="button" data-view="after" aria-pressed="false">Proposed</button>
+  </div>
+  <div class="stage" data-view="before">
+    <div class="phone-col" data-side="before">
+      <div class="phone-label b"><i></i>Today</div>
+      <div class="phone-scale"><div class="phone" data-screen="home" data-side="before">
+        <div class="phone-scroll"><div class="phone-content"><div style="background:#FE3008;display:flex;flex-direction:column;">
+    <div style="height:56px;display:flex;align-items:center;justify-content:space-between;padding:0 16px;box-sizing:border-box;">
+      <button style="border:0;background:transparent;padding:0;font-family:'IBM Plex Sans',sans-serif;font-size:19px;font-weight:700;color:#FFFFFF;display:flex;align-items:center;gap:6px;">Home <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 12 15 18 9"></polyline></svg></button>
+      <div style="display:flex;gap:8px;">
+        <button aria-label="Account" style="width:36px;height:36px;border-radius:18px;border:0;background:#FFFFFF;display:flex;align-items:center;justify-content:center;color:#1C1B18;padding:0;"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"></path><circle cx="12" cy="7" r="4"></circle></svg></button>
+        <button aria-label="Notifications" style="width:36px;height:36px;border-radius:18px;border:0;background:#FFFFFF;display:flex;align-items:center;justify-content:center;color:#1C1B18;padding:0;position:relative;"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M18 8A6 6 0 0 0 6 8c0 7-3 9-3 9h18s-3-2-3-9"></path><path d="M13.7 21a2 2 0 0 1-3.4 0"></path></svg><span style="position:absolute;top:6px;right:7px;width:8px;height:8px;border-radius:4px;background:#FE3008;"></span></button>
+        <button aria-label="Cart" style="width:36px;height:36px;border-radius:18px;border:0;background:#FFFFFF;display:flex;align-items:center;justify-content:center;color:#1C1B18;padding:0;"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="9" cy="21" r="1"></circle><circle cx="20" cy="21" r="1"></circle><path d="M1 1h4l2.7 13.4a2 2 0 0 0 2 1.6h9.7a2 2 0 0 0 2-1.6L23 6H6"></path></svg></button>
+      </div>
+    </div>
+
+    <div style="height:92px;display:flex;gap:16px;padding:10px 0 0 14px;box-sizing:border-box;overflow:hidden;color:#FFFFFF;">
+      <div style="display:flex;flex-direction:column;align-items:center;gap:4px;flex-shrink:0;width:54px;"><img src="img/rail_deals.png" alt="" style="width:32px;height:32px;object-fit:contain;"><span style="font-size:12px;font-weight:500;">Deals</span></div>
+      <div style="display:flex;flex-direction:column;align-items:center;gap:4px;flex-shrink:0;width:54px;"><img src="img/rail_grocery.png" alt="" style="width:32px;height:32px;object-fit:contain;"><span style="font-size:12px;font-weight:500;">Grocery</span></div>
+      <div style="display:flex;flex-direction:column;align-items:center;gap:4px;flex-shrink:0;width:54px;"><img src="img/rail_alcohol.png" alt="" style="width:32px;height:32px;object-fit:contain;"><span style="font-size:12px;font-weight:500;">Alcohol</span></div>
+      <div style="display:flex;flex-direction:column;align-items:center;gap:4px;flex-shrink:0;width:70px;"><img src="img/rail_gamedays.png" alt="" style="width:32px;height:32px;object-fit:contain;"><span style="font-size:12px;font-weight:500;white-space:nowrap;">Game Days</span></div>
+      <div style="display:flex;flex-direction:column;align-items:center;gap:4px;flex-shrink:0;width:82px;"><img src="img/rail_convenience.png" alt="" style="width:32px;height:32px;object-fit:contain;"><span style="font-size:12px;font-weight:500;white-space:nowrap;">Convenience</span></div>
+      <div style="display:flex;flex-direction:column;align-items:center;gap:4px;flex-shrink:0;width:54px;"><img src="img/rail_flowers.png" alt="" style="width:32px;height:32px;object-fit:contain;"><span style="font-size:12px;font-weight:500;">Flowers</span></div>
+      <div style="display:flex;flex-direction:column;align-items:center;gap:4px;flex-shrink:0;width:54px;"><img src="img/rail_gaming.png" alt="" style="width:32px;height:32px;object-fit:contain;"><span style="font-size:12px;font-weight:500;">Gaming</span></div>
+    </div>
+
+    <div style="height:376px;display:flex;flex-direction:column;align-items:center;padding:10px 0 0;box-sizing:border-box;position:relative;color:#FFFFFF;">
+      <span style="position:absolute;top:2px;right:12px;font-family:'IBM Plex Mono',monospace;font-size:10px;font-weight:600;letter-spacing:1px;color:#FFFFFF;opacity:0.85;">SPOTLIGHT · 1 OF 3</span>
+      <div style="display:flex;gap:12px;align-items:center;margin-left:-4px;">
+        <img src="img/ad_chicken.jpg" alt="Kirkland rotisserie chicken" style="width:68px;height:112px;object-fit:cover;object-position:right;border-radius:0 14px 14px 0;flex-shrink:0;">
+        <img src="img/ad_costco.jpg" alt="Costco Wholesale" style="width:112px;height:112px;object-fit:cover;border-radius:14px;flex-shrink:0;">
+        <img src="img/ad_coke.jpg" alt="Coca-Cola crate" style="width:112px;height:112px;object-fit:cover;border-radius:14px;flex-shrink:0;">
+        <img src="img/ad_keurig.jpg" alt="Kirkland coffee pods" style="width:112px;height:112px;object-fit:cover;border-radius:14px;flex-shrink:0;">
+      </div>
+      <div style="margin-top:24px;font-size:27px;font-weight:700;letter-spacing:0.5px;text-transform:uppercase;text-align:center;line-height:1.1;">Costco is here</div>
+      <div style="margin-top:22px;font-size:18px;font-weight:600;">Link your Costco account</div>
+      <div style="margin-top:4px;font-size:14px;">And get 20% off $100+ (max $50 off)</div>
+      <button style="margin-top:18px;height:44px;padding:0 28px;border-radius:22px;border:0;background:#FFFFFF;font-family:'IBM Plex Sans',sans-serif;font-size:16px;font-weight:600;color:#1C1B18;">Shop now</button>
+      <div style="position:absolute;bottom:10px;display:flex;gap:6px;"><span style="width:6px;height:6px;border-radius:3px;background:#FFFFFF;"></span><span style="width:6px;height:6px;border-radius:3px;background:rgba(255,255,255,0.45);"></span><span style="width:6px;height:6px;border-radius:3px;background:rgba(255,255,255,0.45);"></span></div>
+    </div>
+  </div>
+
+  <div style="padding:20px 16px 18px;box-sizing:border-box;border-bottom:8px solid #F1F1F1;">
+    <div style="font-size:20px;font-weight:700;">What are you in the mood for?</div>
+    <div style="display:flex;gap:10px;margin-top:14px;overflow:hidden;">
+      <span style="display:flex;align-items:center;gap:8px;height:36px;padding:0 14px 0 10px;border-radius:18px;background:#F1F1F1;font-size:14px;white-space:nowrap;flex-shrink:0;"><img src="img/chip_pizza.png" alt="" style="width:20px;height:22px;object-fit:contain;">Pizza</span>
+      <span style="display:flex;align-items:center;gap:8px;height:36px;padding:0 14px 0 10px;border-radius:18px;background:#F1F1F1;font-size:14px;white-space:nowrap;flex-shrink:0;"><img src="img/chip_fastfood.png" alt="" style="width:20px;height:22px;object-fit:contain;">Fast Food</span>
+      <span style="display:flex;align-items:center;gap:8px;height:36px;padding:0 14px 0 10px;border-radius:18px;background:#F1F1F1;font-size:14px;white-space:nowrap;flex-shrink:0;"><img src="img/chip_breakfast.png" alt="" style="width:20px;height:22px;object-fit:contain;">Breakfast</span>
+      <span style="display:flex;align-items:center;gap:8px;height:36px;padding:0 14px 0 10px;border-radius:18px;background:#F1F1F1;font-size:14px;white-space:nowrap;flex-shrink:0;"><img src="img/chip_coffee.png" alt="" style="width:20px;height:22px;object-fit:contain;">Coffee</span>
+    </div>
+    <div style="display:flex;gap:10px;margin-top:10px;overflow:hidden;">
+      <span style="display:flex;align-items:center;gap:8px;height:36px;padding:0 14px 0 10px;border-radius:18px;background:#F1F1F1;font-size:14px;white-space:nowrap;flex-shrink:0;"><img src="img/chip_deals.png" alt="" style="width:20px;height:22px;object-fit:contain;">Deals</span>
+      <span style="display:flex;align-items:center;gap:8px;height:36px;padding:0 14px 0 10px;border-radius:18px;background:#F1F1F1;font-size:14px;white-space:nowrap;flex-shrink:0;"><img src="img/chip_sandwiches.png" alt="" style="width:20px;height:22px;object-fit:contain;">Sandwiches</span>
+      <span style="display:flex;align-items:center;gap:8px;height:36px;padding:0 14px 0 10px;border-radius:18px;background:#F1F1F1;font-size:14px;white-space:nowrap;flex-shrink:0;"><img src="img/chip_chinese.png" alt="" style="width:20px;height:22px;object-fit:contain;">Chinese</span>
+      <span style="display:flex;align-items:center;gap:8px;height:36px;padding:0 14px 0 10px;border-radius:18px;background:#F1F1F1;font-size:14px;white-space:nowrap;flex-shrink:0;"><img src="img/chip_healthy.png" alt="" style="width:20px;height:22px;object-fit:contain;">Healthy</span>
+    </div>
+  </div>
+
+  <div style="padding:20px 0 18px 16px;box-sizing:border-box;border-bottom:8px solid #F1F1F1;">
+    <div style="display:flex;align-items:center;justify-content:space-between;padding-right:16px;">
+      <span style="font-size:20px;font-weight:700;">Your past orders</span>
+      <button aria-label="See all past orders" style="width:32px;height:32px;border-radius:16px;border:0;background:#F1F1F1;display:flex;align-items:center;justify-content:center;color:#1C1B18;padding:0;"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="5" y1="12" x2="19" y2="12"></line><polyline points="12 5 19 12 12 19"></polyline></svg></button>
+    </div>
+    <div style="display:flex;gap:10px;margin-top:16px;overflow:hidden;">
+      <div style="width:270px;flex-shrink:0;">
+        <img src="img/store_subway.jpg" alt="Subway sandwich and fries" style="width:270px;height:120px;object-fit:cover;border-radius:10px;display:block;">
+        <div style="display:flex;align-items:center;justify-content:space-between;margin-top:8px;"><span style="font-size:16px;font-weight:600;">Subway</span><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20.8 4.6a5.5 5.5 0 0 0-7.8 0L12 5.7l-1-1.1a5.5 5.5 0 0 0-7.8 7.8l1 1L12 21l7.8-7.6 1-1a5.5 5.5 0 0 0 0-7.8z"></path></svg></div>
+        <div style="font-size:12px;color:#5E5B54;margin-top:4px;display:flex;align-items:center;gap:4px;flex-wrap:wrap;">4.5 <span style="color:#1C1B18;">★</span> (500+) · 1.8 mi · <strong style="color:#1C1B18;">Fast</strong> <svg width="11" height="11" viewBox="0 0 24 24" fill="#1C1B18" stroke="none"><polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2"></polygon></svg> 28 min</div>
+        <span style="display:inline-block;margin-top:8px;height:24px;line-height:24px;padding:0 8px;border-radius:4px;background:#FFEFEB;color:#C8280A;font-size:12px;font-weight:600;">Buy 1, get 1 free</span>
+      </div>
+      <div style="width:200px;flex-shrink:0;">
+        <img src="img/store_reva.jpg" alt="Reva Modern Indian dish" style="width:200px;height:120px;object-fit:cover;border-radius:10px;display:block;">
+        <div style="font-size:16px;font-weight:600;margin-top:8px;white-space:nowrap;">Reva Modern Indian</div>
+        <div style="font-size:12px;color:#5E5B54;margin-top:4px;white-space:nowrap;">4.5 <span style="color:#1C1B18;">★</span> (200+) · 2.4 mi · 35 min</div>
+        <span style="display:inline-block;margin-top:8px;height:24px;line-height:24px;padding:0 8px;border-radius:4px;background:#F1F1F1;color:#1C1B18;font-size:12px;font-weight:600;white-space:nowrap;">#9 Best Indian</span>
+      </div>
+    </div>
+  </div>
+
+  <div style="padding:20px 0 0 16px;box-sizing:border-box;">
+    <div style="display:flex;align-items:center;justify-content:space-between;padding-right:16px;">
+      <span style="font-size:20px;font-weight:700;">Recently viewed</span>
+      <button aria-label="See all recently viewed" style="width:32px;height:32px;border-radius:16px;border:0;background:#F1F1F1;display:flex;align-items:center;justify-content:center;color:#1C1B18;padding:0;"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="5" y1="12" x2="19" y2="12"></line><polyline points="12 5 19 12 12 19"></polyline></svg></button>
+    </div>
+    <div style="display:flex;gap:10px;margin-top:16px;overflow:hidden;">
+      <div style="width:270px;flex-shrink:0;">
+        <img src="img/store_sbl.jpg" alt="Smiling Banana Leaf stir-fry" style="width:270px;height:120px;object-fit:cover;border-radius:10px;display:block;">
+        <div style="font-size:16px;font-weight:600;margin-top:8px;">Smiling Banana Leaf</div>
+        <div style="font-size:12px;color:#5E5B54;margin-top:4px;display:flex;align-items:center;gap:4px;">4.6 <span style="color:#1C1B18;">★</span> (1k+) · 3.8 mi · 39 min · <img src="img/icon_dashpass.png" alt="DashPass" style="width:14px;height:13px;object-fit:contain;"></div>
+      </div>
+      <div style="width:200px;flex-shrink:0;">
+        <img src="img/store_little_bangkok.jpg" alt="Little Bangkok soup" style="width:200px;height:120px;object-fit:cover;border-radius:10px;display:block;">
+        <div style="font-size:16px;font-weight:600;margin-top:8px;">Little Bangkok</div>
+        <div style="font-size:12px;color:#5E5B54;margin-top:4px;white-space:nowrap;">4.7 <span style="color:#1C1B18;">★</span> (800+) · 1.2 mi · 31 min</div>
+      </div>
+    </div>
+  </div></div></div>
+        <div class="phone-fixed"><div style="position:absolute;left:16px;right:16px;top:690px;display:flex;justify-content:center;">
+    <div style="height:40px;padding:0 18px;border-radius:8px;background:#2B2A27;color:#FFFFFF;font-size:14px;display:flex;align-items:center;gap:8px;"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"></polyline></svg>Thank you for the feedback</div>
+  </div>
+<div style="position:absolute;left:16px;right:16px;top:772px;height:56px;border-radius:28px;background:#FFFFFF;box-shadow:0 2px 12px rgba(0,0,0,0.18);display:flex;align-items:center;padding:0 6px 0 18px;box-sizing:border-box;gap:10px;">
+    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#1C1B18" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="7"></circle><line x1="21" y1="21" x2="16.5" y2="16.5"></line></svg>
+    <span style="flex-grow:1;font-size:15px;color:#5E5B54;">Search DashMart</span>
+    <span style="height:44px;padding:0 14px;border-radius:22px;background:#F1F1F1;display:flex;align-items:center;gap:6px;font-size:14px;font-weight:600;"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linejoin="round"><path d="M12 3l1.8 5.2L19 10l-5.2 1.8L12 17l-1.8-5.2L5 10l5.2-1.8z"></path></svg>Ask</span>
+  </div><div class="spot" hidden></div><div class="marks"></div></div>
+      </div></div>
+    </div>
+    <div class="phone-col" data-side="after">
+      <div class="phone-label a"><i></i>Proposed</div>
+      <div class="phone-scale"><div class="phone" data-screen="home" data-side="after">
+        <div class="phone-scroll"><div class="phone-content"><div style="background:#FE3008;display:flex;flex-direction:column;color:#FFFFFF;">
+    <div style="height:56px;display:flex;align-items:center;justify-content:space-between;padding:0 16px;box-sizing:border-box;">
+      <button style="border:0;background:transparent;padding:0;font-family:'IBM Plex Sans',sans-serif;color:#FFFFFF;display:flex;flex-direction:column;align-items:flex-start;gap:1px;text-align:left;"><span style="font-size:10px;font-weight:600;letter-spacing:0.6px;opacity:0.85;">DELIVER TO</span><span style="font-size:16px;font-weight:700;display:flex;align-items:center;gap:4px;">Home · 41 Elm St <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 12 15 18 9"></polyline></svg></span></button>
+      <div style="display:flex;gap:8px;">
+        <button aria-label="Account" style="width:36px;height:36px;border-radius:18px;border:0;background:#FFFFFF;display:flex;align-items:center;justify-content:center;color:#1C1B18;padding:0;"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"></path><circle cx="12" cy="7" r="4"></circle></svg></button>
+        <button aria-label="Cart" style="width:36px;height:36px;border-radius:18px;border:0;background:#FFFFFF;display:flex;align-items:center;justify-content:center;color:#1C1B18;padding:0;"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="9" cy="21" r="1"></circle><circle cx="20" cy="21" r="1"></circle><path d="M1 1h4l2.7 13.4a2 2 0 0 0 2 1.6h9.7a2 2 0 0 0 2-1.6L23 6H6"></path></svg></button>
+      </div>
+    </div>
+    <div style="height:84px;display:flex;justify-content:space-between;padding:8px 14px 0;box-sizing:border-box;">
+      <div style="display:flex;flex-direction:column;align-items:center;gap:4px;width:60px;position:relative;"><svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="#FFFFFF" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M4 2v6a3 3 0 0 0 3 3v11"></path><path d="M10 2v6a3 3 0 0 1-3 3"></path><path d="M7 2v4"></path><path d="M19 2c-2.2 0-3.5 3-3.5 6.5V13H19v9"></path></svg><span style="font-size:11px;font-weight:700;white-space:nowrap;">Restaurants</span><span style="position:absolute;left:8px;right:8px;bottom:-8px;height:3px;border-radius:2px;background:#FFFFFF;"></span></div>
+      <div style="display:flex;flex-direction:column;align-items:center;gap:4px;width:56px;"><img src="img/rail_grocery.png" alt="" style="width:32px;height:32px;object-fit:contain;"><span style="font-size:11px;font-weight:500;">Grocery</span></div>
+      <div style="display:flex;flex-direction:column;align-items:center;gap:4px;width:66px;"><img src="img/rail_convenience.png" alt="" style="width:32px;height:32px;object-fit:contain;"><span style="font-size:11px;font-weight:500;white-space:nowrap;">Convenience</span></div>
+      <div style="display:flex;flex-direction:column;align-items:center;gap:4px;width:56px;"><img src="img/rail_alcohol.png" alt="" style="width:32px;height:32px;object-fit:contain;"><span style="font-size:11px;font-weight:500;">Alcohol</span></div>
+      <div style="display:flex;flex-direction:column;align-items:center;gap:4px;width:56px;"><img src="img/rail_retail.png" alt="" style="width:32px;height:32px;object-fit:contain;"><span style="font-size:11px;font-weight:500;">Retail</span></div>
+      <div style="display:flex;flex-direction:column;align-items:center;gap:4px;width:44px;"><div style="width:32px;height:32px;display:flex;align-items:center;justify-content:center;"><svg width="26" height="26" viewBox="0 0 24 24" fill="#FFFFFF" stroke="none"><circle cx="5" cy="12" r="2.2"></circle><circle cx="12" cy="12" r="2.2"></circle><circle cx="19" cy="12" r="2.2"></circle></svg></div><span style="font-size:11px;font-weight:500;">More</span></div>
+    </div>
+  </div>
+
+  <div style="padding:16px 0 16px 16px;box-sizing:border-box;">
+    <div style="display:flex;align-items:center;justify-content:space-between;padding-right:16px;height:28px;">
+      <span style="font-size:18px;font-weight:700;">Order again</span>
+      <a href="#order-again" style="font-size:13px;font-weight:600;color:#1C1B18;text-decoration:none;">See all</a>
+    </div>
+    <div style="display:flex;gap:10px;margin-top:12px;overflow:hidden;">
+      <div style="width:160px;flex-shrink:0;">
+        <img src="img/store_subway.jpg" alt="Subway" style="width:160px;height:96px;object-fit:cover;border-radius:10px;display:block;">
+        <div style="font-size:15px;font-weight:600;margin-top:6px;">Subway</div>
+        <div style="font-size:12px;color:#5E5B54;margin-top:2px;display:flex;align-items:center;gap:6px;">28 min · 4.5 ★ <span style="height:18px;line-height:18px;padding:0 6px;border-radius:3px;background:#FFEFEB;color:#C8280A;font-size:11px;font-weight:600;">BOGO</span></div>
+      </div>
+      <div style="width:160px;flex-shrink:0;">
+        <img src="img/store_reva.jpg" alt="Reva Modern Indian" style="width:160px;height:96px;object-fit:cover;border-radius:10px;display:block;">
+        <div style="font-size:15px;font-weight:600;margin-top:6px;white-space:nowrap;">Reva Modern Indian</div>
+        <div style="font-size:12px;color:#5E5B54;margin-top:2px;">35 min · 4.5 ★</div>
+      </div>
+      <div style="width:160px;flex-shrink:0;">
+        <img src="img/store_sbl.jpg" alt="Smiling Banana Leaf" style="width:160px;height:96px;object-fit:cover;border-radius:10px;display:block;">
+        <div style="font-size:15px;font-weight:600;margin-top:6px;white-space:nowrap;">Smiling Banana Leaf</div>
+        <div style="font-size:12px;color:#5E5B54;margin-top:2px;">39 min · 4.6 ★</div>
+      </div>
+    </div>
+  </div>
+
+  <div style="padding:0 16px 16px;box-sizing:border-box;">
+    <div style="position:relative;height:120px;border-radius:12px;background:#FE3008;color:#FFFFFF;display:flex;align-items:center;padding:0 14px;box-sizing:border-box;gap:12px;overflow:hidden;">
+      <img src="img/ad_costco.jpg" alt="Costco Wholesale" style="width:92px;height:92px;object-fit:cover;border-radius:10px;flex-shrink:0;">
+      <div style="display:flex;flex-direction:column;gap:4px;flex-grow:1;">
+        <span style="font-family:'IBM Plex Mono',monospace;font-size:10px;font-weight:600;letter-spacing:1px;opacity:0.85;">SPONSORED</span>
+        <span style="font-size:16px;font-weight:700;line-height:1.15;">Costco is here. 20% off $100+</span>
+        <span style="font-size:12px;opacity:0.9;">Link your membership · max $50 off</span>
+        <button style="align-self:flex-start;margin-top:2px;height:30px;padding:0 14px;border-radius:15px;border:0;background:#FFFFFF;color:#1C1B18;font-family:'IBM Plex Sans',sans-serif;font-size:13px;font-weight:600;">Shop</button>
+      </div>
+      <button aria-label="Hide this ad" style="position:absolute;top:8px;right:8px;width:24px;height:24px;border-radius:12px;border:0;background:rgba(255,255,255,0.25);display:flex;align-items:center;justify-content:center;color:#FFFFFF;padding:0;"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><line x1="18" y1="6" x2="6" y2="18"></line><line x1="6" y1="6" x2="18" y2="18"></line></svg></button>
+    </div>
+  </div>
+
+  <div style="display:flex;gap:8px;padding:0 16px 16px;overflow:hidden;">
+    <span style="display:flex;align-items:center;gap:7px;height:36px;padding:0 12px 0 8px;border-radius:18px;background:#F1F1F1;font-size:14px;white-space:nowrap;flex-shrink:0;"><img src="img/chip_pizza.png" alt="" style="width:20px;height:22px;object-fit:contain;">Pizza</span>
+    <span style="display:flex;align-items:center;gap:7px;height:36px;padding:0 12px 0 8px;border-radius:18px;background:#F1F1F1;font-size:14px;white-space:nowrap;flex-shrink:0;"><img src="img/chip_sushi.png" alt="" style="width:20px;height:22px;object-fit:contain;">Sushi</span>
+    <span style="display:flex;align-items:center;gap:7px;height:36px;padding:0 12px 0 8px;border-radius:18px;background:#F1F1F1;font-size:14px;white-space:nowrap;flex-shrink:0;"><img src="img/chip_chinese.png" alt="" style="width:20px;height:22px;object-fit:contain;">Chinese</span>
+    <span style="display:flex;align-items:center;gap:7px;height:36px;padding:0 12px 0 8px;border-radius:18px;background:#F1F1F1;font-size:14px;white-space:nowrap;flex-shrink:0;"><img src="img/chip_mexican.png" alt="" style="width:20px;height:22px;object-fit:contain;">Mexican</span>
+    <span style="display:flex;align-items:center;gap:7px;height:36px;padding:0 12px 0 8px;border-radius:18px;background:#F1F1F1;font-size:14px;white-space:nowrap;flex-shrink:0;"><img src="img/chip_burgers.png" alt="" style="width:20px;height:22px;object-fit:contain;">Burgers</span>
+    <span style="display:flex;align-items:center;gap:7px;height:36px;padding:0 12px 0 8px;border-radius:18px;background:#F1F1F1;font-size:14px;white-space:nowrap;flex-shrink:0;"><img src="img/chip_healthy.png" alt="" style="width:20px;height:22px;object-fit:contain;">Healthy</span>
+    <span style="display:flex;align-items:center;gap:7px;height:36px;padding:0 12px 0 8px;border-radius:18px;background:#F1F1F1;font-size:14px;white-space:nowrap;flex-shrink:0;"><img src="img/chip_breakfast.png" alt="" style="width:20px;height:22px;object-fit:contain;">Breakfast</span>
+  </div>
+
+  <div style="padding:16px 0 16px 16px;box-sizing:border-box;border-top:8px solid #F1F1F1;">
+    <div style="display:flex;align-items:center;justify-content:space-between;padding-right:16px;height:28px;">
+      <span style="font-size:18px;font-weight:700;">Deals near you</span>
+      <a href="#deals" style="font-size:13px;font-weight:600;color:#1C1B18;text-decoration:none;">See all</a>
+    </div>
+    <div style="display:flex;gap:10px;margin-top:12px;overflow:hidden;">
+      <div style="width:160px;flex-shrink:0;">
+        <img src="img/store_little_bangkok.jpg" alt="Little Bangkok" style="width:160px;height:96px;object-fit:cover;border-radius:10px;display:block;">
+        <div style="font-size:15px;font-weight:600;margin-top:6px;">Little Bangkok</div>
+        <div style="font-size:12px;color:#5E5B54;margin-top:2px;display:flex;align-items:center;gap:6px;">31 min <span style="height:18px;line-height:18px;padding:0 6px;border-radius:3px;background:#FFEFEB;color:#C8280A;font-size:11px;font-weight:600;">BOGO</span></div>
+      </div>
+      <div style="width:160px;flex-shrink:0;">
+        <img src="img/food_pad_thai.jpg" alt="Thai Basil Kitchen" style="width:160px;height:96px;object-fit:cover;border-radius:10px;display:block;">
+        <div style="font-size:15px;font-weight:600;margin-top:6px;">Thai Basil Kitchen</div>
+        <div style="font-size:12px;color:#5E5B54;margin-top:2px;display:flex;align-items:center;gap:6px;">24 min <span style="height:18px;line-height:18px;padding:0 6px;border-radius:3px;background:#FFEFEB;color:#C8280A;font-size:11px;font-weight:600;">20% off</span></div>
+      </div>
+      <div style="width:160px;flex-shrink:0;position:relative;">
+        <img src="img/food_crab_rangoon.jpg" alt="Golden Wok" style="width:160px;height:96px;object-fit:cover;border-radius:10px;display:block;">
+        <span style="position:absolute;top:6px;left:6px;font-family:'IBM Plex Mono',monospace;font-size:9px;font-weight:600;letter-spacing:1px;color:#5E5B54;background:#FFFFFF;padding:2px 5px;border-radius:3px;">SPONSORED</span>
+        <div style="font-size:15px;font-weight:600;margin-top:6px;">Golden Wok</div>
+        <div style="font-size:12px;color:#5E5B54;margin-top:2px;display:flex;align-items:center;gap:6px;">22 min <span style="height:18px;line-height:18px;padding:0 6px;border-radius:3px;background:#FFEFEB;color:#C8280A;font-size:11px;font-weight:600;">$0 delivery fee</span></div>
+      </div>
+    </div>
+  </div>
+
+  <div style="padding:16px 0 16px 16px;box-sizing:border-box;border-top:1px solid #E7E4DD;">
+    <div style="display:flex;align-items:center;justify-content:space-between;padding-right:16px;height:28px;">
+      <span style="font-size:18px;font-weight:700;">Fastest near you</span>
+      <a href="#fastest" style="font-size:13px;font-weight:600;color:#1C1B18;text-decoration:none;">See all</a>
+    </div>
+    <div style="display:flex;gap:10px;margin-top:12px;overflow:hidden;">
+      <div style="width:160px;flex-shrink:0;">
+        <img src="img/food_fried_rice.jpg" alt="Bangkok Bites" style="width:160px;height:96px;object-fit:cover;border-radius:10px;display:block;">
+        <div style="font-size:15px;font-weight:600;margin-top:6px;">Bangkok Bites</div>
+        <div style="font-size:12px;color:#5E5B54;margin-top:2px;">14 min · 4.7 ★</div>
+      </div>
+      <div style="width:160px;flex-shrink:0;">
+        <img src="img/food_veggie_rolls.jpg" alt="Spring Roll House" style="width:160px;height:96px;object-fit:cover;border-radius:10px;display:block;">
+        <div style="font-size:15px;font-weight:600;margin-top:6px;">Spring Roll House</div>
+        <div style="font-size:12px;color:#5E5B54;margin-top:2px;">16 min · 4.4 ★</div>
+      </div>
+      <div style="width:160px;flex-shrink:0;">
+        <img src="img/food_pad_see_ew.jpg" alt="Noodle Bar" style="width:160px;height:96px;object-fit:cover;border-radius:10px;display:block;">
+        <div style="font-size:15px;font-weight:600;margin-top:6px;">Noodle Bar</div>
+        <div style="font-size:12px;color:#5E5B54;margin-top:2px;">19 min · 4.6 ★</div>
+      </div>
+    </div>
+  </div>
+
+  <div style="padding:16px 0 16px 16px;box-sizing:border-box;border-top:1px solid #E7E4DD;">
+    <div style="display:flex;align-items:center;justify-content:space-between;padding-right:16px;height:28px;">
+      <span style="font-size:18px;font-weight:700;">Top rated</span>
+      <a href="#top-rated" style="font-size:13px;font-weight:600;color:#1C1B18;text-decoration:none;">See all</a>
+    </div>
+    <div style="display:flex;gap:10px;margin-top:12px;overflow:hidden;">
+      <div style="width:160px;flex-shrink:0;">
+        <img src="img/food_fresh_rolls_lg.jpg" alt="Saigon Rolls" style="width:160px;height:96px;object-fit:cover;border-radius:10px;display:block;">
+        <div style="font-size:15px;font-weight:600;margin-top:6px;">Saigon Rolls</div>
+        <div style="font-size:12px;color:#5E5B54;margin-top:2px;">26 min · 4.8 ★</div>
+      </div>
+      <div style="width:160px;flex-shrink:0;">
+        <img src="img/food_pork_rolls.jpg" alt="Crispy House" style="width:160px;height:96px;object-fit:cover;border-radius:10px;display:block;">
+        <div style="font-size:15px;font-weight:600;margin-top:6px;">Crispy House</div>
+        <div style="font-size:12px;color:#5E5B54;margin-top:2px;">33 min · 4.8 ★</div>
+      </div>
+      <div style="width:160px;flex-shrink:0;">
+        <img src="img/store_reva.jpg" alt="Reva Modern Indian" style="width:160px;height:96px;object-fit:cover;border-radius:10px;display:block;">
+        <div style="font-size:15px;font-weight:600;margin-top:6px;">Reva Modern Indian</div>
+        <div style="font-size:12px;color:#5E5B54;margin-top:2px;">35 min · 4.8 ★</div>
+      </div>
+    </div>
+  </div></div></div>
+        <div class="phone-fixed"><div style="position:absolute;left:16px;right:16px;top:706px;height:40px;border-radius:8px;border:1.5px dashed #0F766E;display:flex;align-items:center;justify-content:center;font-family:'IBM Plex Mono',monospace;font-size:10px;font-weight:600;letter-spacing:0.5px;color:#0F766E;background:rgba(255,255,255,0.88);">TOASTS ANCHOR HERE · ABOVE SEARCH</div>
+<div style="position:absolute;left:16px;right:16px;top:772px;height:56px;border-radius:28px;background:#FFFFFF;box-shadow:0 2px 12px rgba(0,0,0,0.18);display:flex;align-items:center;padding:0 16px 0 18px;box-sizing:border-box;gap:10px;">
+    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#1C1B18" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="7"></circle><line x1="21" y1="21" x2="16.5" y2="16.5"></line></svg>
+    <span style="flex-grow:1;font-size:15px;color:#5E5B54;">Search DoorDash</span>
+    <span style="display:flex;align-items:center;gap:4px;font-size:13px;font-weight:600;color:#5E5B54;"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linejoin="round"><path d="M12 3l1.8 5.2L19 10l-5.2 1.8L12 17l-1.8-5.2L5 10l5.2-1.8z"></path></svg>Ask</span>
+  </div><div class="spot" hidden></div><div class="marks"></div></div>
+      </div></div>
+    </div>
+    <aside class="panel" data-panel="home"></aside>
+  </div>
+</section>
+
+<!-- STORE -->
+<section class="screen" data-screen="store" role="tabpanel" hidden>
+  <div class="seg" role="group" aria-label="Which phone to show">
+    <button type="button" data-view="before" aria-pressed="true">Today</button>
+    <button type="button" data-view="after" aria-pressed="false">Proposed</button>
+  </div>
+  <div class="stage" data-view="before">
+    <div class="phone-col" data-side="before">
+      <div class="phone-label b"><i></i>Today</div>
+      <div class="phone-scale"><div class="phone" data-screen="store" data-side="before">
+        <div class="phone-scroll"><div class="phone-content"><div style="height:200px;position:relative;overflow:hidden;">
+    <img src="img/store_sbl.jpg" alt="Smiling Banana Leaf hero" style="width:390px;height:200px;object-fit:cover;display:block;">
+    <div style="position:absolute;left:0;right:0;bottom:0;height:120px;background:linear-gradient(to bottom, rgba(0,0,0,0) 0%, rgba(40,30,20,0.75) 100%);"></div>
+    <div style="position:absolute;top:12px;left:16px;right:16px;display:flex;justify-content:space-between;">
+      <button aria-label="Back" style="width:40px;height:40px;border-radius:20px;border:0;background:#FFFFFF;display:flex;align-items:center;justify-content:center;color:#1C1B18;padding:0;"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M19 12H5"></path><path d="M12 19l-7-7 7-7"></path></svg></button>
+      <div style="display:flex;gap:8px;">
+        <button aria-label="Save" style="width:40px;height:40px;border-radius:20px;border:0;background:#FFFFFF;display:flex;align-items:center;justify-content:center;color:#1C1B18;padding:0;"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20.8 4.6a5.5 5.5 0 0 0-7.8 0L12 5.7l-1-1.1a5.5 5.5 0 0 0-7.8 7.8l1 1L12 21l7.8-7.6 1-1a5.5 5.5 0 0 0 0-7.8z"></path></svg></button>
+        <button aria-label="Share" style="width:40px;height:40px;border-radius:20px;border:0;background:#FFFFFF;display:flex;align-items:center;justify-content:center;color:#1C1B18;padding:0;"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 12v8a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2v-8"></path><polyline points="16 6 12 2 8 6"></polyline><line x1="12" y1="2" x2="12" y2="15"></line></svg></button>
+        <button aria-label="More" style="width:40px;height:40px;border-radius:20px;border:0;background:#FFFFFF;display:flex;align-items:center;justify-content:center;color:#1C1B18;padding:0;"><svg width="18" height="18" viewBox="0 0 24 24" fill="#1C1B18" stroke="none"><circle cx="5" cy="12" r="2"></circle><circle cx="12" cy="12" r="2"></circle><circle cx="19" cy="12" r="2"></circle></svg></button>
+      </div>
+    </div>
+    <div style="position:absolute;left:16px;bottom:12px;display:flex;align-items:center;gap:12px;">
+      <img src="img/logo_sbl.png" alt="Smiling Banana Leaf logo" style="width:52px;height:52px;border-radius:26px;object-fit:cover;background:#FFFFFF;display:block;">
+      <span style="font-size:26px;font-weight:700;color:#FFFFFF;text-shadow:0 1px 3px rgba(0,0,0,0.4);">Smiling Banana Leaf</span>
+    </div>
+  </div>
+  <div style="height:116px;background:#5A4832;color:#FFFFFF;padding:10px 16px 0;box-sizing:border-box;display:flex;flex-direction:column;gap:6px;">
+    <div style="font-size:14px;">Bangkok-style Thai with Northern-style Khao Soi</div>
+    <div style="font-size:13px;color:#E6E0D9;display:flex;align-items:center;gap:6px;"><img src="img/icon_dashpass.png" alt="" style="width:14px;height:13px;object-fit:contain;">DashPass · Virtual Brand · 3.8 mi</div>
+    <button style="margin-top:4px;height:48px;width:200px;border-radius:8px;border:0;background:rgba(255,255,255,0.16);color:#FFFFFF;display:flex;align-items:center;gap:10px;padding:0 14px;font-family:'IBM Plex Sans',sans-serif;text-align:left;"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"></circle><line x1="12" y1="16" x2="12" y2="12"></line><line x1="12" y1="8" x2="12.01" y2="8"></line></svg><span style="display:flex;flex-direction:column;"><span style="font-size:14px;font-weight:600;">Store info</span><span style="font-size:12px;color:#E6E0D9;">See details</span></span></button>
+  </div>
+
+  <div style="margin:16px 16px 0;border:1px solid #E1DFD8;border-radius:12px;padding:12px;box-sizing:border-box;display:flex;flex-direction:column;gap:12px;">
+    <div style="display:flex;align-items:center;justify-content:space-between;">
+      <div style="display:flex;height:40px;border-radius:20px;background:#F1F1F1;padding:3px;box-sizing:border-box;"><span style="height:34px;padding:0 16px;border-radius:17px;background:#1C1B18;color:#FFFFFF;font-size:14px;font-weight:600;display:flex;align-items:center;">Delivery</span><span style="height:34px;padding:0 16px;font-size:14px;font-weight:600;display:flex;align-items:center;">Pickup</span></div>
+      <span style="height:40px;padding:0 14px;border-radius:20px;background:#F1F1F1;font-size:14px;font-weight:600;display:flex;align-items:center;">Group order</span>
+    </div>
+    <div style="display:flex;align-items:flex-start;justify-content:space-between;">
+      <div style="font-size:13px;line-height:1.35;display:flex;flex-direction:column;"><span style="font-weight:600;display:flex;align-items:center;gap:6px;"><img src="img/icon_dashpass.png" alt="" style="width:16px;height:15px;object-fit:contain;">DashPass benefits apply</span><span style="display:flex;align-items:center;gap:4px;">on $12+ <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"></circle><line x1="12" y1="16" x2="12" y2="12"></line><line x1="12" y1="8" x2="12.01" y2="8"></line></svg></span></div>
+      <div style="display:flex;align-items:center;gap:10px;"><div style="display:flex;flex-direction:column;align-items:flex-end;line-height:1.2;"><span style="font-size:15px;font-weight:600;">39 min</span><span style="font-size:12px;color:#5E5B54;">delivery time</span></div><span style="width:30px;height:30px;border-radius:15px;background:#F1F1F1;display:flex;align-items:center;justify-content:center;"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 12 15 18 9"></polyline></svg></span></div>
+    </div>
+  </div>
+
+  <div style="padding:22px 0 0 16px;">
+    <div style="display:flex;align-items:center;justify-content:space-between;padding-right:16px;">
+      <span style="font-size:20px;font-weight:700;">Deals &amp; benefits</span>
+      <button aria-label="See all deals" style="width:32px;height:32px;border-radius:16px;border:0;background:#F1F1F1;display:flex;align-items:center;justify-content:center;color:#1C1B18;padding:0;"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="5" y1="12" x2="19" y2="12"></line><polyline points="12 5 19 12 12 19"></polyline></svg></button>
+    </div>
+    <div style="display:flex;gap:10px;margin-top:12px;overflow:hidden;">
+      <div style="width:330px;flex-shrink:0;border:1px solid #E1DFD8;border-radius:10px;padding:12px;box-sizing:border-box;display:flex;align-items:center;gap:12px;">
+        <img src="img/icon_tag.png" alt="" style="width:26px;height:28px;object-fit:contain;">
+        <div style="display:flex;flex-direction:column;flex-grow:1;line-height:1.25;"><span style="font-size:15px;font-weight:600;color:#C8280A;">Buy 1, get 1 free</span><span style="font-size:13px;color:#5E5B54;">Add 2 eligible items</span></div>
+        <span style="height:36px;padding:0 14px;border-radius:18px;background:#F1F1F1;font-size:13px;font-weight:600;display:flex;align-items:center;">See items</span>
+      </div>
+      <div style="width:120px;flex-shrink:0;border:1px solid #E1DFD8;border-radius:10px;padding:12px;box-sizing:border-box;display:flex;flex-direction:column;line-height:1.25;"><span style="font-size:15px;font-weight:600;color:#C8280A;white-space:nowrap;">$10 off $40</span><span style="font-size:13px;color:#5E5B54;white-space:nowrap;">Orders over $40</span></div>
+    </div>
+  </div>
+
+  <div style="padding:26px 16px 0;">
+    <div style="font-size:20px;font-weight:700;">What can we help you find?</div>
+    <div style="display:flex;gap:8px;margin-top:12px;">
+      <span style="height:36px;padding:0 16px;border-radius:18px;background:#1C1B18;color:#FFFFFF;font-size:14px;font-weight:600;display:flex;align-items:center;">Featured</span>
+      <span style="height:36px;padding:0 16px;border-radius:18px;background:#F1F1F1;font-size:14px;font-weight:600;display:flex;align-items:center;">High protein</span>
+      <span style="height:36px;padding:0 16px;border-radius:18px;background:#F1F1F1;font-size:14px;font-weight:600;display:flex;align-items:center;">Spicy</span>
+    </div>
+  </div>
+
+  <div style="padding:20px 16px 0;display:grid;grid-template-columns:repeat(2, minmax(0, 1fr));gap:16px 14px;">
+    <div style="display:flex;flex-direction:column;gap:6px;">
+      <div style="position:relative;height:156px;border-radius:10px;overflow:hidden;"><img src="img/food_fresh_rolls.jpg" alt="Fresh Roll of the Day" style="width:100%;height:156px;object-fit:cover;display:block;"><button aria-label="Add Fresh Roll of the Day" style="position:absolute;right:6px;bottom:5px;width:36px;height:36px;border-radius:18px;border:0;background:#FFFFFF;box-shadow:0 1px 4px rgba(0,0,0,0.2);display:flex;align-items:center;justify-content:center;color:#1C1B18;padding:0;"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><line x1="12" y1="5" x2="12" y2="19"></line><line x1="5" y1="12" x2="19" y2="12"></line></svg></button></div>
+      <div style="font-size:15px;font-weight:600;">Fresh Roll of the Day</div>
+      <div style="font-size:14px;display:flex;gap:6px;align-items:baseline;"><span style="color:#C8280A;font-weight:600;">2 for $9.99</span><span style="color:#5E5B54;text-decoration:line-through;font-size:13px;">$19.98</span></div>
+      <span style="align-self:flex-start;height:24px;line-height:24px;padding:0 8px;border-radius:4px;background:#FFEFEB;color:#C8280A;font-size:12px;font-weight:600;">Buy 1, get 1 free</span>
+    </div>
+    <div style="display:flex;flex-direction:column;gap:6px;">
+      <div style="position:relative;height:156px;border-radius:10px;overflow:hidden;"><img src="img/food_pork_rolls.jpg" alt="Crispy Pork Spring Rolls" style="width:100%;height:156px;object-fit:cover;display:block;"><button aria-label="Add Crispy Pork Spring Rolls" style="position:absolute;right:6px;bottom:5px;width:36px;height:36px;border-radius:18px;border:0;background:#FFFFFF;box-shadow:0 1px 4px rgba(0,0,0,0.2);display:flex;align-items:center;justify-content:center;color:#1C1B18;padding:0;"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><line x1="12" y1="5" x2="12" y2="19"></line><line x1="5" y1="12" x2="19" y2="12"></line></svg></button></div>
+      <div style="font-size:15px;font-weight:600;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;">Crispy  PORK  Spring Rolls (4)</div>
+      <div style="font-size:14px;display:flex;gap:6px;align-items:baseline;"><span style="color:#C8280A;font-weight:600;">2 for $11.49</span><span style="color:#5E5B54;text-decoration:line-through;font-size:13px;">$22.98</span></div>
+      <span style="align-self:flex-start;height:24px;line-height:24px;padding:0 8px;border-radius:4px;background:#FFEFEB;color:#C8280A;font-size:12px;font-weight:600;">Buy 1, get 1 free</span>
+    </div>
+    <div style="display:flex;flex-direction:column;gap:6px;">
+      <div style="position:relative;height:156px;border-radius:10px;overflow:hidden;"><img src="img/food_pad_thai.jpg" alt="Pad Thai" style="width:100%;height:156px;object-fit:cover;display:block;"><button aria-label="Add Pad Thai" style="position:absolute;right:6px;bottom:5px;width:36px;height:36px;border-radius:18px;border:0;background:#FFFFFF;box-shadow:0 1px 4px rgba(0,0,0,0.2);display:flex;align-items:center;justify-content:center;color:#1C1B18;padding:0;"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><line x1="12" y1="5" x2="12" y2="19"></line><line x1="5" y1="12" x2="19" y2="12"></line></svg></button></div>
+      <div style="font-size:15px;font-weight:600;">Pad Thai</div>
+      <div style="font-size:14px;color:#5E5B54;">$18.99</div>
+    </div>
+    <div style="display:flex;flex-direction:column;gap:6px;">
+      <div style="position:relative;height:156px;border-radius:10px;overflow:hidden;"><img src="img/food_pad_see_ew.jpg" alt="Pad See Ew" style="width:100%;height:156px;object-fit:cover;display:block;"><button aria-label="Add Pad See Ew" style="position:absolute;right:6px;bottom:5px;width:36px;height:36px;border-radius:18px;border:0;background:#FFFFFF;box-shadow:0 1px 4px rgba(0,0,0,0.2);display:flex;align-items:center;justify-content:center;color:#1C1B18;padding:0;"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><line x1="12" y1="5" x2="12" y2="19"></line><line x1="5" y1="12" x2="19" y2="12"></line></svg></button></div>
+      <div style="font-size:15px;font-weight:600;">Pad See Ew</div>
+      <div style="font-size:14px;color:#5E5B54;">$18.99</div>
+    </div>
+    <div style="display:flex;flex-direction:column;gap:6px;">
+      <div style="position:relative;height:156px;border-radius:10px;overflow:hidden;"><img src="img/food_crab_rangoon.jpg" alt="Crab Rangoon" style="width:100%;height:156px;object-fit:cover;display:block;"><button aria-label="Add Crab Rangoon" style="position:absolute;right:6px;bottom:5px;width:36px;height:36px;border-radius:18px;border:0;background:#FFFFFF;box-shadow:0 1px 4px rgba(0,0,0,0.2);display:flex;align-items:center;justify-content:center;color:#1C1B18;padding:0;"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><line x1="12" y1="5" x2="12" y2="19"></line><line x1="5" y1="12" x2="19" y2="12"></line></svg></button></div>
+      <div style="font-size:15px;font-weight:600;">Crab Rangoon (6)</div>
+      <div style="font-size:14px;display:flex;gap:6px;align-items:baseline;"><span style="color:#C8280A;font-weight:600;">2 for $10.49</span><span style="color:#5E5B54;text-decoration:line-through;font-size:13px;">$20.98</span></div>
+      <span style="align-self:flex-start;height:24px;line-height:24px;padding:0 8px;border-radius:4px;background:#FFEFEB;color:#C8280A;font-size:12px;font-weight:600;">Buy 1, get 1 free</span>
+    </div>
+    <div style="display:flex;flex-direction:column;gap:6px;">
+      <div style="position:relative;height:156px;border-radius:10px;overflow:hidden;"><img src="img/food_fried_rice.jpg" alt="Pineapple Fried Rice" style="width:100%;height:156px;object-fit:cover;display:block;"><button aria-label="Add Pineapple Fried Rice" style="position:absolute;right:6px;bottom:5px;width:36px;height:36px;border-radius:18px;border:0;background:#FFFFFF;box-shadow:0 1px 4px rgba(0,0,0,0.2);display:flex;align-items:center;justify-content:center;color:#1C1B18;padding:0;"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><line x1="12" y1="5" x2="12" y2="19"></line><line x1="5" y1="12" x2="19" y2="12"></line></svg></button></div>
+      <div style="font-size:15px;font-weight:600;">Pineapple Fried Rice</div>
+      <div style="font-size:14px;color:#5E5B54;">$19.49</div>
+    </div>
+  </div></div></div>
+        <div class="phone-fixed"><div class="spot" hidden></div><div class="marks"></div></div>
+      </div></div>
+    </div>
+    <div class="phone-col" data-side="after">
+      <div class="phone-label a"><i></i>Proposed</div>
+      <div class="phone-scale"><div class="phone" data-screen="store" data-side="after">
+        <div class="phone-scroll"><div class="phone-content"><div style="height:120px;position:relative;overflow:hidden;">
+    <img src="img/store_sbl.jpg" alt="Smiling Banana Leaf hero" style="width:390px;height:120px;object-fit:cover;object-position:center 40%;display:block;">
+    <div style="position:absolute;top:12px;left:16px;right:16px;display:flex;justify-content:space-between;">
+      <button aria-label="Back" style="width:40px;height:40px;border-radius:20px;border:0;background:#FFFFFF;display:flex;align-items:center;justify-content:center;color:#1C1B18;padding:0;"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M19 12H5"></path><path d="M12 19l-7-7 7-7"></path></svg></button>
+      <div style="display:flex;gap:8px;">
+        <button aria-label="Save" style="width:40px;height:40px;border-radius:20px;border:0;background:#FFFFFF;display:flex;align-items:center;justify-content:center;color:#1C1B18;padding:0;"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20.8 4.6a5.5 5.5 0 0 0-7.8 0L12 5.7l-1-1.1a5.5 5.5 0 0 0-7.8 7.8l1 1L12 21l7.8-7.6 1-1a5.5 5.5 0 0 0 0-7.8z"></path></svg></button>
+        <button aria-label="More: share, group order, store info" style="width:40px;height:40px;border-radius:20px;border:0;background:#FFFFFF;display:flex;align-items:center;justify-content:center;color:#1C1B18;padding:0;"><svg width="18" height="18" viewBox="0 0 24 24" fill="#1C1B18" stroke="none"><circle cx="5" cy="12" r="2"></circle><circle cx="12" cy="12" r="2"></circle><circle cx="19" cy="12" r="2"></circle></svg></button>
+      </div>
+    </div>
+  </div>
+
+  <div style="padding:12px 16px 0;display:flex;align-items:flex-start;gap:12px;">
+    <img src="img/logo_sbl.png" alt="Smiling Banana Leaf logo" style="width:48px;height:48px;border-radius:24px;object-fit:cover;border:1px solid #E1DFD8;display:block;flex-shrink:0;">
+    <div style="display:flex;flex-direction:column;gap:4px;">
+      <div style="font-size:22px;font-weight:700;line-height:1.15;">Smiling Banana Leaf</div>
+      <div style="font-size:13px;color:#5E5B54;">Bangkok-style Thai · Northern-style Khao Soi</div>
+      <div style="font-size:13px;display:flex;align-items:center;gap:6px;"><span style="font-weight:600;">4.6 ★</span><span style="color:#5E5B54;">(1k+)</span><span style="color:#5E5B54;">·</span><span>3.8 mi</span><span style="color:#5E5B54;">·</span><span>29–39 min</span><span style="color:#5E5B54;">·</span><img src="img/icon_dashpass.png" alt="DashPass" style="width:16px;height:15px;object-fit:contain;"></div>
+    </div>
+  </div>
+
+  <div style="margin:12px 16px 0;height:44px;border-radius:22px;background:#F1F1F1;padding:3px;box-sizing:border-box;display:flex;">
+    <span style="flex:1;height:38px;border-radius:19px;background:#1C1B18;color:#FFFFFF;font-size:14px;font-weight:600;display:flex;align-items:center;justify-content:center;gap:6px;">Delivery <span style="font-weight:400;color:#D9D6CF;">29 min</span></span>
+    <span style="flex:1;height:38px;border-radius:19px;font-size:14px;font-weight:600;display:flex;align-items:center;justify-content:center;gap:6px;">Pickup <span style="font-weight:400;color:#5E5B54;">15 min</span></span>
+  </div>
+
+  <a href="#offers" style="margin:12px 16px 0;height:40px;border:1px solid #E1DFD8;border-radius:10px;display:flex;align-items:center;gap:10px;padding:0 12px;box-sizing:border-box;color:#1C1B18;text-decoration:none;">
+    <img src="img/icon_tag.png" alt="" style="width:18px;height:20px;object-fit:contain;">
+    <span style="flex-grow:1;font-size:13px;"><span style="font-weight:600;">2 offers</span> <span style="color:#5E5B54;">· BOGO small bites · $10 off $40</span></span>
+    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#5E5B54" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="9 18 15 12 9 6"></polyline></svg>
+  </a>
+
+  <div style="margin-top:12px;height:44px;border-bottom:1px solid #E7E4DD;display:flex;align-items:center;padding:0 8px 0 12px;box-sizing:border-box;gap:4px;">
+    <button aria-label="Full menu" style="width:36px;height:36px;border:0;background:transparent;display:flex;align-items:center;justify-content:center;color:#1C1B18;padding:0;flex-shrink:0;"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="8" y1="6" x2="21" y2="6"></line><line x1="8" y1="12" x2="21" y2="12"></line><line x1="8" y1="18" x2="21" y2="18"></line><line x1="3" y1="6" x2="3.01" y2="6"></line><line x1="3" y1="12" x2="3.01" y2="12"></line><line x1="3" y1="18" x2="3.01" y2="18"></line></svg></button>
+    <button aria-label="Search menu" style="width:36px;height:36px;border:0;background:transparent;display:flex;align-items:center;justify-content:center;color:#1C1B18;padding:0;flex-shrink:0;"><svg width="19" height="19" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="7"></circle><line x1="21" y1="21" x2="16.5" y2="16.5"></line></svg></button>
+    <div style="display:flex;gap:18px;flex-grow:1;overflow:hidden;padding-left:6px;height:44px;align-items:stretch;">
+      <span style="font-size:15px;font-weight:600;display:flex;align-items:center;border-bottom:2px solid #1C1B18;white-space:nowrap;">Most ordered</span>
+      <span style="font-size:15px;color:#5E5B54;display:flex;align-items:center;white-space:nowrap;">Small bites</span>
+      <span style="font-size:15px;color:#5E5B54;display:flex;align-items:center;white-space:nowrap;">Soups</span>
+      <span style="font-size:15px;color:#5E5B54;display:flex;align-items:center;white-space:nowrap;">Salads</span>
+    </div>
+    <button aria-label="Filters: high protein, spicy, vegetarian" style="width:36px;height:36px;border:0;background:transparent;display:flex;align-items:center;justify-content:center;color:#1C1B18;padding:0;flex-shrink:0;"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="4" y1="21" x2="4" y2="14"></line><line x1="4" y1="10" x2="4" y2="3"></line><line x1="12" y1="21" x2="12" y2="12"></line><line x1="12" y1="8" x2="12" y2="3"></line><line x1="20" y1="21" x2="20" y2="16"></line><line x1="20" y1="12" x2="20" y2="3"></line><line x1="1" y1="14" x2="7" y2="14"></line><line x1="9" y1="8" x2="15" y2="8"></line><line x1="17" y1="16" x2="23" y2="16"></line></svg></button>
+  </div>
+
+  <div style="padding:14px 16px 0;font-size:16px;font-weight:700;">Most ordered</div>
+
+  <div style="padding:10px 16px 0;display:grid;grid-template-columns:repeat(2, minmax(0, 1fr));gap:16px 14px;">
+    <div style="display:flex;flex-direction:column;gap:6px;">
+      <div style="position:relative;height:156px;border-radius:10px;overflow:hidden;"><img src="img/food_fresh_rolls.jpg" alt="Fresh Roll of the Day" style="width:100%;height:156px;object-fit:cover;display:block;"><button aria-label="Add Fresh Roll of the Day" style="position:absolute;right:6px;bottom:5px;width:36px;height:36px;border-radius:18px;border:0;background:#FFFFFF;box-shadow:0 1px 4px rgba(0,0,0,0.2);display:flex;align-items:center;justify-content:center;color:#1C1B18;padding:0;"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><line x1="12" y1="5" x2="12" y2="19"></line><line x1="5" y1="12" x2="19" y2="12"></line></svg></button></div>
+      <div style="font-size:15px;font-weight:600;line-height:1.25;min-height:38px;">Fresh Roll of the Day</div>
+      <div style="font-size:14px;display:flex;gap:8px;align-items:center;"><span>$9.99</span><span style="height:18px;line-height:18px;padding:0 6px;border-radius:3px;background:#FFEFEB;color:#C8280A;font-size:11px;font-weight:600;">BOGO</span></div>
+    </div>
+    <div style="display:flex;flex-direction:column;gap:6px;">
+      <div style="position:relative;height:156px;border-radius:10px;overflow:hidden;"><img src="img/food_pork_rolls.jpg" alt="Crispy Pork Spring Rolls" style="width:100%;height:156px;object-fit:cover;display:block;"><button aria-label="Add Crispy Pork Spring Rolls" style="position:absolute;right:6px;bottom:5px;width:36px;height:36px;border-radius:18px;border:0;background:#FFFFFF;box-shadow:0 1px 4px rgba(0,0,0,0.2);display:flex;align-items:center;justify-content:center;color:#1C1B18;padding:0;"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><line x1="12" y1="5" x2="12" y2="19"></line><line x1="5" y1="12" x2="19" y2="12"></line></svg></button></div>
+      <div style="font-size:15px;font-weight:600;line-height:1.25;min-height:38px;">Crispy Pork Spring Rolls (4)</div>
+      <div style="font-size:14px;display:flex;gap:8px;align-items:center;"><span>$11.49</span><span style="height:18px;line-height:18px;padding:0 6px;border-radius:3px;background:#FFEFEB;color:#C8280A;font-size:11px;font-weight:600;">BOGO</span></div>
+    </div>
+    <div style="display:flex;flex-direction:column;gap:6px;">
+      <div style="position:relative;height:156px;border-radius:10px;overflow:hidden;"><img src="img/food_pad_thai.jpg" alt="Pad Thai" style="width:100%;height:156px;object-fit:cover;display:block;"><button aria-label="Add Pad Thai" style="position:absolute;right:6px;bottom:5px;width:36px;height:36px;border-radius:18px;border:0;background:#FFFFFF;box-shadow:0 1px 4px rgba(0,0,0,0.2);display:flex;align-items:center;justify-content:center;color:#1C1B18;padding:0;"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><line x1="12" y1="5" x2="12" y2="19"></line><line x1="5" y1="12" x2="19" y2="12"></line></svg></button></div>
+      <div style="font-size:15px;font-weight:600;line-height:1.25;min-height:38px;">Pad Thai</div>
+      <div style="font-size:14px;">$18.99</div>
+    </div>
+    <div style="display:flex;flex-direction:column;gap:6px;">
+      <div style="position:relative;height:156px;border-radius:10px;overflow:hidden;"><img src="img/food_pad_see_ew.jpg" alt="Pad See Ew" style="width:100%;height:156px;object-fit:cover;display:block;"><button aria-label="Add Pad See Ew" style="position:absolute;right:6px;bottom:5px;width:36px;height:36px;border-radius:18px;border:0;background:#FFFFFF;box-shadow:0 1px 4px rgba(0,0,0,0.2);display:flex;align-items:center;justify-content:center;color:#1C1B18;padding:0;"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><line x1="12" y1="5" x2="12" y2="19"></line><line x1="5" y1="12" x2="19" y2="12"></line></svg></button></div>
+      <div style="font-size:15px;font-weight:600;line-height:1.25;min-height:38px;">Pad See Ew</div>
+      <div style="font-size:14px;">$18.99</div>
+    </div>
+    <div style="display:flex;flex-direction:column;gap:6px;">
+      <div style="position:relative;height:156px;border-radius:10px;overflow:hidden;"><img src="img/food_crab_rangoon.jpg" alt="Crab Rangoon" style="width:100%;height:156px;object-fit:cover;display:block;"><button aria-label="Add Crab Rangoon" style="position:absolute;right:6px;bottom:5px;width:36px;height:36px;border-radius:18px;border:0;background:#FFFFFF;box-shadow:0 1px 4px rgba(0,0,0,0.2);display:flex;align-items:center;justify-content:center;color:#1C1B18;padding:0;"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><line x1="12" y1="5" x2="12" y2="19"></line><line x1="5" y1="12" x2="19" y2="12"></line></svg></button></div>
+      <div style="font-size:15px;font-weight:600;line-height:1.25;min-height:38px;">Crab Rangoon (6)</div>
+      <div style="font-size:14px;display:flex;gap:8px;align-items:center;"><span>$10.49</span><span style="height:18px;line-height:18px;padding:0 6px;border-radius:3px;background:#FFEFEB;color:#C8280A;font-size:11px;font-weight:600;">BOGO</span></div>
+    </div>
+    <div style="display:flex;flex-direction:column;gap:6px;">
+      <div style="position:relative;height:156px;border-radius:10px;overflow:hidden;"><img src="img/food_fried_rice.jpg" alt="Pineapple Fried Rice" style="width:100%;height:156px;object-fit:cover;display:block;"><button aria-label="Add Pineapple Fried Rice" style="position:absolute;right:6px;bottom:5px;width:36px;height:36px;border-radius:18px;border:0;background:#FFFFFF;box-shadow:0 1px 4px rgba(0,0,0,0.2);display:flex;align-items:center;justify-content:center;color:#1C1B18;padding:0;"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><line x1="12" y1="5" x2="12" y2="19"></line><line x1="5" y1="12" x2="19" y2="12"></line></svg></button></div>
+      <div style="font-size:15px;font-weight:600;line-height:1.25;min-height:38px;">Pineapple Fried Rice</div>
+      <div style="font-size:14px;">$19.49</div>
+    </div>
+    <div style="display:flex;flex-direction:column;gap:6px;">
+      <div style="position:relative;height:156px;border-radius:10px;overflow:hidden;"><img src="img/food_veggie_rolls.jpg" alt="Veggie Crispy Rolls" style="width:100%;height:156px;object-fit:cover;display:block;"><button aria-label="Add Veggie Crispy Rolls" style="position:absolute;right:6px;bottom:5px;width:36px;height:36px;border-radius:18px;border:0;background:#FFFFFF;box-shadow:0 1px 4px rgba(0,0,0,0.2);display:flex;align-items:center;justify-content:center;color:#1C1B18;padding:0;"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><line x1="12" y1="5" x2="12" y2="19"></line><line x1="5" y1="12" x2="19" y2="12"></line></svg></button></div>
+      <div style="font-size:15px;font-weight:600;line-height:1.25;min-height:38px;">Veggie Crispy Rolls (4)</div>
+      <div style="font-size:14px;display:flex;gap:8px;align-items:center;"><span>$9.49</span><span style="height:18px;line-height:18px;padding:0 6px;border-radius:3px;background:#FFEFEB;color:#C8280A;font-size:11px;font-weight:600;">BOGO</span></div>
+    </div>
+    <div style="display:flex;flex-direction:column;gap:6px;">
+      <div style="position:relative;height:156px;border-radius:10px;overflow:hidden;"><img src="img/store_little_bangkok.jpg" alt="Tom Yum Soup" style="width:100%;height:156px;object-fit:cover;display:block;"><button aria-label="Add Tom Yum Soup" style="position:absolute;right:6px;bottom:5px;width:36px;height:36px;border-radius:18px;border:0;background:#FFFFFF;box-shadow:0 1px 4px rgba(0,0,0,0.2);display:flex;align-items:center;justify-content:center;color:#1C1B18;padding:0;"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><line x1="12" y1="5" x2="12" y2="19"></line><line x1="5" y1="12" x2="19" y2="12"></line></svg></button></div>
+      <div style="font-size:15px;font-weight:600;line-height:1.25;min-height:38px;">Tom Yum Soup</div>
+      <div style="font-size:14px;">$12.99</div>
+    </div>
+  </div></div></div>
+        <div class="phone-fixed"><div class="spot" hidden></div><div class="marks"></div></div>
+      </div></div>
+    </div>
+    <aside class="panel" data-panel="store"></aside>
+  </div>
+</section>
+
+<!-- MENU -->
+<section class="screen" data-screen="menu" role="tabpanel" hidden>
+  <div class="seg" role="group" aria-label="Which phone to show">
+    <button type="button" data-view="before" aria-pressed="true">Today</button>
+    <button type="button" data-view="after" aria-pressed="false">Proposed</button>
+  </div>
+  <div class="stage" data-view="before">
+    <div class="phone-col" data-side="before">
+      <div class="phone-label b"><i></i>Today</div>
+      <div class="phone-scale"><div class="phone" data-screen="menu" data-side="before">
+        <div class="phone-scroll"><div class="phone-content"><div style="height:56px;display:flex;align-items:center;justify-content:space-between;padding:0 12px;box-sizing:border-box;background:#FFFFFF;">
+    <button aria-label="Back" style="width:40px;height:40px;border:0;background:transparent;display:flex;align-items:center;justify-content:center;color:#1C1B18;padding:0;"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M19 12H5"></path><path d="M12 19l-7-7 7-7"></path></svg></button>
+    <span style="font-size:19px;font-weight:700;">Smiling Banana Leaf</span>
+    <div style="display:flex;">
+      <button aria-label="Save" style="width:40px;height:40px;border:0;background:transparent;display:flex;align-items:center;justify-content:center;color:#1C1B18;padding:0;"><svg width="19" height="19" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20.8 4.6a5.5 5.5 0 0 0-7.8 0L12 5.7l-1-1.1a5.5 5.5 0 0 0-7.8 7.8l1 1L12 21l7.8-7.6 1-1a5.5 5.5 0 0 0 0-7.8z"></path></svg></button>
+      <button aria-label="Share" style="width:40px;height:40px;border:0;background:transparent;display:flex;align-items:center;justify-content:center;color:#1C1B18;padding:0;"><svg width="19" height="19" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 12v8a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2v-8"></path><polyline points="16 6 12 2 8 6"></polyline><line x1="12" y1="2" x2="12" y2="15"></line></svg></button>
+      <button aria-label="More" style="width:40px;height:40px;border:0;background:transparent;display:flex;align-items:center;justify-content:center;color:#1C1B18;padding:0;"><svg width="19" height="19" viewBox="0 0 24 24" fill="#1C1B18" stroke="none"><circle cx="5" cy="12" r="2"></circle><circle cx="12" cy="12" r="2"></circle><circle cx="19" cy="12" r="2"></circle></svg></button>
+    </div>
+  </div>
+
+  <div style="height:48px;border-bottom:1px solid #E7E4DD;display:flex;align-items:stretch;padding:0 0 0 12px;box-sizing:border-box;gap:6px;background:#FFFFFF;">
+    <button aria-label="Full menu" style="width:36px;border:0;background:transparent;display:flex;align-items:center;justify-content:center;color:#1C1B18;padding:0;"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="8" y1="6" x2="21" y2="6"></line><line x1="8" y1="12" x2="21" y2="12"></line><line x1="8" y1="18" x2="21" y2="18"></line><line x1="3" y1="6" x2="3.01" y2="6"></line><line x1="3" y1="12" x2="3.01" y2="12"></line><line x1="3" y1="18" x2="3.01" y2="18"></line></svg></button>
+    <button aria-label="Search menu" style="width:36px;border:0;background:transparent;display:flex;align-items:center;justify-content:center;color:#1C1B18;padding:0;"><svg width="19" height="19" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="7"></circle><line x1="21" y1="21" x2="16.5" y2="16.5"></line></svg></button>
+    <div style="display:flex;gap:22px;flex-grow:1;overflow:hidden;padding-left:8px;">
+      <span style="font-size:16px;font-weight:600;display:flex;align-items:center;border-bottom:2px solid #1C1B18;white-space:nowrap;">Most Ordered</span>
+      <span style="font-size:16px;color:#5E5B54;display:flex;align-items:center;white-space:nowrap;">Small Bites</span>
+      <span style="font-size:16px;color:#5E5B54;display:flex;align-items:center;white-space:nowrap;">Soups</span>
+    </div>
+  </div>
+
+  <div style="height:30px;overflow:hidden;position:relative;padding:0 16px;">
+    <div style="position:absolute;top:-9px;left:16px;right:16px;font-size:14px;color:#5E5B54;line-height:1.35;">The most commonly ordered items and dishes from this store</div>
+  </div>
+
+  <div style="margin:0 16px;height:72px;border:1px solid #E1DFD8;border-radius:10px;display:flex;align-items:center;padding:0 12px;box-sizing:border-box;gap:10px;">
+    <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#5E5B54" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="15 18 9 12 15 6"></polyline></svg>
+    <div style="display:flex;flex-direction:column;flex-grow:1;line-height:1.3;"><span style="font-size:14px;font-weight:600;color:#C8280A;">Earn credits for menu-worthy photos</span><span style="font-size:12px;color:#5E5B54;">Select items. Photo must be approved for menu.</span></div>
+    <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#5E5B54" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="9 18 15 12 9 6"></polyline></svg>
+  </div>
+
+  <div style="padding:22px 16px 0;">
+    <div style="font-size:20px;font-weight:700;">What can we help you find?</div>
+    <div style="display:flex;gap:8px;margin-top:12px;">
+      <span style="height:36px;padding:0 16px;border-radius:18px;background:#1C1B18;color:#FFFFFF;font-size:14px;font-weight:600;display:flex;align-items:center;">Featured</span>
+      <span style="height:36px;padding:0 16px;border-radius:18px;background:#F1F1F1;font-size:14px;font-weight:600;display:flex;align-items:center;">High protein</span>
+      <span style="height:36px;padding:0 16px;border-radius:18px;background:#F1F1F1;font-size:14px;font-weight:600;display:flex;align-items:center;">Spicy</span>
+    </div>
+  </div>
+
+  <div style="padding:20px 16px 0;display:grid;grid-template-columns:repeat(2, minmax(0, 1fr));gap:16px 14px;">
+    <div style="display:flex;flex-direction:column;gap:6px;">
+      <div style="position:relative;height:156px;border-radius:10px;overflow:hidden;"><img src="img/food_fresh_rolls.jpg" alt="Fresh Roll of the Day" style="width:100%;height:156px;object-fit:cover;display:block;"><button aria-label="Add Fresh Roll of the Day" style="position:absolute;right:6px;bottom:5px;width:36px;height:36px;border-radius:18px;border:0;background:#FFFFFF;box-shadow:0 1px 4px rgba(0,0,0,0.2);display:flex;align-items:center;justify-content:center;color:#1C1B18;padding:0;"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><line x1="12" y1="5" x2="12" y2="19"></line><line x1="5" y1="12" x2="19" y2="12"></line></svg></button></div>
+      <div style="font-size:15px;font-weight:600;">Fresh Roll of the Day</div>
+      <div style="font-size:14px;display:flex;gap:6px;align-items:baseline;"><span style="color:#C8280A;font-weight:600;">2 for $9.99</span><span style="color:#5E5B54;text-decoration:line-through;font-size:13px;">$19.98</span></div>
+      <span style="align-self:flex-start;height:24px;line-height:24px;padding:0 8px;border-radius:4px;background:#FFEFEB;color:#C8280A;font-size:12px;font-weight:600;">Buy 1, get 1 free</span>
+    </div>
+    <div style="display:flex;flex-direction:column;gap:6px;">
+      <div style="position:relative;height:156px;border-radius:10px;overflow:hidden;"><img src="img/food_pork_rolls.jpg" alt="Crispy Pork Spring Rolls" style="width:100%;height:156px;object-fit:cover;display:block;"><button aria-label="Add Crispy Pork Spring Rolls" style="position:absolute;right:6px;bottom:5px;width:36px;height:36px;border-radius:18px;border:0;background:#FFFFFF;box-shadow:0 1px 4px rgba(0,0,0,0.2);display:flex;align-items:center;justify-content:center;color:#1C1B18;padding:0;"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><line x1="12" y1="5" x2="12" y2="19"></line><line x1="5" y1="12" x2="19" y2="12"></line></svg></button></div>
+      <div style="font-size:15px;font-weight:600;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;">Crispy  PORK  Spring Rolls (4)</div>
+      <div style="font-size:14px;display:flex;gap:6px;align-items:baseline;"><span style="color:#C8280A;font-weight:600;">2 for $11.49</span><span style="color:#5E5B54;text-decoration:line-through;font-size:13px;">$22.98</span></div>
+      <span style="align-self:flex-start;height:24px;line-height:24px;padding:0 8px;border-radius:4px;background:#FFEFEB;color:#C8280A;font-size:12px;font-weight:600;">Buy 1, get 1 free</span>
+    </div>
+    <div style="display:flex;flex-direction:column;gap:6px;">
+      <div style="position:relative;height:156px;border-radius:10px;overflow:hidden;"><img src="img/food_pad_see_ew.jpg" alt="Pad See Ew" style="width:100%;height:156px;object-fit:cover;display:block;"><button aria-label="Add Pad See Ew" style="position:absolute;right:6px;bottom:5px;width:36px;height:36px;border-radius:18px;border:0;background:#FFFFFF;box-shadow:0 1px 4px rgba(0,0,0,0.2);display:flex;align-items:center;justify-content:center;color:#1C1B18;padding:0;"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><line x1="12" y1="5" x2="12" y2="19"></line><line x1="5" y1="12" x2="19" y2="12"></line></svg></button></div>
+      <div style="font-size:15px;font-weight:600;">Pad See Ew</div>
+      <div style="font-size:14px;color:#5E5B54;">$18.99</div>
+    </div>
+    <div style="display:flex;flex-direction:column;gap:6px;">
+      <div style="position:relative;height:156px;border-radius:10px;overflow:hidden;"><img src="img/food_pad_thai.jpg" alt="Pad Thai" style="width:100%;height:156px;object-fit:cover;display:block;"><button aria-label="Add Pad Thai" style="position:absolute;right:6px;bottom:5px;width:36px;height:36px;border-radius:18px;border:0;background:#FFFFFF;box-shadow:0 1px 4px rgba(0,0,0,0.2);display:flex;align-items:center;justify-content:center;color:#1C1B18;padding:0;"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><line x1="12" y1="5" x2="12" y2="19"></line><line x1="5" y1="12" x2="19" y2="12"></line></svg></button></div>
+      <div style="font-size:15px;font-weight:600;">Pad Thai</div>
+      <div style="font-size:14px;color:#5E5B54;">$18.99</div>
+    </div>
+    <div style="display:flex;flex-direction:column;gap:6px;">
+      <div style="position:relative;height:156px;border-radius:10px;overflow:hidden;"><img src="img/food_crab_rangoon.jpg" alt="Crab Rangoon" style="width:100%;height:156px;object-fit:cover;display:block;"><button aria-label="Add Crab Rangoon" style="position:absolute;right:6px;bottom:5px;width:36px;height:36px;border-radius:18px;border:0;background:#FFFFFF;box-shadow:0 1px 4px rgba(0,0,0,0.2);display:flex;align-items:center;justify-content:center;color:#1C1B18;padding:0;"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><line x1="12" y1="5" x2="12" y2="19"></line><line x1="5" y1="12" x2="19" y2="12"></line></svg></button></div>
+      <div style="font-size:15px;font-weight:600;">Crab Rangoon (6)</div>
+      <div style="font-size:14px;display:flex;gap:6px;align-items:baseline;"><span style="color:#C8280A;font-weight:600;">2 for $10.49</span><span style="color:#5E5B54;text-decoration:line-through;font-size:13px;">$20.98</span></div>
+      <span style="align-self:flex-start;height:24px;line-height:24px;padding:0 8px;border-radius:4px;background:#FFEFEB;color:#C8280A;font-size:12px;font-weight:600;">Buy 1, get 1 free</span>
+    </div>
+    <div style="display:flex;flex-direction:column;gap:6px;">
+      <div style="position:relative;height:156px;border-radius:10px;overflow:hidden;"><img src="img/food_fried_rice.jpg" alt="Pineapple Fried Rice" style="width:100%;height:156px;object-fit:cover;display:block;"><button aria-label="Add Pineapple Fried Rice" style="position:absolute;right:6px;bottom:5px;width:36px;height:36px;border-radius:18px;border:0;background:#FFFFFF;box-shadow:0 1px 4px rgba(0,0,0,0.2);display:flex;align-items:center;justify-content:center;color:#1C1B18;padding:0;"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><line x1="12" y1="5" x2="12" y2="19"></line><line x1="5" y1="12" x2="19" y2="12"></line></svg></button></div>
+      <div style="font-size:15px;font-weight:600;">Pineapple Fried Rice</div>
+      <div style="font-size:14px;color:#5E5B54;">$19.49</div>
+    </div>
+  </div></div></div>
+        <div class="phone-fixed"><div style="position:absolute;left:0;right:0;top:772px;height:72px;background:#FFFFFF;border-top:1px solid #E7E4DD;box-shadow:0 -4px 12px rgba(0,0,0,0.06);display:flex;align-items:center;padding:0 16px;box-sizing:border-box;gap:12px;">
+    <img src="img/icon_tag.png" alt="" style="width:28px;height:30px;object-fit:contain;">
+    <div style="display:flex;flex-direction:column;flex-grow:1;line-height:1.25;"><span style="font-size:16px;font-weight:600;color:#C8280A;">Buy 1, get 1 free</span><span style="font-size:13px;color:#5E5B54;">Add 2 eligible items</span></div>
+    <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#1C1B18" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="9 18 15 12 9 6"></polyline></svg>
+  </div><div class="spot" hidden></div><div class="marks"></div></div>
+      </div></div>
+    </div>
+    <div class="phone-col" data-side="after">
+      <div class="phone-label a"><i></i>Proposed · after first add</div>
+      <div class="phone-scale"><div class="phone" data-screen="menu" data-side="after">
+        <div class="phone-scroll"><div class="phone-content"><div style="height:56px;display:flex;align-items:center;justify-content:space-between;padding:0 12px;box-sizing:border-box;background:#FFFFFF;">
+    <button aria-label="Back" style="width:40px;height:40px;border:0;background:transparent;display:flex;align-items:center;justify-content:center;color:#1C1B18;padding:0;"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M19 12H5"></path><path d="M12 19l-7-7 7-7"></path></svg></button>
+    <span style="font-size:19px;font-weight:700;">Smiling Banana Leaf</span>
+    <div style="display:flex;">
+      <button aria-label="Save" style="width:40px;height:40px;border:0;background:transparent;display:flex;align-items:center;justify-content:center;color:#1C1B18;padding:0;"><svg width="19" height="19" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20.8 4.6a5.5 5.5 0 0 0-7.8 0L12 5.7l-1-1.1a5.5 5.5 0 0 0-7.8 7.8l1 1L12 21l7.8-7.6 1-1a5.5 5.5 0 0 0 0-7.8z"></path></svg></button>
+      <button aria-label="More: share, group order, store info" style="width:40px;height:40px;border:0;background:transparent;display:flex;align-items:center;justify-content:center;color:#1C1B18;padding:0;"><svg width="19" height="19" viewBox="0 0 24 24" fill="#1C1B18" stroke="none"><circle cx="5" cy="12" r="2"></circle><circle cx="12" cy="12" r="2"></circle><circle cx="19" cy="12" r="2"></circle></svg></button>
+    </div>
+  </div>
+
+  <div style="height:48px;border-bottom:1px solid #E7E4DD;display:flex;align-items:stretch;padding:0 8px 0 12px;box-sizing:border-box;gap:4px;background:#FFFFFF;">
+    <button aria-label="Full menu" style="width:36px;border:0;background:transparent;display:flex;align-items:center;justify-content:center;color:#1C1B18;padding:0;flex-shrink:0;"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="8" y1="6" x2="21" y2="6"></line><line x1="8" y1="12" x2="21" y2="12"></line><line x1="8" y1="18" x2="21" y2="18"></line><line x1="3" y1="6" x2="3.01" y2="6"></line><line x1="3" y1="12" x2="3.01" y2="12"></line><line x1="3" y1="18" x2="3.01" y2="18"></line></svg></button>
+    <button aria-label="Search menu" style="width:36px;border:0;background:transparent;display:flex;align-items:center;justify-content:center;color:#1C1B18;padding:0;flex-shrink:0;"><svg width="19" height="19" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="7"></circle><line x1="21" y1="21" x2="16.5" y2="16.5"></line></svg></button>
+    <div style="display:flex;gap:18px;flex-grow:1;overflow:hidden;padding-left:6px;">
+      <span style="font-size:15px;font-weight:600;display:flex;align-items:center;border-bottom:2px solid #1C1B18;white-space:nowrap;">Most ordered</span>
+      <span style="font-size:15px;color:#5E5B54;display:flex;align-items:center;white-space:nowrap;">Small bites</span>
+      <span style="font-size:15px;color:#5E5B54;display:flex;align-items:center;white-space:nowrap;">Soups</span>
+      <span style="font-size:15px;color:#5E5B54;display:flex;align-items:center;white-space:nowrap;">Salads</span>
+    </div>
+    <button aria-label="Filters: high protein, spicy, vegetarian" style="width:36px;border:0;background:transparent;display:flex;align-items:center;justify-content:center;color:#1C1B18;padding:0;flex-shrink:0;"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="4" y1="21" x2="4" y2="14"></line><line x1="4" y1="10" x2="4" y2="3"></line><line x1="12" y1="21" x2="12" y2="12"></line><line x1="12" y1="8" x2="12" y2="3"></line><line x1="20" y1="21" x2="20" y2="16"></line><line x1="20" y1="12" x2="20" y2="3"></line><line x1="1" y1="14" x2="7" y2="14"></line><line x1="9" y1="8" x2="15" y2="8"></line><line x1="17" y1="16" x2="23" y2="16"></line></svg></button>
+  </div>
+
+  <div style="margin:8px 16px 0;height:24px;border-radius:6px;border:1.5px dashed #0F766E;display:flex;align-items:center;justify-content:center;font-family:'IBM Plex Mono',monospace;font-size:10px;font-weight:600;letter-spacing:0.5px;color:#0F766E;">PHOTO-CREDIT BANNER MOVED TO POST-DELIVERY</div>
+
+  <div style="padding:12px 16px 0;font-size:16px;font-weight:700;">Most ordered</div>
+
+  <div style="padding:10px 16px 0;display:grid;grid-template-columns:repeat(2, minmax(0, 1fr));gap:16px 14px;">
+    <div style="display:flex;flex-direction:column;gap:6px;">
+      <div style="position:relative;height:156px;border-radius:10px;overflow:hidden;outline:2px solid #1C1B18;outline-offset:-2px;">
+        <img src="img/food_fresh_rolls.jpg" alt="Fresh Roll of the Day" style="width:100%;height:156px;object-fit:cover;display:block;">
+        <div style="position:absolute;right:4px;bottom:4px;height:38px;border-radius:19px;background:#FFFFFF;box-shadow:0 1px 4px rgba(0,0,0,0.2);display:flex;align-items:center;padding:0 4px;gap:2px;">
+          <button aria-label="Remove one" style="width:30px;height:30px;border:0;background:transparent;display:flex;align-items:center;justify-content:center;color:#1C1B18;padding:0;"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><line x1="5" y1="12" x2="19" y2="12"></line></svg></button>
+          <span style="font-size:14px;font-weight:600;width:16px;text-align:center;">1</span>
+          <button aria-label="Add one more" style="width:30px;height:30px;border:0;background:transparent;display:flex;align-items:center;justify-content:center;color:#1C1B18;padding:0;"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><line x1="12" y1="5" x2="12" y2="19"></line><line x1="5" y1="12" x2="19" y2="12"></line></svg></button>
+        </div>
+      </div>
+      <div style="font-size:15px;font-weight:600;line-height:1.25;min-height:38px;">Fresh Roll of the Day</div>
+      <div style="font-size:14px;display:flex;gap:8px;align-items:center;"><span>$9.99</span><span style="height:18px;line-height:18px;padding:0 6px;border-radius:3px;background:#FFEFEB;color:#C8280A;font-size:11px;font-weight:600;">BOGO</span></div>
+    </div>
+    <div style="display:flex;flex-direction:column;gap:6px;">
+      <div style="position:relative;height:156px;border-radius:10px;overflow:hidden;"><img src="img/food_pork_rolls.jpg" alt="Crispy Pork Spring Rolls" style="width:100%;height:156px;object-fit:cover;display:block;"><button aria-label="Add Crispy Pork Spring Rolls" style="position:absolute;right:6px;bottom:5px;width:36px;height:36px;border-radius:18px;border:0;background:#FFFFFF;box-shadow:0 1px 4px rgba(0,0,0,0.2);display:flex;align-items:center;justify-content:center;color:#1C1B18;padding:0;"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><line x1="12" y1="5" x2="12" y2="19"></line><line x1="5" y1="12" x2="19" y2="12"></line></svg></button></div>
+      <div style="font-size:15px;font-weight:600;line-height:1.25;min-height:38px;">Crispy Pork Spring Rolls (4)</div>
+      <div style="font-size:14px;display:flex;gap:8px;align-items:center;"><span>$11.49</span><span style="height:18px;line-height:18px;padding:0 6px;border-radius:3px;background:#FFEFEB;color:#C8280A;font-size:11px;font-weight:600;">BOGO</span></div>
+    </div>
+    <div style="display:flex;flex-direction:column;gap:6px;">
+      <div style="position:relative;height:156px;border-radius:10px;overflow:hidden;"><img src="img/food_pad_see_ew.jpg" alt="Pad See Ew" style="width:100%;height:156px;object-fit:cover;display:block;"><button aria-label="Add Pad See Ew" style="position:absolute;right:6px;bottom:5px;width:36px;height:36px;border-radius:18px;border:0;background:#FFFFFF;box-shadow:0 1px 4px rgba(0,0,0,0.2);display:flex;align-items:center;justify-content:center;color:#1C1B18;padding:0;"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><line x1="12" y1="5" x2="12" y2="19"></line><line x1="5" y1="12" x2="19" y2="12"></line></svg></button></div>
+      <div style="font-size:15px;font-weight:600;line-height:1.25;min-height:38px;">Pad See Ew</div>
+      <div style="font-size:14px;">$18.99</div>
+    </div>
+    <div style="display:flex;flex-direction:column;gap:6px;">
+      <div style="position:relative;height:156px;border-radius:10px;overflow:hidden;"><img src="img/food_pad_thai.jpg" alt="Pad Thai" style="width:100%;height:156px;object-fit:cover;display:block;"><button aria-label="Add Pad Thai" style="position:absolute;right:6px;bottom:5px;width:36px;height:36px;border-radius:18px;border:0;background:#FFFFFF;box-shadow:0 1px 4px rgba(0,0,0,0.2);display:flex;align-items:center;justify-content:center;color:#1C1B18;padding:0;"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><line x1="12" y1="5" x2="12" y2="19"></line><line x1="5" y1="12" x2="19" y2="12"></line></svg></button></div>
+      <div style="font-size:15px;font-weight:600;line-height:1.25;min-height:38px;">Pad Thai</div>
+      <div style="font-size:14px;">$18.99</div>
+    </div>
+    <div style="display:flex;flex-direction:column;gap:6px;">
+      <div style="position:relative;height:156px;border-radius:10px;overflow:hidden;"><img src="img/food_crab_rangoon.jpg" alt="Crab Rangoon" style="width:100%;height:156px;object-fit:cover;display:block;"><button aria-label="Add Crab Rangoon" style="position:absolute;right:6px;bottom:5px;width:36px;height:36px;border-radius:18px;border:0;background:#FFFFFF;box-shadow:0 1px 4px rgba(0,0,0,0.2);display:flex;align-items:center;justify-content:center;color:#1C1B18;padding:0;"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><line x1="12" y1="5" x2="12" y2="19"></line><line x1="5" y1="12" x2="19" y2="12"></line></svg></button></div>
+      <div style="font-size:15px;font-weight:600;line-height:1.25;min-height:38px;">Crab Rangoon (6)</div>
+      <div style="font-size:14px;display:flex;gap:8px;align-items:center;"><span>$10.49</span><span style="height:18px;line-height:18px;padding:0 6px;border-radius:3px;background:#FFEFEB;color:#C8280A;font-size:11px;font-weight:600;">BOGO</span></div>
+    </div>
+    <div style="display:flex;flex-direction:column;gap:6px;">
+      <div style="position:relative;height:156px;border-radius:10px;overflow:hidden;"><img src="img/food_fried_rice.jpg" alt="Pineapple Fried Rice" style="width:100%;height:156px;object-fit:cover;display:block;"><button aria-label="Add Pineapple Fried Rice" style="position:absolute;right:6px;bottom:5px;width:36px;height:36px;border-radius:18px;border:0;background:#FFFFFF;box-shadow:0 1px 4px rgba(0,0,0,0.2);display:flex;align-items:center;justify-content:center;color:#1C1B18;padding:0;"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><line x1="12" y1="5" x2="12" y2="19"></line><line x1="5" y1="12" x2="19" y2="12"></line></svg></button></div>
+      <div style="font-size:15px;font-weight:600;line-height:1.25;min-height:38px;">Pineapple Fried Rice</div>
+      <div style="font-size:14px;">$19.49</div>
+    </div>
+    <div style="display:flex;flex-direction:column;gap:6px;">
+      <div style="position:relative;height:156px;border-radius:10px;overflow:hidden;"><img src="img/food_veggie_rolls.jpg" alt="Veggie Crispy Rolls" style="width:100%;height:156px;object-fit:cover;display:block;"><button aria-label="Add Veggie Crispy Rolls" style="position:absolute;right:6px;bottom:5px;width:36px;height:36px;border-radius:18px;border:0;background:#FFFFFF;box-shadow:0 1px 4px rgba(0,0,0,0.2);display:flex;align-items:center;justify-content:center;color:#1C1B18;padding:0;"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><line x1="12" y1="5" x2="12" y2="19"></line><line x1="5" y1="12" x2="19" y2="12"></line></svg></button></div>
+      <div style="font-size:15px;font-weight:600;line-height:1.25;min-height:38px;">Veggie Crispy Rolls (4)</div>
+      <div style="font-size:14px;display:flex;gap:8px;align-items:center;"><span>$9.49</span><span style="height:18px;line-height:18px;padding:0 6px;border-radius:3px;background:#FFEFEB;color:#C8280A;font-size:11px;font-weight:600;">BOGO</span></div>
+    </div>
+    <div style="display:flex;flex-direction:column;gap:6px;">
+      <div style="position:relative;height:156px;border-radius:10px;overflow:hidden;"><img src="img/store_little_bangkok.jpg" alt="Tom Yum Soup" style="width:100%;height:156px;object-fit:cover;display:block;"><button aria-label="Add Tom Yum Soup" style="position:absolute;right:6px;bottom:5px;width:36px;height:36px;border-radius:18px;border:0;background:#FFFFFF;box-shadow:0 1px 4px rgba(0,0,0,0.2);display:flex;align-items:center;justify-content:center;color:#1C1B18;padding:0;"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><line x1="12" y1="5" x2="12" y2="19"></line><line x1="5" y1="12" x2="19" y2="12"></line></svg></button></div>
+      <div style="font-size:15px;font-weight:600;line-height:1.25;min-height:38px;">Tom Yum Soup</div>
+      <div style="font-size:14px;">$12.99</div>
+    </div>
+  </div></div></div>
+        <div class="phone-fixed"><div style="position:absolute;left:0;right:0;top:736px;height:108px;background:#FFFFFF;border-top:1px solid #E7E4DD;box-shadow:0 -4px 12px rgba(0,0,0,0.06);padding:12px 16px;box-sizing:border-box;display:flex;flex-direction:column;gap:8px;">
+    <div style="display:flex;align-items:center;justify-content:space-between;gap:8px;">
+      <span style="font-size:13px;display:flex;align-items:center;gap:6px;"><img src="img/icon_tag.png" alt="" style="width:15px;height:16px;object-fit:contain;"><span style="font-weight:600;">1 of 2 for BOGO</span><span style="color:#5E5B54;">· add 1 more small bite</span></span>
+      <span style="font-size:11px;color:#5E5B54;white-space:nowrap;display:flex;align-items:center;gap:4px;"><img src="img/icon_dashpass.png" alt="DashPass" style="width:13px;height:12px;object-fit:contain;">$2.01 to $0 delivery fee</span>
+    </div>
+    <div style="height:4px;border-radius:2px;background:#E7E4DD;overflow:hidden;"><div style="width:50%;height:4px;background:#FE3008;"></div></div>
+    <button style="height:44px;border-radius:22px;border:0;background:#FE3008;color:#FFFFFF;font-family:'IBM Plex Sans',sans-serif;font-size:15px;font-weight:600;display:flex;align-items:center;justify-content:space-between;padding:0 18px;"><span>View cart</span><span style="font-weight:500;opacity:0.9;">1 item · $9.99</span></button>
+  </div><div class="spot" hidden></div><div class="marks"></div></div>
+      </div></div>
+    </div>
+    <aside class="panel" data-panel="menu"></aside>
+  </div>
+</section>
+
+<!-- THE CASE -->
+<section class="screen case" data-screen="case" role="tabpanel" hidden>
+  <div class="case-inner">
+
+    <div>
+      <div class="eyebrow">The one rule</div>
+      <h2>Every element above the fold earns its slot with a metric it moves</h2>
+      <p class="lead">Today's home has eleven blocks in the first viewport and two of them are food. The proposed home has seven, and four of them are stores you can tap. The store page moves the first dish from about 80% of the viewport to under 50%. The menu goes from three navigation systems to one. None of it removes an ad product; it makes each impression worth more.</p>
+    </div>
+
+    <div>
+      <div class="eyebrow">Why it works</div>
+      <h2>Twelve reasons, each tied to a numbered change</h2>
+      <p class="lead">The effects behind the redesign in plain terms. Click a tag to jump to that change. H = Home, S = Store page, M = Menu.</p>
+      <div class="grid3">
+        <div class="card"><h3>Fewer options, faster decisions</h3><p class="def">The time and effort it takes to decide grows with every extra option on screen. Cutting a rail from 14 to 6 speeds up the choice.</p><div class="jumps"><button class="jump" data-jump="home:1">H1</button><button class="jump" data-jump="home:4">H4</button><button class="jump" data-jump="store:5">S5</button></div></div>
+        <div class="card"><h3>People hold a handful of things in mind</h3><p class="def">A card with seven signals asks the reader to hold seven things at once. Two get read; seven get skipped.</p><div class="jumps"><button class="jump" data-jump="home:6">H6</button><button class="jump" data-jump="store:1">S1</button></div></div>
+        <div class="card"><h3>Anything shaped like an ad gets skipped</h3><p class="def">Most of all at the top of a page. A smaller, labeled card inside the feed gets looked at; a full-height hero gets scrolled past.</p><div class="jumps"><button class="jump" data-jump="home:2">H2</button><button class="jump" data-jump="home:3">H3</button></div></div>
+        <div class="card"><h3>One highlight stands out, ten cancel out</h3><p class="def">A promo tag draws the eye only when it is rare. When every item, banner and bar is red, none of them is.</p><div class="jumps"><button class="jump" data-jump="home:6">H6</button><button class="jump" data-jump="store:3">S3</button><button class="jump" data-jump="menu:4">M4</button></div></div>
+        <div class="card"><h3>First position gets remembered</h3><p class="def">What sits first on the screen is what people notice and recall. That slot should hold the user's intent, not the ad.</p><div class="jumps"><button class="jump" data-jump="home:2">H2</button><button class="jump" data-jump="home:5">H5</button></div></div>
+        <div class="card"><h3>Progress pulls people forward</h3><p class="def">Once one BOGO item is in the cart, "one more" makes the second add far likelier than asking for two up front.</p><div class="jumps"><button class="jump" data-jump="store:2">S2</button><button class="jump" data-jump="menu:5">M5</button></div></div>
+        <div class="card"><h3>Unfinished things stay in mind</h3><p class="def">"1 of 2" is a hook the user wants to close. "Add 2 eligible items" is a chore.</p><div class="jumps"><button class="jump" data-jump="menu:5">M5</button></div></div>
+        <div class="card"><h3>Show the next step, not every step</h3><p class="def">Filters, store info and Ask are there when asked for and out of the way otherwise.</p><div class="jumps"><button class="jump" data-jump="home:7">H7</button><button class="jump" data-jump="store:2">S2</button><button class="jump" data-jump="store:4">S4</button><button class="jump" data-jump="menu:2">M2</button></div></div>
+        <div class="card"><h3>Close, large targets are faster to hit</h3><p class="def">The bottom search pill sits under the thumb. That is the right call and it stays.</p><div class="jumps"><button class="jump" data-jump="home:7">H7</button></div></div>
+        <div class="card"><h3>People expect your app to work like the ones they know</h3><p class="def">"Order again" reads instantly because "Buy again" already taught it.</p><div class="jumps"><button class="jump" data-jump="home:5">H5</button></div></div>
+        <div class="card"><h3>Experiences are judged by their peak and their end</h3><p class="def">Ask for a photo when the food arrives and the user is happiest, not while they are still choosing.</p><div class="jumps"><button class="jump" data-jump="menu:3">M3</button></div></div>
+        <div class="card"><h3>Complexity moves, it doesn't vanish</h3><p class="def">Put it where intent is (a filter icon, a "more" menu) instead of on every screen.</p><div class="jumps"><button class="jump" data-jump="store:4">S4</button><button class="jump" data-jump="menu:2">M2</button></div></div>
+      </div>
+      <p class="src" style="margin:12px 0 0;max-width:80ch">The formal names, if anyone asks, in the same order: Hick's law, Miller's law, banner blindness, the Von Restorff effect, the serial-position effect, the goal-gradient effect, the Zeigarnik effect, progressive disclosure, Fitts's law, Jakob's law, the peak-end rule, Tesler's law. Reference: growth.design/psychology.</p>
+    </div>
+
+    <div>
+      <div class="eyebrow">Experiment plan</div>
+      <h2>Three staged A/B tests, each with an ad-revenue guardrail</h2>
+      <p class="lead">Consumer and Ads are measured on the same scorecard instead of fighting over the fold.</p>
+      <div class="grid3">
+        <div class="card"><div class="eyebrow">Test 1 · Home</div><h3>Intent-first home</h3><p><strong>Hypothesis</strong> Returning users convert more when Order again precedes Spotlight, and Spotlight's CTR rises when the unit is smaller, contextual and dismissible.</p><p><strong>Primary</strong> session → order conversion</p><p><strong>Secondary</strong> time to first store tap, reorder rate, search starts</p><p><strong>Guardrails</strong> Spotlight revenue per session (non-inferior, 2% bound), new-vertical visits, DashPass sign-ups</p></div>
+        <div class="card"><div class="eyebrow">Test 2 · Store page</div><h3>Compressed header, one offer line</h3><p><strong>Hypothesis</strong> Rating and ETA in the header plus a single offer line raise first-add rate without lowering offer awareness.</p><p><strong>Primary</strong> store view → first add</p><p><strong>Secondary</strong> menu scroll depth, pickup share, offer-sheet opens</p><p><strong>Guardrails</strong> promo cost per order, group-order starts, share rate</p></div>
+        <div class="card"><div class="eyebrow">Test 3 · Menu + cart bar</div><h3>Goal-gradient cart bar</h3><p><strong>Hypothesis</strong> A cart bar that shows "1 of 2" after the first add completes more BOGOs than a pre-emptive sticky banner.</p><p><strong>Primary</strong> BOGO completion among sessions with one eligible add</p><p><strong>Secondary</strong> AOV, items per order, DashPass threshold attainment</p><p><strong>Guardrails</strong> cart abandonment, photo submissions per 1k orders (3b: post-delivery ask)</p></div>
+      </div>
+      <div style="height:14px"></div>
+      <div class="tablewrap"><table>
+        <thead><tr><th>Metric</th><th>Expected</th><th>Role</th></tr></thead>
+        <tbody>
+          <tr><td>Session → order conversion</td><td>up</td><td>primary</td></tr>
+          <tr><td>Time to first store tap</td><td>down</td><td>secondary</td></tr>
+          <tr><td>Spotlight CTR</td><td>up</td><td>ads</td></tr>
+          <tr><td>Spotlight impressions per session</td><td>down, viewable up</td><td>ads</td></tr>
+          <tr><td>Ad revenue per session</td><td>flat</td><td>guardrail</td></tr>
+          <tr><td>Sponsored-listing impressions in first two screens</td><td>up</td><td>ads</td></tr>
+          <tr><td>BOGO completion, AOV</td><td>up</td><td>secondary</td></tr>
+          <tr><td>New-vertical visits (grocery, retail)</td><td>flat</td><td>guardrail</td></tr>
+        </tbody>
+      </table></div>
+      <div style="height:14px"></div>
+      <div class="grid2">
+        <div class="card"><h3>Segments and rollout</h3><p>New vs returning (the home layout differs by design). DashPass vs not. Mealtime vs off-peak. iOS vs Android. Ramp 5% → 25% → 50%, two weeks each; keep a 5% holdout for eight weeks to read retention, not just conversion.</p></div>
+        <div class="card"><h3>Why Ads should want this</h3><p>Fewer, labeled placements with a dismiss signal improve targeting and CTR. "Deals near you" adds sponsored-listing inventory to the first two screens. Spotlight stays a premium unit and gains a viewability rule (100% in view, one second) that advertisers can be billed on with confidence.</p></div>
+      </div>
+      <div style="height:14px"></div>
+      <div class="rule"><strong>Kill criteria</strong> Any test that moves ad revenue per session below the 2% bound for two consecutive weeks reverts, and the fold rule is renegotiated with Ads before a second attempt.</div>
+    </div>
+
+    <div>
+      <div class="eyebrow">Evidence</div>
+      <h2>The constraint, what people say, and a precedent inside DoorDash</h2>
+      <div class="grid3">
+        <div class="card">
+          <div class="eyebrow">1 · The constraint</div>
+          <h3>Why the hero can't be deleted</h3>
+          <p>Spotlight is DoorDash Ads' premium homepage unit: "a large, immersive creative canvas" for static display and short video. DoorDash reports "2.5x higher click-through rates" than banners, "+20% new-to-merchant sales" for restaurants, "+36% new-to-brand sales" for CPG, and a "60%+ video completion rate".</p>
+          <p>DoorDash and Wolt Ads passed a $1B annualized run rate in 2024. In June 2026 the platform unified DoorDash, Wolt and Deliveroo ads for 400,000+ advertisers.</p>
+          <p class="src">Sources: DoorDash Ads, "Introducing Spotlight"; "DoorDash Ads Becomes a Global Commerce Media Platform", 4 Jun 2026.</p>
+          <p><strong>Implication</strong> The redesign constrains the unit and makes each impression worth more. It does not remove it.</p>
+        </div>
+        <div class="card">
+          <div class="eyebrow">2 · What people say</div>
+          <h3>Reddit and Blind</h3>
+          <p><span class="quote">r/doordash · "Pickup and Map option completely removed in new UI?!"</span> A redesign hid pickup and the map behind search → Browse. Lesson: hide noise, never tools.</p>
+          <p><span class="quote">r/doordash · "App is hiding stores"</span> Discoverability complaints when the feed prioritizes modules over stores.</p>
+          <p><span class="quote">r/doordash_drivers · "So frequently the UI changes feel overlooked…"</span> "The design feels cluttered and harder to navigate." Dasher app, same organization.</p>
+          <p><span class="quote">r/ios · "iOS just served me an ad on my home screen" (160+ comments)</span> A DoorDash App Clip ad. Ad aggression is already a brand-trust cost.</p>
+          <p><span class="quote">Blind · "DoorDash app product feedback" (Mar 2024)</span> "Poorly organized menu… can deter me from a place." Reviews "could be more front and center."</p>
+        </div>
+        <div class="card">
+          <div class="eyebrow">3 · Internal precedent</div>
+          <h3>The Dasher home did this already</h3>
+          <p>"DoorDash Visions: redesigning the Dasher app's homescreen" (Akhil Dakinedi, Medium). The Dasher home "quickly got cluttered" with entry points, features and CTAs because of "a lack of ownership and governance"; banners and tooltips were moved into an Inbox to clear it.</p>
+          <p><strong>Implication</strong> The consumer home needs the same governance rule: a slot above the fold is earned by a metric, reviewed quarterly, and the notifications inbox is where campaign messages go when they lose it.</p>
+          <p class="src">Threads located through Google on 27 Sep 2026; quotes come from search snippets. Open each thread before citing it.</p>
+        </div>
+      </div>
+    </div>
+
+  </div>
+</section>
+
+<script>
+const DATA = {
+  home: {
+    name: 'Home', short: [2, 5, 1],
+    thesis: 'Today about 60% of the first viewport is an ad and two rails, and no restaurant is visible until you scroll. Proposed puts six tappable stores above the fold and keeps Spotlight as a capped, labeled card.',
+    kept: 'Kept on purpose: the bottom search pill, brand red as a header band, DashPass signals, the Ask capability, and Spotlight as a product with a smaller footprint and better rules.',
+    items: [
+      {n:1, title:'Verticals rail: 14+ items becomes 5 + More',
+       today:'One scrolling rail holds Deals, Grocery, Alcohol, Game Days, Convenience, Flowers, Gaming, Pickup, Retail, Health, Gifts, Party and more. Deals appears here and again as a mood chip.',
+       proposed:'Restaurants · Grocery · Convenience · Alcohol · Retail · More. Everything else lives under More and in search. One row, no scroll.',
+       why:'Every extra option on screen adds time and effort to the decision, and a rail that scrolls hides most of its options anyway. Six visible choices get scanned in one glance.', metric:'Time to first store tap ↓ · guardrail: new-vertical visits',
+       before:{x:0,y:56,w:390,h:92}, after:{x:0,y:56,w:390,h:84}, mb:{x:8,y:64}, ma:{x:8,y:64}},
+      {n:2, title:'Spotlight ad: 60% of the viewport becomes one capped card',
+       today:'The Costco unit plus the rails fill about 60% of the first viewport. The first restaurant name sits below the fold. On scroll the Shop now button detaches from its creative and floats over food.',
+       proposed:'Keep the Spotlight canvas. It is the ad product: 2.5x banner CTR and +20% new-to-merchant sales per DoorDash Ads. Cap it at a 3:1 card, label it Sponsored, add a dismiss that feeds targeting, allow video inside. Users with order history see it second, after Order again. New users see it first.',
+       why:'People skip anything shaped like an ad, most of all at the top of a page. A smaller, labeled card inside the feed gets looked at; a full-height hero gets scrolled past. And what sits first on the screen is what gets remembered, so that slot should hold the user\'s own intent.', metric:'Spotlight CTR ↑ · revenue per session non-inferior',
+       before:{x:0,y:148,w:390,h:376}, after:{x:16,y:350,w:358,h:120}, mb:{x:8,y:168}, ma:{x:8,y:358}},
+      {n:3, title:'Creative rotation: three variants becomes one per session',
+       today:'Three creatives for the same campaign rotate in the hero: Link membership to shop, Costco is here, and a product carousel. Motion at the top of the screen competes with the decision the user came to make.',
+       proposed:'One creative per session, frequency-capped. Video plays inside the card. Rotation happens across sessions, not within one.',
+       why:'Attention is finite. Movement at the top of the screen pulls the eye away from the decision the user came to make, and three creatives in one session teach people to ignore the slot.', metric:'Video completion (60%+ today) should hold in the smaller unit',
+       before:{x:0,y:148,w:390,h:376}, after:{x:16,y:350,w:358,h:120}, mb:{x:354,y:494}, ma:{x:354,y:446}},
+      {n:4, title:'Mood chips: two rows of 16 becomes one row of 8',
+       today:'"What are you in the mood for?" is a two-row, horizontally scrolling grid of 16+ chips with mixed taxonomy. Deals is not a mood.',
+       proposed:'One row of cuisines. Deals gets its own row below, "Deals near you", which is also where sponsored listings can live with a label.',
+       why:'Two rows of sixteen chips is a wall to scan, and mixing a deal filter into a list of cuisines makes people read every chip to understand the list. One row of like things gets picked from in a glance.', metric:'Chip CTR ↑ · sponsored-listing impressions in first two screens ↑',
+       before:{x:0,y:524,w:390,h:168}, after:{x:16,y:486,w:358,h:36}, mb:{x:8,y:532}, ma:{x:8,y:494}},
+      {n:5, title:'Order again moves from third module to first',
+       today:'"Your past orders" is the highest-intent module for a returning user and it sits third, below the fold.',
+       proposed:'First module for anyone with at least one past order. Three cards visible without scrolling.',
+       why:'A returning user opens the app already knowing what they want. Putting that first works the way Amazon\'s Buy again and every reorder pattern works, so nobody has to learn it.', metric:'Reorder rate ↑ · time to order ↓',
+       before:{x:0,y:692,w:390,h:296}, after:{x:0,y:140,w:390,h:210}, mb:{x:8,y:700}, ma:{x:8,y:148}},
+      {n:6, title:'Store cards: seven signals becomes two',
+       today:'Each card carries rating, review count, distance, Fast, ETA, a promo pill and a ranking badge. Seven things to read before tapping.',
+       proposed:'Name, ETA, rating. A promo tag appears only when an offer is live, so it stands out when it does.',
+       why:'People can hold a handful of things in mind at once. Two signals per card get read; seven get skipped. A promo tag stands out only when it is rare, so it appears only when an offer is live.', metric:'Card CTR ↑',
+       before:{x:16,y:884,w:270,h:80}, after:{x:16,y:296,w:160,h:40}, mb:{x:8,y:894}, ma:{x:8,y:304}},
+      {n:7, title:'Search: keep the bottom pill, stop the placeholder from rotating',
+       today:'The placeholder cycles "Search milk / soup / healthy / DashMart" every few seconds, and Ask is a second button inside the pill.',
+       proposed:'The bottom position stays: it is in the thumb zone and is the one thing in this build worth defending. Static placeholder. Ask becomes an affordance inside the field.',
+       why:'The bottom of the screen is where the thumb already is, so a bottom search pill is the fastest target on the page. Rotating text pulls the eye every few seconds for no gain, and a second button inside the field is a second decision.', metric:'Search starts ↑ · Ask usage neutral or ↑',
+       before:{x:16,y:772,w:358,h:56,layer:'fixed'}, after:{x:16,y:772,w:358,h:56,layer:'fixed'}, mb:{x:354,y:786}, ma:{x:354,y:786}},
+      {n:8, title:'Toasts anchor above search, never over content',
+       today:'"Thank you for the feedback" lands mid-screen on top of the past-orders row.',
+       proposed:'One toast lane directly above the search pill. Nothing else interrupts the feed.',
+       why:'A message dropped over the content interrupts what the user was doing. A fixed lane above search says the same thing without getting in the way.', metric:'Mis-taps ↓ · feedback submissions flat',
+       before:{x:16,y:690,w:358,h:40,layer:'fixed'}, after:{x:16,y:706,w:358,h:40,layer:'fixed'}, mb:{x:354,y:696}, ma:{x:354,y:712}}
+    ]
+  },
+  store: {
+    name: 'Store page', short: [1, 3, 4],
+    thesis: 'The store page has one job: get a dish into the cart. Today the first dish sits at about 80% of the first viewport, under five stacked blocks. Proposed puts it under 50% and states the offer once.',
+    kept: 'To verify with data before shipping: group-order usage is low enough to live under "more" (if not, it returns as a chip beside the segmented control); share can move without hurting referral volume; pickup share does not fall when the ETA is shown inside the toggle.',
+    items: [
+      {n:1, title:'Identity: five stacked elements becomes three lines',
+       today:'Hero, logo, name, tagline, a meta line ("DashPass · Virtual Brand · 3.8 mi") and a two-line "Store info / See details" button. The rating is not on the page top at all. The ETA is two sections lower.',
+       proposed:'A 3:1 hero, the name, one meta line: rating · distance · ETA range · DashPass. Store info, share and group order move under the "more" button.',
+       why:'Before scrolling, the reader wants two answers: is it good, and how long. Rating and ETA in the first three lines give both. A two-line button and a tagline ask for attention the decision doesn\'t need.', metric:'Menu scroll depth ↑ · store bounce ↓ · Blind feedback: reviews "more front and center"',
+       before:{x:0,y:0,w:390,h:316}, after:{x:0,y:0,w:390,h:214}, mb:{x:8,y:208}, ma:{x:8,y:136}},
+      {n:2, title:'Fulfillment: four controls in a card becomes one segmented control',
+       today:'One bordered card holds Delivery/Pickup, Group order, "DashPass benefits apply on $12+" with an info icon, and an ETA dropdown. Two of the four are informational, not actionable.',
+       proposed:'Delivery 29 min | Pickup 15 min. The ETA lives inside the choice it belongs to. The DashPass threshold moves to the cart bar, where the user can act on it ("$2.01 to $0 delivery fee").',
+       why:'Show the next step, not every step. The ETA belongs inside the choice it describes, and the DashPass threshold only matters once there is a cart, so that is where it goes.', metric:'DashPass threshold attainment ↑ · pickup share (watch)',
+       before:{x:16,y:332,w:358,h:108}, after:{x:16,y:214,w:358,h:44}, mb:{x:8,y:340}, ma:{x:8,y:222}},
+      {n:3, title:'Offers: a card carousel becomes one line',
+       today:'"Deals & benefits" is a carousel of cards, each with its own "See items" button. The same BOGO renders four times on one screen: deal card, item strikethrough price, item pill, and (after scrolling) a sticky bottom bar.',
+       proposed:'One line: "2 offers · BOGO small bites · $10 off $40", tap to expand. Items carry a small BOGO tag and nothing else. The offer is stated once where the user decides, then tracked in the cart bar.',
+       why:'A highlight works because it is rare. Saying the same offer four times on one screen trains people to tune it out. One clear line at the moment of choice, then progress in the cart bar, gets acted on.', metric:'BOGO attach ↑ with fewer cues · guardrail: promo cost per order',
+       before:{x:16,y:462,w:374,h:102}, after:{x:16,y:270,w:358,h:40}, mb:{x:8,y:470}, ma:{x:8,y:278}},
+      {n:4, title:'Finding a dish: three navigation systems becomes one',
+       today:'"What can we help you find?" chips (Featured, High protein, Spicy) sit above sticky category tabs, which sit next to a list icon and a search icon. Three mental models for one menu.',
+       proposed:'The category tab bar is the one system, sticky from the start. Attribute filters (high protein, spicy, vegetarian) live behind a single filter icon at the end of the bar. List and search icons stay.',
+       why:'Every extra way to navigate is one more thing to understand before finding a dish. Complexity doesn\'t disappear when you hide it, but it can wait behind a filter icon until someone wants it.', metric:'Time to first add ↓',
+       before:{x:16,y:594,w:358,h:74}, after:{x:0,y:322,w:390,h:44}, mb:{x:8,y:602}, ma:{x:8,y:330}},
+      {n:5, title:'Header actions: four becomes three',
+       today:'Back, save, share, more. Share is a low-frequency action given a top-level button.',
+       proposed:'Back, save, more (share, group order, store info, report inside). Save stays at top level because favorites drive retention.',
+       why:'Fewer top-level buttons means a faster scan of the header. Share is rare; saving a store drives repeat orders, so it keeps its button.', metric:'Favorite rate flat or ↑ · share rate (watch, expect small ↓)',
+       before:{x:234,y:8,w:144,h:48}, after:{x:282,y:8,w:96,h:48}, mb:{x:206,y:20}, ma:{x:254,y:20}}
+    ]
+  },
+  menu: {
+    name: 'Menu browsing', short: [5, 3, 1],
+    thesis: 'Today three navigation systems, a photo-credit ask and a sticky promo bar compete with the food. Proposed keeps one tab bar and lets the cart bar carry the goal after the first add. The proposed phone is shown in that state.',
+    kept: 'Keep the Full Menu sheet exactly as it is. One job, fourteen rows, item counts, large targets, nothing else. It is the best screen in the set.',
+    items: [
+      {n:1, title:'One navigation system',
+       today:'Sticky category tabs, a list icon, a search icon, and a separate "What can we help you find?" chip row. Three ways to move through one menu.',
+       proposed:'The tab bar is the system. List, search and one filter icon live in it. Nothing else navigates.',
+       why:'One way to move through the menu means one thing to learn. Three ways means the user has to work out which one to use before they start.', metric:'Time to first add ↓ · tab usage ↑',
+       before:{x:0,y:56,w:390,h:48}, after:{x:0,y:56,w:390,h:48}, mb:{x:8,y:64}, ma:{x:8,y:64}},
+      {n:2, title:'Attribute chips become a filter',
+       today:'Featured, High protein, Spicy are always visible, always taking a row, and used by a minority of sessions.',
+       proposed:'One filter icon at the end of the tab bar opens a sheet: high protein, spicy, vegetarian, gluten-free. An active filter shows as a count badge on the icon.',
+       why:'Complexity moves, it doesn\'t vanish. Attribute filters matter to a minority of sessions, so they wait behind one icon instead of costing every session a row.', metric:'Filter usage should hold among users who used chips',
+       before:{x:0,y:226,w:390,h:80}, after:{x:332,y:58,w:46,h:44}, mb:{x:8,y:236}, ma:{x:306,y:64}},
+      {n:3, title:'The photo-credit ask moves to after the meal',
+       today:'"Earn credits for menu-worthy photos" sits between the tabs and the food, in a carousel with arrows. The user has no food to photograph yet.',
+       proposed:'The ask appears in the post-delivery rating flow and as one line on the order page. Same program, right moment.',
+       why:'People judge an experience by its best moment and how it ends. A photo request lands when the food arrives and the user is pleased, not while they are still deciding what to eat.', metric:'Photo submissions per 1k orders ↑ · approved-photo rate ↑',
+       before:{x:16,y:134,w:358,h:72}, after:{x:16,y:112,w:358,h:24}, mb:{x:8,y:142}, ma:{x:8,y:110}},
+      {n:4, title:'Item cards say the price once',
+       today:'"2 for $9.99", a struck-through "$19.98", and a "Buy 1, get 1 free" pill encode the same offer three ways. Names truncate ("Crispy PORK Spring…") and casing is inconsistent across merchants.',
+       proposed:'"$9.99" plus a small BOGO tag. Names get two lines. Merchant item names are normalized to title case at ingestion, not fixed by hand.',
+       why:'Three encodings of one offer is three things to decode per card. One price and one small tag reads in a glance, and a full name beats a truncated one every time.', metric:'Item CTR ↑ · price-confusion support tickets ↓',
+       before:{x:16,y:322,w:358,h:242}, after:{x:16,y:180,w:358,h:228}, mb:{x:8,y:330}, ma:{x:8,y:188}},
+      {n:5, title:'The sticky bar earns its place',
+       today:'"Buy 1, get 1 free · Add 2 eligible items" is pinned to the bottom before anything is in the cart. It is a demand with no progress behind it.',
+       proposed:'No bar until the first add. Then the cart bar carries the goal: "1 of 2 for BOGO · add 1 more small bite", a progress line, and the DashPass gap in the same lane. One bar, two goals, both actionable.',
+       why:'Progress toward a goal pulls people forward, and an unfinished task stays in mind. "1 of 2" makes the second add far likelier than asking for two up front, before anything is in the cart.', metric:'BOGO completion ↑ · AOV ↑ · guardrail: cart abandonment',
+       before:{x:0,y:772,w:390,h:72,layer:'fixed'}, after:{x:0,y:736,w:390,h:108,layer:'fixed'}, mb:{x:8,y:780}, ma:{x:8,y:744}},
+      {n:6, title:'Nothing clips under the sticky header',
+       today:'The section description scrolls under the tab bar and shows as a half line.',
+       proposed:'The description is dropped (the tab name already says it) and the section title has reserved space below the bar.',
+       why:'Clipped text is the kind of small flaw that makes a screen feel unfinished. The first viewport should have zero of them.', metric:'Zero visual bugs in the first viewport',
+       before:{x:0,y:104,w:390,h:30}, after:{x:0,y:140,w:390,h:34}, mb:{x:354,y:108}, ma:{x:354,y:146}}
+    ]
+  }
+};
+
+const SCREENS = ['home','store','menu'];
+const state = { screen: 'home', idx: {home:-1, store:-1, menu:-1}, short: false };
+const reduced = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+const $ = (s, r=document) => r.querySelector(s);
+const $$ = (s, r=document) => Array.from(r.querySelectorAll(s));
+const phoneEl = (k, side) => $(`.phone[data-screen="${k}"][data-side="${side}"]`);
+const panelEl = k => $(`.panel[data-panel="${k}"]`);
+
+function esc(s){ return s.replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;'); }
+
+function buildPanel(k){
+  const d = DATA[k]; const p = panelEl(k);
+  const items = d.items.map((it, i) => `
+    <button class="item${d.short.includes(it.n) ? ' star' : ''}" type="button" data-i="${i}" aria-current="false">
+      <span class="nums"><span class="num b">${it.n}</span><span class="num a">${it.n}</span></span>
+      <span>
+        <span class="item-title">${esc(it.title)}<span class="chip">3-min</span></span>
+        <span class="item-body">
+          <span class="pair">
+            <p><b class="b">Today</b>${esc(it.today)}</p>
+            <p><b class="a">Proposed</b>${esc(it.proposed)}</p>
+            <p><b class="w">Why</b>${esc(it.why)}</p>
+          </span>
+          <span class="meta">${esc(it.metric)}</span>
+        </span>
+      </span>
+    </button>`).join('');
+  p.innerHTML = `
+    <div class="panel-head">
+      <h2>${esc(d.name)}</h2>
+      <p class="thesis">${esc(d.thesis)}</p>
+      <div class="legend"><span><i style="background:var(--before)"></i>Today · friction</span><span><i style="background:var(--after)"></i>Proposed · fix</span></div>
+    </div>
+    <div class="items">${items}<div class="kept">${esc(d.kept)}</div></div>
+    <div class="panel-foot">
+      <button class="btn prev" type="button">← Back</button>
+      <span class="counter">${d.items.length} points</span>
+      <button class="btn primary next" type="button">Next →</button>
+    </div>
+    <div class="hint">Click a number on either phone to spotlight it. Click it again, click the phone, or press Esc to clear. ← → step through.</div>`;
+  $$('.item', p).forEach(el => el.addEventListener('click', () => select(k, Number(el.dataset.i), true)));
+  $('.prev', p).addEventListener('click', () => step(-1));
+  $('.next', p).addEventListener('click', () => step(1));
+}
+
+function buildMarks(k){
+  for (const side of ['before','after']) {
+    const ph = phoneEl(k, side); const marks = $('.marks', ph);
+    DATA[k].items.forEach((it, i) => {
+      const b = document.createElement('button');
+      b.type = 'button'; b.className = 'mark ' + (side === 'before' ? 'b' : 'a') + (DATA[k].short.includes(it.n) ? ' star' : '');
+      b.textContent = it.n; b.dataset.i = i;
+      b.setAttribute('aria-label', `Point ${it.n}: ${it.title}`);
+      b.addEventListener('click', e => { e.stopPropagation(); select(k, i, true); });
+      marks.appendChild(b);
+    });
+    ph.addEventListener('click', () => select(k, -1));
+    let raf = 0;
+    $('.phone-scroll', ph).addEventListener('scroll', () => { if (raf) return; raf = requestAnimationFrame(() => { raf = 0; layoutPhone(k, side); }); }, {passive:true});
+  }
+}
+
+function layoutPhone(k, side){
+  const ph = phoneEl(k, side); const st = $('.phone-scroll', ph).scrollTop;
+  const items = DATA[k].items; const active = state.idx[k];
+  $$('.mark', ph).forEach((m, i) => {
+    const it = items[i]; const r = side === 'before' ? it.before : it.after; const p = side === 'before' ? it.mb : it.ma;
+    const y = p.y - (r.layer === 'fixed' ? 0 : st);
+    m.style.left = p.x + 'px'; m.style.top = y + 'px';
+    m.hidden = (y < -10 || y > 830);
+    m.classList.toggle('on', i === active);
+  });
+  const spot = $('.spot', ph);
+  if (active < 0) { spot.hidden = true; return; }
+  spot.hidden = false;
+  const it = items[active]; const r = side === 'before' ? it.before : it.after;
+  const y = r.y - (r.layer === 'fixed' ? 0 : st);
+  spot.style.left = r.x + 'px'; spot.style.top = y + 'px'; spot.style.width = r.w + 'px'; spot.style.height = r.h + 'px';
+}
+
+function select(k, i, toggle){
+  const items = DATA[k].items; i = Math.min(items.length - 1, i);
+  if (toggle && i === state.idx[k]) i = -1;
+  if (i < 0) i = -1;
+  state.idx[k] = i;
+  for (const side of ['before','after']) {
+    const ph = phoneEl(k, side);
+    if (i >= 0) {
+      const r = side === 'before' ? items[i].before : items[i].after;
+      const sc = $('.phone-scroll', ph);
+      if (r.layer !== 'fixed') {
+        const target = Math.max(0, Math.min(r.y - 110, 1300 - 844));
+        if (Math.abs(sc.scrollTop - target) > 2) sc.scrollTo({top: target, behavior: reduced ? 'auto' : 'smooth'});
+      }
+    }
+    layoutPhone(k, side);
+  }
+  const p = panelEl(k);
+  $$('.item', p).forEach((el, j) => el.setAttribute('aria-current', j === i ? 'true' : 'false'));
+  if (i >= 0) { const cur = $$('.item', p)[i]; if (cur) cur.scrollIntoView({block: 'nearest', behavior: reduced ? 'auto' : 'smooth'}); }
+  const path = shortPath(k); const pos = path.indexOf(i);
+  if (state.short) $('.counter', p).textContent = pos >= 0 ? `${pos + 1} / ${path.length} · short path` : (i >= 0 ? `${i + 1} / ${items.length}` : `${path.length} points · short path`);
+  else $('.counter', p).textContent = i >= 0 ? `${i + 1} / ${items.length}` : `${items.length} points`;
+  $('.prev', p).disabled = i < 0;
+  $('.next', p).disabled = state.short ? (pos === path.length - 1) : (i === items.length - 1);
+}
+
+function shortPath(k){ return DATA[k].short.map(n => DATA[k].items.findIndex(it => it.n === n)); }
+
+function step(d){
+  if (!SCREENS.includes(state.screen)) return;
+  const k = state.screen; const n = DATA[k].items.length; const cur = state.idx[k];
+  if (state.short) {
+    const path = shortPath(k); const pos = path.indexOf(cur); const j = SCREENS.indexOf(k);
+    if (d < 0) {
+      if (pos > 0) select(k, path[pos - 1]);
+      else if (pos === 0) select(k, -1);
+      else if (cur >= 0) { const prevStar = path.filter(x => x < cur).pop(); select(k, prevStar === undefined ? -1 : prevStar); }
+      else if (j > 0) { showTab(SCREENS[j-1]); const pp = shortPath(SCREENS[j-1]); select(SCREENS[j-1], pp[pp.length - 1]); }
+      return;
+    }
+    if (pos >= 0 && pos < path.length - 1) { select(k, path[pos + 1]); return; }
+    if (pos < 0) { const nextStar = path.find(x => x > cur); if (nextStar !== undefined) { select(k, nextStar); return; } }
+    showTab(j < SCREENS.length - 1 ? SCREENS[j+1] : 'case'); if (j < SCREENS.length - 1) select(SCREENS[j+1], shortPath(SCREENS[j+1])[0]);
+    return;
+  }
+  if (d < 0) {
+    if (cur > 0) select(k, cur - 1);
+    else if (cur === 0) select(k, -1);
+    else { const j = SCREENS.indexOf(k); if (j > 0) { showTab(SCREENS[j-1]); select(SCREENS[j-1], DATA[SCREENS[j-1]].items.length - 1); } }
+    return;
+  }
+  if (cur < n - 1) { select(k, cur + 1); return; }
+  const j = SCREENS.indexOf(k); showTab(j < SCREENS.length - 1 ? SCREENS[j+1] : 'case'); if (j < SCREENS.length - 1) select(SCREENS[j+1], 0);
+}
+
+function fit(){
+  const sec = $(`.screen[data-screen="${state.screen}"]`); if (!sec || sec.hidden || state.screen === 'case') return;
+  const stage = $('.stage', sec); const narrow = window.matchMedia('(max-width: 899px)').matches;
+  let s;
+  if (narrow) { s = Math.min(1, (stage.clientWidth - 32) / 390); }
+  else {
+    const availH = stage.clientHeight - 32 - 26;
+    const availW = (stage.clientWidth - 48 - 340 - 72) / 2;
+    s = Math.min(1, availH / 844, availW / 390);
+  }
+  s = Math.max(0.3, s);
+  sec.style.setProperty('--s', s.toFixed(4));
+}
+
+function showTab(k){
+  state.screen = k;
+  $$('.tab').forEach(t => t.setAttribute('aria-selected', t.dataset.tab === k ? 'true' : 'false'));
+  $$('.screen').forEach(s => s.hidden = s.dataset.screen !== k);
+  try { history.replaceState(null, '', '#' + k); } catch (e) {}
+  if (SCREENS.includes(k)) { fit(); select(k, state.idx[k]); }
+}
+
+// init
+SCREENS.forEach(k => { buildPanel(k); buildMarks(k); });
+$$('.tab').forEach(t => t.addEventListener('click', () => showTab(t.dataset.tab)));
+$$('.seg').forEach(seg => {
+  const stage = $('.stage', seg.parentElement);
+  $$('button', seg).forEach(b => b.addEventListener('click', () => {
+    $$('button', seg).forEach(x => x.setAttribute('aria-pressed', x === b ? 'true' : 'false'));
+    stage.dataset.view = b.dataset.view; fit(); select(state.screen, state.idx[state.screen]);
+  }));
+});
+$$('[data-jump]').forEach(el => el.addEventListener('click', () => {
+  const [k, n] = el.dataset.jump.split(':'); showTab(k); select(k, Number(n) - 1);
+}));
+document.addEventListener('keydown', e => {
+  if (e.metaKey || e.ctrlKey || e.altKey) return;
+  if (e.key === 'ArrowRight' || e.key === 'ArrowDown') { e.preventDefault(); step(1); }
+  else if (e.key === 'ArrowLeft' || e.key === 'ArrowUp') { e.preventDefault(); step(-1); }
+  else if (/^[1-9]$/.test(e.key) && SCREENS.includes(state.screen)) { select(state.screen, Number(e.key) - 1, true); }
+  else if (e.key === 'Escape' && SCREENS.includes(state.screen)) { select(state.screen, -1); }
+  else if (e.key === 'h' || e.key === 'H') showTab('home');
+  else if (e.key === 's' || e.key === 'S') showTab('store');
+  else if (e.key === 'm' || e.key === 'M') showTab('menu');
+  else if (e.key === 'c' || e.key === 'C') showTab('case');
+});
+$('#shortbtn').addEventListener('click', () => {
+  state.short = !state.short;
+  document.body.classList.toggle('short', state.short);
+  $('#shortbtn').setAttribute('aria-pressed', state.short ? 'true' : 'false');
+  SCREENS.forEach(k => { const h = $('.hint', panelEl(k)); if (h) h.textContent = state.short ? 'Short path on: Next and Back follow the three marked points per screen. Any number still works.' : 'Click a number on either phone to spotlight it. Click it again, click the phone, or press Esc to clear. ← → step through.'; });
+  if (SCREENS.includes(state.screen)) select(state.screen, state.idx[state.screen]);
+});
+$('#fsbtn').addEventListener('click', () => { const el = document.documentElement; if (document.fullscreenElement) { document.exitFullscreen().catch(() => {}); } else if (el.requestFullscreen) { el.requestFullscreen().catch(() => {}); } });
+new ResizeObserver(() => { fit(); if (SCREENS.includes(state.screen)) ['before','after'].forEach(side => layoutPhone(state.screen, side)); }).observe(document.body);
+const hash = (location.hash || '').slice(1);
+showTab(['home','store','menu','case'].includes(hash) ? hash : 'home');
+SCREENS.forEach(k => { if (k !== state.screen) { ['before','after'].forEach(side => layoutPhone(k, side)); } });
+</script>
+
+</body></html>

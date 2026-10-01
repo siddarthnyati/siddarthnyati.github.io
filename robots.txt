@@ -1,0 +1,3 @@
+User-agent: *
+Allow: /
+Sitemap: https://siddarthnyati.github.io/sitemap.xml

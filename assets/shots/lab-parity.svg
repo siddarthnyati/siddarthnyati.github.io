@@ -1,0 +1,15 @@
+<svg viewBox="0 0 480 300" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Card rail answers three questions; the stablecoin rail leaves two open">
+<rect width="480" height="300" fill="#0b0c0f"/>
+<text x="24" y="52" font-family="-apple-system,Segoe UI,Roboto,sans-serif" font-size="10" letter-spacing="2" fill="#7f8994">CARD RAIL</text>
+<line x1="24" y1="92" x2="456" y2="92" stroke="#3a4048" stroke-width="1.5"/>
+<circle cx="240" cy="92" r="6.5" fill="#e2b33c"/><circle cx="330" cy="92" r="6.5" fill="#e2b33c"/><circle cx="420" cy="92" r="6.5" fill="#e2b33c"/>
+<text x="240" y="74" text-anchor="middle" font-family="-apple-system,Segoe UI,Roboto,sans-serif" font-size="11.5" fill="#e2b33c">token vault</text>
+<text x="330" y="54" text-anchor="middle" font-family="-apple-system,Segoe UI,Roboto,sans-serif" font-size="11.5" fill="#e2b33c">3DS · passkey</text>
+<text x="452" y="74" text-anchor="end" font-family="-apple-system,Segoe UI,Roboto,sans-serif" font-size="11.5" fill="#e2b33c">liability rules</text>
+<text x="24" y="182" font-family="-apple-system,Segoe UI,Roboto,sans-serif" font-size="10" letter-spacing="2" fill="#7f8994">STABLECOIN RAIL</text>
+<line x1="24" y1="216" x2="456" y2="216" stroke="#3a4048" stroke-width="1.5" stroke-dasharray="5 6"/>
+<circle cx="240" cy="216" r="6.5" fill="none" stroke="#e2b33c" stroke-width="1.6"/><circle cx="330" cy="216" r="6.5" fill="none" stroke="#7d8590" stroke-width="1.6"/><circle cx="420" cy="216" r="6.5" fill="none" stroke="#7d8590" stroke-width="1.6"/>
+<text x="240" y="246" text-anchor="middle" font-family="-apple-system,Segoe UI,Roboto,sans-serif" font-size="11.5" fill="#9aa3ae">key ≠ holder</text>
+<text x="330" y="266" text-anchor="middle" font-family="-apple-system,Segoe UI,Roboto,sans-serif" font-size="11.5" fill="#9aa3ae">no identity layer</text>
+<text x="452" y="246" text-anchor="end" font-family="-apple-system,Segoe UI,Roboto,sans-serif" font-size="11.5" fill="#9aa3ae">no dispute rail</text>
+</svg>

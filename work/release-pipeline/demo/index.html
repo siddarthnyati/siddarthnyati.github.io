@@ -1,0 +1,946 @@
+<!doctype html><html lang="en"><head><meta charset=utf8><meta name=viewport content="width=device-width,initial-scale=1"><style>:root{color-scheme:light}body{margin:0;padding:0;font:14px -apple-system,BlinkMacSystemFont,sans-serif;background:#faf9f5;color:#141413}img{max-width:100%}[hidden]:not([hidden=until-found i]){display:none!important}</style></head><body><!--sn-backbar--><div style="all:initial;display:block;background:#1B2B4B;padding:11px 20px"><a href="/work/release-pipeline/" style="all:initial;cursor:pointer;color:#FBFCFD;font:600 15px/1.3 'Gill Sans','Segoe UI',sans-serif;text-decoration:underline;text-underline-offset:3px">Back to the summary on Siddarth Nyati's portfolio</a></div><!--/sn-backbar-->
+<title>Inside a Multi-Agent Pipeline</title>
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Outfit:wght@500;600;700;800&family=Public+Sans:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500;600&display=swap">
+<style>
+  :root{
+    --paper:#F3F4FA;--card:#FFFFFF;--card-2:#E9EBF6;
+    --ink:#181B2E;--ink-soft:#4A5068;--ink-faint:#7E85A0;
+    --line:#E2E4F1;--line-2:#CDD0E5;
+    --indigo:#4F3FE0;--indigo-deep:#3527B0;--indigo-soft:#EBE9FE;
+    --green:#0B7D5B;--green-soft:#D9F4E8;
+    --amber:#B45A0B;--amber-soft:#FCEAD5;
+    --shadow:0 1px 2px rgba(24,27,46,.05),0 10px 30px rgba(24,27,46,.09);
+  }
+  @media (prefers-color-scheme:dark){:root:not([data-theme="light"]){
+    --paper:#0B0C15;--card:#151726;--card-2:#1E2133;
+    --ink:#EDEEF8;--ink-soft:#AFB5CC;--ink-faint:#7A8199;
+    --line:#252839;--line-2:#373B52;
+    --indigo:#8B84FF;--indigo-deep:#B2ACFF;--indigo-soft:#1D1B42;
+    --green:#3FCF9C;--green-soft:#0D2E24;--amber:#F0A542;--amber-soft:#33220E;
+    --shadow:0 1px 2px rgba(0,0,0,.45),0 12px 34px rgba(0,0,0,.38);
+  }}
+  :root[data-theme="dark"]{
+    --paper:#0B0C15;--card:#151726;--card-2:#1E2133;--ink:#EDEEF8;--ink-soft:#AFB5CC;--ink-faint:#7A8199;
+    --line:#252839;--line-2:#373B52;--indigo:#8B84FF;--indigo-deep:#B2ACFF;--indigo-soft:#1D1B42;
+    --green:#3FCF9C;--green-soft:#0D2E24;--amber:#F0A542;--amber-soft:#33220E;
+    --shadow:0 1px 2px rgba(0,0,0,.45),0 12px 34px rgba(0,0,0,.38);
+  }
+  *{box-sizing:border-box;margin:0;padding:0}
+  html{scroll-behavior:smooth}
+  @media (prefers-reduced-motion:reduce){html{scroll-behavior:auto}}
+  body{background:var(--paper);color:var(--ink);font-family:"Public Sans",system-ui,-apple-system,Segoe UI,sans-serif;font-size:17px;line-height:1.65;-webkit-font-smoothing:antialiased}
+  .wrap{max-width:752px;margin:0 auto;padding:0 22px 120px}
+
+  nav.jump{position:sticky;top:53px;z-index:30;background:var(--paper);border-bottom:1px solid var(--line);margin:0 -22px;padding:11px 22px;display:flex;gap:6px;overflow-x:auto;scrollbar-width:none}
+  nav.jump::-webkit-scrollbar{display:none}
+  nav.jump a{flex:0 0 auto;font-family:"JetBrains Mono",monospace;font-size:11.5px;font-weight:500;text-decoration:none;color:var(--ink-soft);padding:5px 11px;border-radius:8px;border:1px solid transparent;white-space:nowrap;transition:all .15s}
+  nav.jump a:hover{background:var(--indigo-soft);color:var(--indigo-deep);border-color:color-mix(in srgb,var(--indigo) 30%,transparent)}
+
+  header.mast{padding:54px 0 28px}
+  .eyebrow{font-family:"JetBrains Mono",monospace;font-size:12px;font-weight:500;letter-spacing:.16em;text-transform:uppercase;color:var(--indigo);margin-bottom:16px}
+  h1{font-family:"Outfit",sans-serif;font-weight:800;font-size:clamp(2.1rem,5.6vw,3.2rem);line-height:1.04;letter-spacing:-.02em;text-wrap:balance;margin-bottom:18px}
+  .standfirst{font-size:1.15rem;color:var(--ink-soft);max-width:60ch}
+  .standfirst b{color:var(--ink);font-weight:600}
+  .meta-row{display:flex;flex-wrap:wrap;gap:9px;margin-top:24px}
+  .pill{font-family:"JetBrains Mono",monospace;font-size:12px;font-weight:500;padding:6px 12px;border-radius:999px;border:1px solid var(--line-2);background:var(--card);color:var(--ink-soft)}
+  .pill b{color:var(--ink)}
+
+  section{padding-top:50px;scroll-margin-top:104px}
+  .sec-head{display:flex;align-items:baseline;gap:13px;margin-bottom:8px;border-top:2px solid var(--ink);padding-top:15px}
+  .sec-no{font-family:"JetBrains Mono",monospace;font-size:13px;font-weight:600;color:var(--indigo)}
+  h2{font-family:"Outfit",sans-serif;font-weight:700;font-size:clamp(1.55rem,3.8vw,2.05rem);line-height:1.1;letter-spacing:-.015em;text-wrap:balance}
+  .sec-sub{color:var(--ink-faint);font-size:1.02rem;margin-bottom:22px;max-width:60ch}
+  h3{font-family:"Public Sans",sans-serif;font-weight:700;font-size:1.13rem;margin:28px 0 8px}
+  p{margin-bottom:14px}
+  p.lead{font-size:1.08rem}
+  strong{font-weight:600;color:var(--ink)}
+  em{font-style:italic}
+  code{font-family:"JetBrains Mono",monospace;font-size:.85em;background:var(--card-2);padding:1px 6px;border-radius:5px;color:var(--ink)}
+
+  .box{border-radius:13px;padding:18px 21px;margin:18px 0}
+  .box .tag{font-family:"JetBrains Mono",monospace;font-size:11px;font-weight:600;letter-spacing:.06em;text-transform:uppercase;margin-bottom:8px}
+  .box p:last-child{margin-bottom:0}
+  .analogy{background:var(--amber-soft);border:1px solid color-mix(in srgb,var(--amber) 34%,transparent)}
+  .analogy .tag{color:var(--amber)}
+  .say{background:var(--indigo-soft);border:1px solid color-mix(in srgb,var(--indigo) 30%,transparent)}
+  .say .tag{color:var(--indigo-deep)}
+  .say .line{font-size:1.04rem;font-style:italic;line-height:1.5;color:var(--ink);border-left:3px solid var(--indigo);padding-left:13px;margin-top:8px}
+  .key{background:var(--green-soft);border:1px solid color-mix(in srgb,var(--green) 30%,transparent)}
+  .key .tag{color:var(--green)}
+
+  ul.clean{list-style:none;display:flex;flex-direction:column;gap:10px;margin:6px 0 16px}
+  ul.clean li{position:relative;padding-left:22px;color:var(--ink-soft)}
+  ul.clean li::before{content:"";position:absolute;left:3px;top:11px;width:7px;height:7px;border-radius:2px;background:var(--indigo)}
+  ul.clean li b{color:var(--ink)}
+
+  figure{margin:22px 0}
+  .figwrap{overflow-x:auto;border:1px solid var(--line);border-radius:13px;background:var(--card);box-shadow:var(--shadow);padding:20px 18px}
+  figure svg{display:block;max-width:100%;height:auto;color:var(--ink)}
+  figcaption{font-size:.9rem;color:var(--ink-faint);margin-top:10px;line-height:1.5;text-align:center}
+
+  .tbl{overflow-x:auto;border:1px solid var(--line);border-radius:12px;box-shadow:var(--shadow);margin:18px 0}
+  table{border-collapse:collapse;width:100%;min-width:560px;background:var(--card);font-size:.93rem}
+  th,td{text-align:left;padding:11px 15px;border-bottom:1px solid var(--line);vertical-align:top}
+  th{font-family:"JetBrains Mono",monospace;font-size:10.5px;letter-spacing:.05em;text-transform:uppercase;color:var(--ink-faint);font-weight:600;background:var(--card-2)}
+  tr:last-child td{border-bottom:none}
+  td:first-child{font-weight:600;color:var(--ink)}
+  td.plain{color:var(--ink-soft)}
+
+  .qa{border-top:1px solid var(--line);margin-top:6px}
+  .qa .row{padding:16px 0;border-bottom:1px solid var(--line)}
+  .qa .q{font-weight:700;color:var(--ink);font-size:1.02rem;display:flex;gap:10px}
+  .qa .q .m{font-family:"JetBrains Mono",monospace;font-size:11px;color:var(--indigo);flex:0 0 auto;padding-top:3px}
+  .qa .a{font-size:.96rem;color:var(--ink-soft);margin-top:6px;padding-left:26px;line-height:1.55}
+  .qa .a b{color:var(--ink)}
+
+  .closer{margin-top:42px;background:var(--ink);color:var(--paper);border-radius:16px;padding:28px 26px}
+  .closer h2{color:var(--paper);font-size:1.4rem;margin-bottom:12px}
+  .closer p{color:color-mix(in srgb,var(--paper) 84%,transparent)}.closer p:last-child{margin-bottom:0}.closer b{color:#fff}
+  .foot{margin-top:32px;font-size:.82rem;color:var(--ink-faint);line-height:1.6}
+  ::selection{background:var(--indigo-soft)}
+  :focus-visible{outline:2px solid var(--indigo);outline-offset:3px;border-radius:4px}
+
+  /* --- tabs --- */
+  html{overflow-x:clip}
+  .tabbar{position:sticky;top:0;z-index:40;display:flex;gap:8px;margin:0 -22px;padding:10px 22px;isolation:isolate;overflow-x:auto;scrollbar-width:none}
+  .tabbar::-webkit-scrollbar{display:none}
+  .tabbar::before{content:"";position:absolute;top:0;bottom:0;left:calc(50% - 50vw);right:calc(50% - 50vw);background:var(--paper);border-bottom:1px solid var(--line);z-index:-1}
+  .tabbar button{flex:0 0 auto;font-family:"Outfit",sans-serif;font-weight:700;font-size:.98rem;color:var(--ink-soft);background:none;border:1px solid transparent;border-radius:10px;padding:8px 15px;cursor:pointer;transition:all .15s;display:flex;align-items:center;gap:7px}
+  .tabbar button .tn{font-family:"JetBrains Mono",monospace;font-size:10px;opacity:.7}
+  .tabbar button:hover{color:var(--ink);background:var(--card-2)}
+  .tabbar button[aria-selected="true"]{color:var(--indigo-deep);background:var(--indigo-soft);border-color:color-mix(in srgb,var(--indigo) 34%,transparent)}
+  .tabpanel[hidden]{display:none}
+
+  /* --- architecture stage list --- */
+  .phase-band{font-family:"JetBrains Mono",monospace;font-size:11px;font-weight:600;letter-spacing:.1em;text-transform:uppercase;color:var(--indigo);margin:22px 0 4px;padding-top:6px;border-top:1px dashed var(--line-2)}
+  .stage{display:flex;gap:13px;padding:13px 0;border-bottom:1px solid var(--line)}
+  .stage:last-child{border-bottom:none}
+  .stage .sn{flex:0 0 auto;width:26px;height:26px;border-radius:7px;display:flex;align-items:center;justify-content:center;font-family:"JetBrains Mono",monospace;font-size:12px;font-weight:700;color:#fff}
+  .stage .sb{flex:1;min-width:0}
+  .stage .st{display:flex;align-items:center;gap:8px;flex-wrap:wrap}
+  .stage .st .nm{font-weight:700;color:var(--ink)}
+  .stage .st .ty{font-family:"JetBrains Mono",monospace;font-size:9.5px;letter-spacing:.05em;text-transform:uppercase;padding:2px 6px;border-radius:5px;font-weight:600}
+  .stage .sd{font-size:.93rem;color:var(--ink-soft);margin-top:3px}
+  .stage .sd code{font-size:.82em}
+  .stage .sio{font-family:"JetBrains Mono",monospace;font-size:10.5px;color:var(--ink-faint);margin-top:6px}
+  .t-io{background:var(--green)} .t-llm{background:var(--indigo)} .t-ui{background:var(--amber)} .t-sys{background:var(--ink-soft)}
+  .ty-io{background:var(--green-soft);color:var(--green)} .ty-llm{background:var(--indigo-soft);color:var(--indigo-deep)} .ty-ui{background:var(--amber-soft);color:var(--amber)} .ty-sys{background:var(--card-2);color:var(--ink-soft)}
+
+  /* --- prompt cards --- */
+  pre.code{font-family:"JetBrains Mono",monospace;font-size:.77rem;line-height:1.62;background:#16142E;color:#C8CBE8;border:1px solid #2A2752;border-radius:11px;padding:15px 16px;overflow-x:auto;margin:10px 0 4px;white-space:pre;-webkit-overflow-scrolling:touch}
+  @media (prefers-color-scheme:light){:root:not([data-theme="dark"]) pre.code{background:#16142E}}
+  .prompt-card{border:1px solid var(--line);border-radius:13px;background:var(--card);box-shadow:var(--shadow);padding:16px 18px;margin:16px 0}
+  .prompt-card .ph{display:flex;align-items:center;gap:9px;flex-wrap:wrap;margin-bottom:6px}
+  .prompt-card .ph .n{font-family:"JetBrains Mono",monospace;font-size:11px;font-weight:600;color:#fff;background:var(--indigo);border-radius:5px;padding:2px 8px}
+  .prompt-card .ph h3{margin:0;font-size:1.05rem}
+  .prompt-card .ph .runs{font-family:"JetBrains Mono",monospace;font-size:10px;color:var(--ink-faint);margin-left:auto}
+  .prompt-card .why{font-size:.9rem;color:var(--ink-soft);margin-top:10px;border-left:3px solid var(--green);padding-left:12px}
+  .prompt-card .why b{color:var(--ink)}
+
+  /* --- numbered mechanisms --- */
+  ol.mech{list-style:none;counter-reset:m;display:flex;flex-direction:column;gap:14px;margin:8px 0 6px;padding:0}
+  ol.mech li{position:relative;counter-increment:m;padding-left:44px;color:var(--ink-soft)}
+  ol.mech li::before{content:counter(m);position:absolute;left:0;top:0;width:30px;height:30px;border-radius:8px;background:var(--indigo-soft);color:var(--indigo-deep);border:1px solid color-mix(in srgb,var(--indigo) 30%,transparent);font-family:"JetBrains Mono",monospace;font-weight:700;font-size:13px;display:flex;align-items:center;justify-content:center}
+  ol.mech li b{color:var(--ink)}
+
+  /* --- walkthrough stepper --- */
+  .pgwide{width:min(1180px,calc(100vw - 36px));position:relative;left:50%;transform:translateX(-50%)}
+  @media(max-width:1000px){.pgwide{width:100%;left:0;transform:none}}
+  .dot{width:9px;height:9px;border-radius:3px;flex:0 0 auto;display:inline-block}
+  .d-human{background:var(--amber)} .d-code{background:var(--green)} .d-llm{background:var(--indigo)}
+
+  .mast.tight{padding:30px 0 6px}
+  .mast.tight h1{font-size:clamp(1.75rem,4vw,2.35rem);margin-bottom:12px}
+  .mast.tight .standfirst{font-size:1rem;max-width:70ch}
+  .legend{display:flex;flex-wrap:wrap;gap:15px;align-items:center;margin:16px 0 0;padding:10px 15px;border:1px solid var(--line);border-radius:10px;background:var(--card);font-size:.84rem;color:var(--ink-soft)}
+  .legend span.li{display:flex;align-items:center;gap:8px}
+  .legend b{color:var(--ink);font-weight:600}
+
+  /* pipeline strip */
+  .strip{position:sticky;top:53px;z-index:25;display:flex;gap:0;margin:16px 0 0;overflow-x:auto;scrollbar-width:none;padding:11px 0 10px;isolation:isolate}
+  .strip::-webkit-scrollbar{display:none}
+  .strip::before{content:"";position:absolute;top:0;bottom:0;left:calc(50% - 50vw);right:calc(50% - 50vw);background:var(--paper);border-bottom:1px solid var(--line);z-index:-1}
+  .strip button{flex:1 1 0;min-width:118px;background:none;border:none;cursor:pointer;padding:0;font-family:inherit;text-align:left}
+  .strip .nd{display:flex;align-items:center}
+  .strip .bul{width:27px;height:27px;border-radius:50%;flex:0 0 auto;display:flex;align-items:center;justify-content:center;font-family:"JetBrains Mono",monospace;font-size:11px;font-weight:700;background:var(--card);border:1.5px solid;transition:transform .22s cubic-bezier(.3,1.4,.5,1),box-shadow .22s,background .2s,color .2s}
+  .strip .bar{flex:1;height:2px;border-radius:2px;background:var(--line-2)}
+  .strip button:last-child .bar{background:transparent}
+  .strip .lab{font-size:.78rem;line-height:1.25;color:var(--ink-faint);margin-top:8px;padding-right:10px;transition:color .18s}
+  .strip button.a-human .bul{border-color:color-mix(in srgb,var(--amber) 52%,transparent);color:var(--amber)}
+  .strip button.a-code .bul{border-color:color-mix(in srgb,var(--green) 52%,transparent);color:var(--green)}
+  .strip button.a-llm .bul{border-color:color-mix(in srgb,var(--indigo) 52%,transparent);color:var(--indigo)}
+  .strip button:hover .bul{transform:scale(1.08)}
+  .strip button.done .bar{background:color-mix(in srgb,var(--indigo) 42%,var(--line-2))}
+  .strip button.on .lab{color:var(--ink);font-weight:600}
+  .strip button.on .bul{transform:scale(1.2);color:var(--paper)}
+  .strip button.on.a-human .bul{background:var(--amber);border-color:var(--amber);box-shadow:0 0 0 4px color-mix(in srgb,var(--amber) 20%,transparent)}
+  .strip button.on.a-code .bul{background:var(--green);border-color:var(--green);box-shadow:0 0 0 4px color-mix(in srgb,var(--green) 20%,transparent)}
+  .strip button.on.a-llm .bul{background:var(--indigo);border-color:var(--indigo);box-shadow:0 0 0 4px color-mix(in srgb,var(--indigo) 22%,transparent)}
+
+  /* panel */
+  .panel{border:1px solid var(--line);border-radius:17px;background:var(--card);box-shadow:var(--shadow);overflow:hidden;margin-top:16px;min-height:430px;display:flex;flex-direction:column;position:relative}
+  .panel::before{content:"";position:absolute;top:0;left:0;right:0;height:3px;background:var(--stage);z-index:2}
+  .panel.enter{animation:pop .3s cubic-bezier(.2,.7,.35,1)}
+  @keyframes pop{from{opacity:0;transform:translateY(7px)}to{opacity:1;transform:none}}
+  @media(prefers-reduced-motion:reduce){.panel.enter{animation:none}.strip .bul{transition:none}}
+  .phead{display:flex;align-items:center;gap:12px;flex-wrap:wrap;padding:16px 20px 15px;border-bottom:1px solid var(--line);background:linear-gradient(180deg,var(--stage-soft),color-mix(in srgb,var(--stage-soft) 30%,var(--card)))}
+  .phead .pn{font-family:"JetBrains Mono",monospace;font-weight:700;font-size:12px;width:28px;height:28px;border-radius:9px;display:flex;align-items:center;justify-content:center;color:var(--paper);background:var(--stage);flex:0 0 auto;box-shadow:0 2px 8px color-mix(in srgb,var(--stage) 40%,transparent)}
+  .phead h3{font-family:"Outfit",sans-serif;font-weight:700;font-size:1.22rem;margin:0;letter-spacing:-.012em;color:var(--ink)}
+  .actor{font-family:"JetBrains Mono",monospace;font-size:9.5px;font-weight:700;letter-spacing:.06em;text-transform:uppercase;padding:4px 10px;border-radius:999px;display:flex;align-items:center;gap:6px;border:1px solid var(--line-2);color:var(--ink);background:var(--card)}
+  .phead .runs{margin-left:auto;font-family:"JetBrains Mono",monospace;font-size:10.5px;color:var(--ink-faint);white-space:nowrap}
+  .pwhy{padding:13px 20px;border-bottom:1px solid var(--line);font-size:.97rem;color:var(--ink);background:var(--paper);display:flex;gap:11px;align-items:flex-start}
+  .pwhy .k{font-family:"JetBrains Mono",monospace;font-size:9.5px;font-weight:700;letter-spacing:.06em;text-transform:uppercase;padding:4px 9px;border-radius:7px;flex:0 0 auto;margin-top:2px;background:var(--stage-soft);color:var(--stage-ink);border:1px solid color-mix(in srgb,var(--stage) 26%,transparent)}
+  .pwhy b{font-weight:600}
+
+  .pgrid{display:grid;grid-template-columns:minmax(0,.78fr) minmax(0,1.3fr) minmax(0,1.12fr);flex:1}
+  @media(max-width:1000px){.pgrid{grid-template-columns:1fr}}
+  .side{padding:17px 19px;min-width:0;position:relative}
+  .side+.side{border-left:1px solid var(--line)}
+  .side.mid{background:var(--paper)}
+  .side+.side::before{content:"\203A";position:absolute;left:-12px;top:52px;width:23px;height:23px;border-radius:50%;background:var(--card);border:1px solid var(--line-2);color:var(--ink-faint);font-size:15px;line-height:19px;text-align:center;z-index:3;font-family:"JetBrains Mono",monospace}
+  @media(max-width:1000px){.side+.side{border-left:none;border-top:1px solid var(--line)}.side+.side::before{display:none}.side.mid{background:var(--paper)}}
+  .slab{font-family:"JetBrains Mono",monospace;font-size:9.5px;font-weight:700;letter-spacing:.07em;text-transform:uppercase;margin-bottom:11px;display:flex;align-items:center;gap:7px}
+  .slab.in{color:var(--green)} .slab.out{color:var(--indigo-deep)} .slab.na{color:var(--ink-faint)} .slab.mi{color:var(--stage-ink)}
+
+  /* --- the prompt card --- */
+  .pmt{border-radius:12px;overflow:hidden;background:#16142E;border:1px solid #2A2752;box-shadow:0 6px 20px rgba(20,18,48,.22)}
+  .pmh{display:flex;align-items:center;gap:6px;padding:8px 12px;background:#1E1B3C;border-bottom:1px solid #2A2752}
+  .pmh .pd{width:8px;height:8px;border-radius:50%;background:#3C3873}
+  .pmh .vb{margin-left:auto;font-family:"JetBrains Mono",monospace;font-size:8.5px;letter-spacing:.06em;text-transform:uppercase;color:#5FD3A4;font-weight:700}
+  .pmh .pt{margin-left:6px;font-family:"JetBrains Mono",monospace;font-size:9px;letter-spacing:.09em;text-transform:uppercase;color:#8D91C4;font-weight:600}
+  pre.pmb{font-family:"JetBrains Mono",monospace;font-size:.665rem;line-height:1.9;color:#C8CBE8;padding:13px 14px;margin:0;white-space:pre-wrap;overflow-wrap:anywhere;max-height:480px;overflow-y:auto;scrollbar-width:thin;scrollbar-color:#3C3873 transparent}
+  pre.pmb .cm{color:#767AA8}
+  pre.pmb .kw{color:#A9A4FF;font-weight:600}
+  pre.pmb .st{color:#5FD3A4}
+  pre.pmb .neg{color:#FFC773;font-weight:700;background:rgba(255,180,84,.15);box-shadow:inset 2px 0 0 #FFB454;padding:2px 7px 2px 9px;border-radius:0 3px 3px 0;-webkit-box-decoration-break:clone;box-decoration-break:clone}
+  pre.pmb .pos{color:#7FE3B4;font-weight:700;background:rgba(95,211,164,.13);box-shadow:inset 2px 0 0 #4FCB96;padding:2px 7px 2px 9px;border-radius:0 3px 3px 0;-webkit-box-decoration-break:clone;box-decoration-break:clone}
+  .pmt.more{position:relative}
+  .pmt.more::after{content:"";position:absolute;left:1px;right:1px;bottom:1px;height:44px;pointer-events:none;border-radius:0 0 11px 11px;background:linear-gradient(180deg,rgba(22,20,46,0),#16142E 78%)}
+  .pmt.more .scrollhint{position:absolute;bottom:8px;left:0;right:0;text-align:center;font-family:"JetBrains Mono",monospace;font-size:8.5px;letter-spacing:.09em;text-transform:uppercase;color:#8D91C4;z-index:2;pointer-events:none}
+  .pmf{font-size:.79rem;color:var(--ink-faint);margin-top:9px;line-height:1.5}
+  .pmf b{color:var(--ink-soft)}
+
+  /* --- the code card (deterministic stages) --- */
+  .cde{border:1px solid color-mix(in srgb,var(--green) 32%,var(--line));border-radius:12px;background:var(--green-soft);overflow:hidden}
+  .cde .ch{padding:8px 13px;border-bottom:1px solid color-mix(in srgb,var(--green) 26%,transparent);font-family:"JetBrains Mono",monospace;font-size:9px;letter-spacing:.09em;text-transform:uppercase;color:var(--green);font-weight:700}
+  .cde ol{list-style:none;counter-reset:cs;margin:0;padding:11px 13px;display:flex;flex-direction:column;gap:10px}
+  .cde ol li{counter-increment:cs;position:relative;padding-left:29px;font-size:.86rem;color:var(--ink);line-height:1.55}
+  .cde ol li::before{content:counter(cs);position:absolute;left:0;top:1px;width:20px;height:19px;font-family:"JetBrains Mono",monospace;font-size:10px;font-weight:700;color:var(--green);background:var(--card);border:1px solid color-mix(in srgb,var(--green) 30%,transparent);border-radius:6px;display:flex;align-items:center;justify-content:center}
+  .cde ol li.key{font-weight:600}
+  .cde ol li.key::before{background:var(--green);color:var(--paper);border-color:var(--green)}
+  .cde code{background:color-mix(in srgb,var(--green) 13%,transparent);font-size:.8em}
+
+  /* --- mock UI pieces --- */
+  .urlbar{display:flex;align-items:center;gap:9px;border:1px solid var(--line-2);border-radius:9px;background:var(--card);padding:9px 12px;font-family:"JetBrains Mono",monospace;font-size:.73rem;color:var(--ink);overflow-wrap:anywhere;box-shadow:0 1px 3px rgba(20,18,48,.05)}
+  .urlbar .lock{color:var(--green);flex:0 0 auto}
+  .steps{list-style:none;margin:0;padding:0;display:flex;flex-direction:column;gap:10px}
+  .steps li{display:flex;gap:10px;font-size:.87rem;color:var(--ink-soft);line-height:1.5}
+  .steps li .ck{color:var(--green);font-weight:700;flex:0 0 auto;font-family:"JetBrains Mono",monospace;font-size:.85rem}
+  .steps li b{color:var(--ink)}
+  .chips{display:flex;flex-wrap:wrap;gap:6px;margin-top:11px}
+  .chip{font-family:"JetBrains Mono",monospace;font-size:10.5px;font-weight:600;padding:4px 9px;border-radius:7px;background:var(--indigo-soft);border:1px solid color-mix(in srgb,var(--indigo) 26%,transparent);color:var(--indigo-deep)}
+  .chip.gy{background:var(--card-2);border-color:var(--line-2);color:var(--ink-soft)}
+  .note{border:1px solid var(--line);border-radius:11px;padding:12px 13px;color:var(--ink-soft);font-size:.85rem;line-height:1.55;background:var(--card);margin-top:12px}
+  .note b{color:var(--ink)}
+  .note.good{border-color:color-mix(in srgb,var(--green) 34%,transparent);background:var(--green-soft);color:var(--ink)}
+  .note.warn{border-color:color-mix(in srgb,var(--amber) 40%,transparent);background:var(--amber-soft);color:var(--ink)}
+  .cap{font-size:.85rem;color:var(--ink-soft);margin:12px 0 0;line-height:1.55}
+
+  .relcard{border:1px solid var(--line-2);border-radius:12px;background:var(--card);overflow:hidden;box-shadow:0 1px 3px rgba(20,18,48,.05)}
+  .relcard .rh{padding:9px 13px;background:var(--card-2);border-bottom:1px solid var(--line);font-family:"Outfit",sans-serif;font-weight:700;font-size:.9rem;color:var(--ink)}
+  .relcard .rr{display:flex;justify-content:space-between;gap:12px;padding:9px 13px;border-bottom:1px solid var(--line);font-size:.87rem}
+  .relcard .rr:last-child{border-bottom:none}
+  .relcard .rk{color:var(--ink-faint)}
+  .relcard .rv{font-family:"JetBrains Mono",monospace;font-size:.79rem;color:var(--ink);font-weight:600;text-align:right}
+
+  .tkt{border:1px solid var(--line-2);border-radius:12px;background:var(--card);overflow:hidden;box-shadow:0 1px 3px rgba(20,18,48,.05)}
+  .tkt .th{display:flex;align-items:center;gap:8px;padding:9px 13px;background:var(--card-2);border-bottom:1px solid var(--line)}
+  .tkt .tk{font-family:"JetBrains Mono",monospace;font-size:11px;font-weight:700;color:var(--indigo-deep)}
+  .tkt .tt{font-size:.71rem;color:var(--ink-faint);margin-left:auto;font-family:"JetBrains Mono",monospace}
+  .tkt .tb{padding:11px 13px;font-size:.87rem;color:var(--ink-soft);line-height:1.55}
+  .tkt .tb b{color:var(--ink)}
+
+  .tlist{border:1px solid var(--line-2);border-radius:12px;background:var(--card);overflow:hidden;box-shadow:0 1px 3px rgba(20,18,48,.05)}
+  .tlist .row{display:flex;align-items:center;gap:9px;padding:8px 11px;border-bottom:1px solid var(--line);transition:background .15s}
+  .tlist .row:last-child{border-bottom:none}
+  .tlist .row:hover{background:var(--paper)}
+  .tlist .row.cf{box-shadow:inset 3px 0 0 var(--green)}
+  .tlist .row .id{font-family:"JetBrains Mono",monospace;font-size:10px;font-weight:700;color:var(--ink);flex:0 0 auto;width:72px}
+  .tlist .row .ds{font-size:.81rem;color:var(--ink-soft);flex:1;min-width:0;line-height:1.35}
+  .badge{font-family:"JetBrains Mono",monospace;font-size:8.5px;font-weight:700;letter-spacing:.05em;text-transform:uppercase;padding:3px 8px;border-radius:999px;flex:0 0 auto;white-space:nowrap}
+  .b-cf{background:var(--green);color:var(--paper)}
+  .b-int{background:var(--card-2);color:var(--ink-faint);border:1px solid var(--line-2)}
+  .tally{display:flex;gap:8px;margin-top:11px;font-size:.83rem;color:var(--ink-soft)}
+  .tally b{color:var(--ink)}
+
+  .doc{border:1px solid var(--line-2);border-radius:12px;background:var(--card);overflow:hidden;box-shadow:0 2px 10px rgba(20,18,48,.07)}
+  .doc .dh{padding:10px 14px;background:var(--card-2);border-bottom:1px solid var(--line)}
+  .doc .crumb{font-family:"JetBrains Mono",monospace;font-size:9px;color:var(--ink-faint);letter-spacing:.03em}
+  .doc .dt{font-family:"Outfit",sans-serif;font-weight:700;font-size:.96rem;color:var(--ink);margin-top:3px}
+  .doc .db{padding:13px 14px;font-size:.84rem;color:var(--ink-soft);line-height:1.55}
+  .doc .db h4{font-family:"Outfit",sans-serif;font-weight:700;font-size:.85rem;color:var(--ink);margin:0 0 5px}
+  .doc .db p{margin:0 0 12px}
+  .doc table.ft{width:100%;min-width:0;border-collapse:collapse;font-size:.75rem;margin:0 0 12px;background:transparent}
+  .doc table.ft th{background:var(--card-2);color:var(--ink-faint);font-family:"JetBrains Mono",monospace;font-size:8px;letter-spacing:.04em;padding:6px 8px;border-bottom:1px solid var(--line);text-align:left}
+  .doc table.ft td{padding:7px 8px;border-bottom:1px solid var(--line);color:var(--ink);vertical-align:top}
+  .doc table.ft tr:last-child td{border-bottom:none}
+  .ok{color:var(--green);font-weight:700}
+  .bad{background:color-mix(in srgb,var(--amber) 30%,transparent);color:var(--ink);font-weight:700;padding:1px 5px;border-radius:4px;box-shadow:inset 0 -2px 0 var(--amber)}
+
+  .mail{border:1px solid var(--line-2);border-radius:12px;background:var(--card);overflow:hidden;box-shadow:0 2px 10px rgba(20,18,48,.07)}
+  .mail .mh{padding:10px 14px;border-bottom:1px solid var(--line);background:var(--card-2)}
+  .mail .mr{display:flex;gap:9px;font-size:.77rem;color:var(--ink-soft);line-height:1.7}
+  .mail .mr .mk{font-family:"JetBrains Mono",monospace;font-size:9px;color:var(--ink-faint);width:36px;flex:0 0 auto;padding-top:2px}
+  .mail .msub{font-family:"Outfit",sans-serif;font-weight:700;font-size:.93rem;color:var(--ink);margin-top:5px;line-height:1.3}
+  .mail .mb{padding:13px 14px;font-size:.83rem;color:var(--ink-soft);line-height:1.55}
+  .mail .mb h4{font-family:"Outfit",sans-serif;font-weight:700;font-size:.83rem;color:var(--ink);margin:0 0 6px}
+  .mail .mb p{margin:0 0 13px}
+  .mail .mb p:last-child{margin-bottom:0}
+
+  .verdict{display:flex;align-items:center;gap:10px;padding:11px 13px;border-radius:11px;font-size:.89rem;font-weight:600;background:var(--amber-soft);border:1px solid color-mix(in srgb,var(--amber) 45%,transparent);color:var(--ink);margin-bottom:11px}
+  .verdict .vp{font-family:"JetBrains Mono",monospace;font-size:9px;white-space:nowrap;font-weight:700;letter-spacing:.05em;text-transform:uppercase;padding:4px 8px;border-radius:6px;background:var(--amber);color:var(--paper)}
+  .flag{border:1px solid var(--line-2);border-radius:12px;background:var(--card);padding:11px 13px;margin-bottom:9px;box-shadow:0 1px 3px rgba(20,18,48,.05)}
+  .flag.hi{border-left:3px solid var(--amber)}
+  .flag.me{border-left:3px solid var(--line-2)}
+  .flag .fh{display:flex;align-items:center;gap:9px;margin-bottom:6px;flex-wrap:wrap}
+  .flag .fa{font-family:"JetBrains Mono",monospace;font-size:9.5px;font-weight:700;color:var(--ink)}
+  .sev{font-family:"JetBrains Mono",monospace;font-size:8px;font-weight:700;letter-spacing:.05em;text-transform:uppercase;padding:3px 7px;border-radius:999px}
+  .s-high{background:var(--amber);color:var(--paper)}
+  .s-med{background:var(--card-2);color:var(--ink-soft);border:1px solid var(--line-2)}
+  .flag .fp{font-size:.85rem;color:var(--ink-soft);line-height:1.5}
+  .flag .fx{font-size:.81rem;color:var(--green);margin-top:6px;font-weight:700}
+
+  .ship{border:1px solid color-mix(in srgb,var(--green) 30%,var(--line-2));border-radius:12px;background:var(--card);overflow:hidden}
+  .ship .sr{display:flex;align-items:center;gap:10px;padding:11px 13px;border-bottom:1px solid var(--line);font-size:.87rem;color:var(--ink)}
+  .ship .sr:last-child{border-bottom:none}
+  .ship .sr .ck{color:var(--green);font-weight:700}
+  .ship .sr .sub{font-family:"JetBrains Mono",monospace;font-size:.7rem;color:var(--ink-faint);margin-left:auto;text-align:right}
+
+  .approve{border:1px solid var(--line-2);border-radius:12px;background:var(--card);padding:13px;box-shadow:0 1px 3px rgba(20,18,48,.05)}
+  .approve .ah{font-family:"JetBrains Mono",monospace;font-size:9px;font-weight:700;letter-spacing:.06em;text-transform:uppercase;color:var(--ink-faint);margin-bottom:9px}
+  .approve .fix{display:flex;align-items:center;gap:9px;font-size:.84rem;color:var(--ink);padding:6px 0;flex-wrap:wrap}
+  .approve .fix .was{font-family:"JetBrains Mono",monospace;font-size:.74rem;text-decoration:line-through;color:var(--ink-faint)}
+  .approve .fix .now{font-family:"JetBrains Mono",monospace;font-size:.74rem;color:var(--green);font-weight:700}
+  .btnrow{display:flex;gap:9px;margin-top:12px;flex-wrap:wrap}
+  .btnfake{font-family:"Outfit",sans-serif;font-weight:700;font-size:.84rem;padding:8px 15px;border-radius:9px;border:1px solid var(--indigo);background:var(--indigo);color:var(--paper);box-shadow:0 2px 9px color-mix(in srgb,var(--indigo) 34%,transparent)}
+  .btnfake.ghost{background:transparent;color:var(--ink-soft);border-color:var(--line-2);box-shadow:none}
+
+  /* drawer */
+  .drawer{border-top:1px solid var(--line);background:var(--card-2)}
+  .dtabs{display:flex;gap:6px;padding:10px 20px;flex-wrap:wrap}
+  .dtabs button{font-family:"JetBrains Mono",monospace;font-size:10.5px;font-weight:600;letter-spacing:.03em;padding:6px 12px;border-radius:8px;border:1px solid var(--line-2);background:var(--card);color:var(--ink-soft);cursor:pointer;transition:all .15s}
+  .dtabs button:hover{color:var(--ink);border-color:var(--ink-faint)}
+  .dtabs button[aria-expanded="true"]{background:var(--stage);color:var(--paper);border-color:var(--stage)}
+  .dbody{padding:0 20px 18px;font-size:.9rem;color:var(--ink-soft);line-height:1.6}
+  .dbody b{color:var(--ink)}
+  .dbody .cq{display:grid;grid-template-columns:repeat(auto-fit,minmax(215px,1fr));gap:13px}
+  .dbody .cq .c .cn{display:inline-block;font-family:"Outfit",sans-serif;font-weight:700;font-size:.84rem;color:var(--indigo-deep);background:var(--indigo-soft);border:1px solid color-mix(in srgb,var(--indigo) 28%,transparent);border-radius:7px;padding:2px 9px;margin-bottom:5px}
+  .dbody .cq .c .cd{font-size:.82rem;line-height:1.5}
+  .dbody .qq{font-style:italic;color:var(--ink);border-left:3px solid var(--amber);padding-left:12px}
+
+  /* nav */
+  .pnav{display:flex;align-items:center;gap:11px;margin-top:14px}
+  .pnav button{font-family:"Outfit",sans-serif;font-weight:700;font-size:.9rem;background:var(--card);border:1px solid var(--line-2);color:var(--ink);border-radius:10px;padding:9px 16px;cursor:pointer;transition:all .15s}
+  .pnav button:hover:not(:disabled){background:var(--indigo);border-color:var(--indigo);color:var(--paper)}
+  .pnav button:disabled{opacity:.32;cursor:default}
+  .pnav .sp{flex:1}
+  .pnav .cnt{font-family:"JetBrains Mono",monospace;font-size:11.5px;color:var(--ink-faint)}
+
+  .script{border:1px solid var(--line);border-radius:14px;background:var(--card);box-shadow:var(--shadow);overflow:hidden;margin-top:26px}
+  .script .sh{padding:13px 20px;border-bottom:1px solid var(--line);background:var(--card-2);font-family:"Outfit",sans-serif;font-weight:700;font-size:1.08rem}
+  .script ol{list-style:none;counter-reset:sc;margin:0;padding:4px 20px 16px}
+  .script ol li{counter-increment:sc;display:grid;grid-template-columns:26px minmax(0,1fr);gap:12px;padding:11px 0;border-bottom:1px solid var(--line);font-size:.93rem;color:var(--ink);font-style:italic;line-height:1.5}
+  .script ol li:last-child{border-bottom:none}
+  .script ol li::before{content:counter(sc);font-family:"JetBrains Mono",monospace;font-weight:700;font-size:11px;font-style:normal;color:var(--paper);background:var(--indigo);border-radius:7px;height:24px;display:flex;align-items:center;justify-content:center}
+
+  /* --- observability dashboard --- */
+  .tiles{display:grid;grid-template-columns:repeat(auto-fit,minmax(112px,1fr));gap:9px;margin:16px 0 14px}
+  .tile{border:1px solid var(--line-2);border-radius:11px;background:var(--card);padding:10px 12px;box-shadow:0 1px 3px rgba(20,18,48,.05)}
+  .tile .tv{font-family:"Outfit",sans-serif;font-weight:800;font-size:1.22rem;color:var(--ink);line-height:1.15}
+  .tile .tk2{font-family:"JetBrains Mono",monospace;font-size:8.5px;letter-spacing:.06em;text-transform:uppercase;color:var(--ink-faint);margin-top:3px;line-height:1.4}
+  .tile.g .tv{color:var(--green)} .tile.a .tv{color:var(--amber)} .tile.i .tv{color:var(--indigo-deep)}
+  .trace{border:1px solid var(--line-2);border-radius:12px;background:var(--card);overflow:hidden;box-shadow:0 2px 10px rgba(20,18,48,.07)}
+  .trace .trh{display:flex;align-items:center;gap:10px;padding:10px 14px;background:var(--card-2);border-bottom:1px solid var(--line);flex-wrap:wrap}
+  .trace .trh .tid{font-family:"JetBrains Mono",monospace;font-size:10.5px;font-weight:700;color:var(--indigo-deep)}
+  .trace .trh .tst{font-family:"JetBrains Mono",monospace;font-size:9px;color:var(--ink-faint);margin-left:auto}
+  .trow{display:grid;grid-template-columns:158px minmax(0,1fr) 128px;gap:10px;align-items:center;padding:7px 14px;border-bottom:1px solid var(--line)}
+  .trow:last-child{border-bottom:none}
+  .trow:hover{background:var(--paper)}
+  .trow .tn2{font-family:"JetBrains Mono",monospace;font-size:9.5px;font-weight:700;color:var(--ink);display:flex;gap:7px;align-items:center;min-width:0}
+  .trow .tbar{height:13px;border-radius:4px;position:relative;background:var(--card-2)}
+  .trow .tbar i{position:absolute;top:0;height:100%;border-radius:4px;display:block}
+  .tb-code{background:var(--green)} .tb-llm{background:var(--indigo)} .tb-human{background:repeating-linear-gradient(45deg,var(--amber),var(--amber) 5px,color-mix(in srgb,var(--amber) 45%,transparent) 5px,color-mix(in srgb,var(--amber) 45%,transparent) 10px)}
+  .trow .tmeta{font-family:"JetBrains Mono",monospace;font-size:8.5px;color:var(--ink-faint);text-align:right;white-space:nowrap}
+  .trow .tmeta b{color:var(--ink-soft)}
+  @media(max-width:760px){.trow{grid-template-columns:108px minmax(0,1fr)}.trow .tmeta{display:none}}
+  .obsgrid{display:grid;grid-template-columns:repeat(auto-fit,minmax(250px,1fr));gap:12px;margin-top:14px}
+  .spark{border:1px solid var(--line-2);border-radius:12px;background:var(--card);padding:12px 14px;box-shadow:0 1px 3px rgba(20,18,48,.05)}
+  .spark .sh2{font-family:"Outfit",sans-serif;font-weight:700;font-size:.88rem;color:var(--ink)}
+  .spark .sv{font-family:"JetBrains Mono",monospace;font-size:9px;color:var(--ink-faint);margin-top:2px}
+  .sp-bars{display:flex;align-items:flex-end;gap:3px;height:46px;margin-top:10px}
+  .sp-bars i{flex:1;background:var(--indigo);opacity:.72;border-radius:2px 2px 0 0;display:block}
+  .sp-bars i.wk{background:var(--amber);opacity:1}
+  .sp-bars i.ok2{background:var(--green);opacity:.85}
+  .spark .sx{display:flex;justify-content:space-between;font-family:"JetBrains Mono",monospace;font-size:8px;color:var(--ink-faint);margin-top:5px}
+  .lyr{font-family:"JetBrains Mono",monospace;font-size:9px;font-weight:700;letter-spacing:.05em;text-transform:uppercase;padding:3px 8px;border-radius:6px;white-space:nowrap}
+  .ly-ops{background:var(--card-2);color:var(--ink-soft)} .ly-q{background:var(--indigo-soft);color:var(--indigo-deep)} .ly-s{background:var(--amber-soft);color:var(--amber)} .ly-b{background:var(--green-soft);color:var(--green)}
+</style>
+
+<div class="wrap">
+
+  <div class="tabbar" role="tablist" aria-label="Sections">
+    <button role="tab" id="tab-flow" aria-controls="flow" aria-selected="true"><span class="tn">01</span>Demo walkthrough</button>
+    <button role="tab" id="tab-obs" aria-controls="obs" aria-selected="false"><span class="tn">02</span>Observability</button>
+  </div>
+
+  <!-- ======================= DEMO WALKTHROUGH TAB ======================= -->
+  <div class="tabpanel" id="flow" role="tabpanel" aria-labelledby="tab-flow">
+    <div class="pgwide">
+
+      <header class="mast tight">
+        <p class="eyebrow">The demo &middot; REL-4821, click through</p>
+        <h1>Watch a release go through it</h1>
+        <p class="standfirst">A multi-agent pipeline that turns one release page into customer-facing docs and a notification email. Seven stages, one click each. Each one answers <b>code or model, and why</b> &mdash; then shows what came out. Prompts and reasoning hide behind the tabs at the bottom.</p>
+        <div class="legend">
+          <span class="li"><span class="dot d-human"></span><b>Person</b> &mdash; twice in the run</span>
+          <span class="li"><span class="dot d-code"></span><b>Code</b> &mdash; what must be exact</span>
+          <span class="li"><span class="dot d-llm"></span><b>LLM agent</b> &mdash; where it&rsquo;s fuzzy</span>
+        </div>
+      </header>
+
+      <div class="strip" id="strip" role="tablist" aria-label="Pipeline stages"></div>
+
+      <div class="panel" id="panel"></div>
+
+      <div class="pnav">
+        <button id="prev" type="button">&larr; Back</button>
+        <button id="next" type="button">Next &rarr;</button>
+        <span class="sp"></span>
+        <span class="cnt" id="cnt"></span>
+      </div>
+
+      <div class="script">
+        <div class="sh">The 90-second version</div>
+        <ol>
+          <li>&ldquo;You paste one link. Code validates it, pulls the page, and finds the seven ticket IDs with a regex &mdash; no model yet, because an ID has to be exact.&rdquo;</li>
+          <li>&ldquo;The first agent reads the page for the things a regex can&rsquo;t do: the version and the deploy dates written in prose.&rdquo;</li>
+          <li>&ldquo;Then one agent call per ticket. Seven in, three customer-facing, four internal. That filter used to be somebody&rsquo;s afternoon.&rdquo;</li>
+          <li>&ldquo;Three doc pages get written into a fixed nine-section template, and one email that groups by type of change instead of by ticket.&rdquo;</li>
+          <li>&ldquo;Now the part worth seeing: a separate reviewer agent reads the drafts against the source tickets. It caught a value range the writer got wrong and a date the docs and email disagreed on.&rdquo;</li>
+          <li>&ldquo;Both flags land on a person&rsquo;s screen with the draft. They fix them, they approve &mdash; and only then does it publish, to internal recipients only.&rdquo;</li>
+          <li>&ldquo;So you don&rsquo;t trust the model. You trust the system around it.&rdquo;</li>
+        </ol>
+      </div>
+
+      <div class="foot" style="margin-top:24px">
+        Worked example is illustrative &mdash; REL-4821, the ticket keys and the field names are invented for demonstration; the stages, prompts and controls are the real operating pattern, abstracted.
+      </div>
+
+    </div><!-- /pgwide -->
+  </div><!-- /flow -->
+
+  <!-- ======================= OBSERVABILITY TAB ======================= -->
+  <div class="tabpanel" id="obs" role="tabpanel" aria-labelledby="tab-obs" hidden>
+
+    <header class="mast" style="padding-top:40px">
+      <p class="eyebrow">Run it weekly &middot; what you watch, and how changes ship</p>
+      <h1>Agent observability &amp; the release loop</h1>
+      <p class="standfirst">The demo tab shows one run going right. This tab answers the next question a regulated enterprise asks: <b>how do you know run 200 is still going right</b> &mdash; and how does a prompt change ship without breaking runs 201&ndash;400? One traced run, the four signal layers, drift over time, and <b>evals as the release gate</b>.</p>
+      <div class="meta-row">
+        <span class="pill">REL-4821 · run #0142 traced</span>
+        <span class="pill">4 signal layers</span>
+        <span class="pill">Prompts ship like code</span>
+      </div>
+    </header>
+
+    <nav class="jump" aria-label="Observability sections">
+      <a href="#onerun">1 · One run, traced</a>
+      <a href="#layers">2 · The four layers</a>
+      <a href="#fleet">3 · The fleet over time</a>
+      <a href="#loops">4 · When loops arrive</a>
+      <a href="#releases">5 · Evals gate releases</a>
+      <a href="#obsqa">6 · Hard questions</a>
+    </nav>
+
+    <!-- 1 · ONE RUN TRACED -->
+    <section id="onerun">
+      <div class="sec-head"><span class="sec-no">1</span><h2>One run, traced end to end</h2></div>
+      <p class="sec-sub">The same REL-4821 run from the demo tab &mdash; as the dashboard would show it. Every model call is a span with tokens, latency and cost; every span traces back to exactly one agent.</p>
+
+      <div class="pgwide">
+        <div class="tiles">
+          <div class="tile"><div class="tv">13</div><div class="tk2">LLM calls</div></div>
+          <div class="tile"><div class="tv">41.8k</div><div class="tk2">tokens in / 6.2k out</div></div>
+          <div class="tile"><div class="tv">$0.21</div><div class="tk2">model cost, this run</div></div>
+          <div class="tile"><div class="tv">58s</div><div class="tk2">pipeline · + 11 min at the gate</div></div>
+          <div class="tile a"><div class="tv">2</div><div class="tk2">judge flags raised</div></div>
+          <div class="tile i"><div class="tv">2</div><div class="tk2">human edits before approve</div></div>
+          <div class="tile g"><div class="tv">✓</div><div class="tk2">shipped · 3 pages + 1 email</div></div>
+        </div>
+
+        <div class="trace">
+          <div class="trh"><span class="tid">run #0142 · REL-4821</span><span class="lyr ly-q">prompt set v14</span><span class="lyr ly-ops">model: sonnet</span><span class="tst">2026-06-12 09:41 · trace 8f3c…a1</span></div>
+          <div class="trow"><span class="tn2"><span class="dot d-code"></span>validate + fetch page</span><span class="tbar"><i class="tb-code" style="left:0;width:2.5%"></i></span><span class="tmeta"><b>0.9s</b> · 0 tok · regex ids: 7</span></div>
+          <div class="trow"><span class="tn2"><span class="dot d-llm"></span>agent 1 · parse</span><span class="tbar"><i class="tb-llm" style="left:2.5%;width:5.5%"></i></span><span class="tmeta"><b>3.2s</b> · 1.4k tok · $0.01</span></div>
+          <div class="trow"><span class="tn2"><span class="dot d-code"></span>fetch 7 tickets ∥</span><span class="tbar"><i class="tb-code" style="left:8%;width:3%"></i></span><span class="tmeta"><b>1.8s</b> · 0 tok</span></div>
+          <div class="trow"><span class="tn2"><span class="dot d-llm"></span>agent 2 · classify ×7 ∥</span><span class="tbar"><i class="tb-llm" style="left:11%;width:10%"></i></span><span class="tmeta"><b>6.1s</b> · 13.3k tok · $0.05</span></div>
+          <div class="trow"><span class="tn2"><span class="dot d-llm"></span>agent 3 · docs ×3 ∥</span><span class="tbar"><i class="tb-llm" style="left:21%;width:34%"></i></span><span class="tmeta"><b>21s</b> · 14.8k tok · $0.08</span></div>
+          <div class="trow"><span class="tn2"><span class="dot d-llm"></span>agent 4 · email</span><span class="tbar"><i class="tb-llm" style="left:55%;width:14%"></i></span><span class="tmeta"><b>8.6s</b> · 5.1k tok · $0.03</span></div>
+          <div class="trow"><span class="tn2"><span class="dot d-llm"></span>agent 5 · judge</span><span class="tbar"><i class="tb-llm" style="left:69%;width:23%"></i></span><span class="tmeta"><b>14s</b> · 7.2k tok · $0.04 · <b>2 flags</b></span></div>
+          <div class="trow"><span class="tn2"><span class="dot d-human"></span>human gate · waiting</span><span class="tbar"><i class="tb-human" style="left:0;width:100%"></i></span><span class="tmeta"><b>11 min</b> · 2 edits · approved</span></div>
+          <div class="trow"><span class="tn2"><span class="dot d-code"></span>publish + send</span><span class="tbar"><i class="tb-code" style="left:94%;width:6%"></i></span><span class="tmeta"><b>2.4s</b> · allow-list 14/14 ✓</span></div>
+        </div>
+
+        <div class="obsgrid">
+          <div class="spark">
+            <div class="sh2">Quality, this run</div>
+            <div class="sv">what the judge and the human said</div>
+            <ul class="steps" style="margin-top:10px">
+              <li><span class="ck">2</span><span>judge flags — 1 high (fabricated range), 1 med (date conflict)</span></li>
+              <li><span class="ck">2</span><span>human edits — <b>both were accepting the judge&rsquo;s fixes</b>, nothing new found</span></li>
+              <li><span class="ck">0</span><span>format-contract failures, 0 retries</span></li>
+            </ul>
+          </div>
+          <div class="spark">
+            <div class="sh2">Guardrails, this run</div>
+            <div class="sv">the events that prove containment</div>
+            <ul class="steps" style="margin-top:10px">
+              <li><span class="ck">✓</span><span>injection scan on fetched page + tickets: <b>clean</b></span></li>
+              <li><span class="ck">✓</span><span>recipients 14/14 internal · <b>0 blocked</b> by allow-list</span></li>
+              <li><span class="ck">✓</span><span>secrets / PII scan on outputs: <b>0 hits</b></span></li>
+            </ul>
+          </div>
+          <div class="spark">
+            <div class="sh2">Version stamp</div>
+            <div class="sv">what every run is pinned to</div>
+            <ul class="steps" style="margin-top:10px">
+              <li><span class="ck">›</span><span>prompt set <b>v14</b> · model <b>sonnet</b> · temp 0.2</span></li>
+              <li><span class="ck">›</span><span>golden-set score at release: <b>28/30</b></span></li>
+              <li><span class="ck">›</span><span>approved by: <b>reviewer&rsquo;s click</b>, in the audit log</span></li>
+            </ul>
+          </div>
+        </div>
+        <p class="cap" style="text-align:center">Every number above is illustrative — but the <b>shape</b> is the point: spans per agent, cost per call, flags and edits as first-class data, and a version stamp on the whole run. Multi-agent design is what makes this cheap — each row already <em>is</em> one agent.</p>
+      </div>
+    </section>
+
+    <!-- 2 · THE FOUR LAYERS -->
+    <section id="layers">
+      <div class="sec-head"><span class="sec-no">2</span><h2>What an enterprise actually watches — four layers</h2></div>
+      <p class="sec-sub">Classic observability asks &ldquo;is it up?&rdquo; Agent observability adds three more questions, each with a different owner. Miss a layer and someone&rsquo;s question has no answer.</p>
+      <div class="tbl"><table>
+        <thead><tr><th>Layer</th><th>Who watches</th><th>The signals</th><th>The question it answers</th></tr></thead>
+        <tbody>
+          <tr><td><span class="lyr ly-ops">System health</span></td><td class="plain">Platform / SRE</td><td class="plain">p95 latency per stage · error &amp; retry rates · token cost per run · gateway quota</td><td class="plain">&ldquo;Is it up, and can we afford it?&rdquo;</td></tr>
+          <tr><td><span class="lyr ly-q">Output quality</span></td><td class="plain">Product owner</td><td class="plain"><b>Judge flag rate · human edit rate · edit distance</b> · format-contract failures · % runs shipped zero-edit</td><td class="plain">&ldquo;Is it still good — and is it drifting?&rdquo;</td></tr>
+          <tr><td><span class="lyr ly-s">Safety &amp; control</span></td><td class="plain">Risk / compliance</td><td class="plain">guardrail triggers (allow-list blocks, injection catches, PII redactions) · every action traceable to a human approval · complete audit trail per run</td><td class="plain">&ldquo;Can I show the regulator the chain?&rdquo;</td></tr>
+          <tr><td><span class="lyr ly-b">Business outcome</span></td><td class="plain">The sponsor</td><td class="plain">runs per week · adoption by team · minutes saved vs. the manual afternoon · rework rate downstream</td><td class="plain">&ldquo;Is it worth its risk budget?&rdquo;</td></tr>
+        </tbody>
+      </table></div>
+      <div class="box key">
+        <div class="tag">◆ The one number to put on a wall</div>
+        <p><strong>Human edit rate.</strong> When reviewers stop fixing things, the system is earning trust; when it spikes, something upstream changed — a model update, a new team writing tickets differently — and it spikes <em>before</em> a customer ever sees the problem. It&rsquo;s also your free eval signal: the gap between &ldquo;judge said fine&rdquo; and &ldquo;human still fixed it&rdquo; is exactly the backlog you work down. One caveat: pair it with random audit samples, or it quietly teaches people to rubber-stamp.</p>
+      </div>
+      <div class="box say">
+        <div class="tag">In one breath</div>
+        <p class="line">&ldquo;Four layers, four owners: ops tells you it&rsquo;s alive, quality tells you it&rsquo;s drifting, safety tells you it&rsquo;s contained, outcome tells you it&rsquo;s worth it. The metric I&rsquo;d wire an alert to is human edit rate — it moves before anything customer-facing breaks, and every edit is a free labeled example for the next eval.&rdquo;</p>
+      </div>
+    </section>
+
+    <!-- 3 · FLEET OVER TIME -->
+    <section id="fleet">
+      <div class="sec-head"><span class="sec-no">3</span><h2>The fleet over time — where drift shows up</h2></div>
+      <p class="sec-sub">One good run proves nothing. The trends do. Eight weeks of the pipeline, per-run averages:</p>
+      <div class="obsgrid" style="margin-top:6px">
+        <div class="spark">
+          <div class="sh2">Judge flags / run</div>
+          <div class="sv">falling as prompts tighten… then wk 7</div>
+          <div class="sp-bars"><i style="height:88%"></i><i style="height:72%"></i><i style="height:60%"></i><i style="height:46%"></i><i style="height:40%"></i><i style="height:34%"></i><i class="wk" style="height:78%"></i><i style="height:38%"></i></div>
+          <div class="sx"><span>wk1</span><span>wk4</span><span>wk8</span></div>
+        </div>
+        <div class="spark">
+          <div class="sh2">Human edits / run</div>
+          <div class="sv">the trust curve — same wk-7 spike</div>
+          <div class="sp-bars"><i style="height:95%"></i><i style="height:70%"></i><i style="height:55%"></i><i style="height:42%"></i><i style="height:30%"></i><i style="height:26%"></i><i class="wk" style="height:64%"></i><i style="height:28%"></i></div>
+          <div class="sx"><span>wk1</span><span>wk4</span><span>wk8</span></div>
+        </div>
+        <div class="spark">
+          <div class="sh2">Cost / run</div>
+          <div class="sv">flat — scale isn&rsquo;t sneaking up on you</div>
+          <div class="sp-bars"><i class="ok2" style="height:52%"></i><i class="ok2" style="height:55%"></i><i class="ok2" style="height:50%"></i><i class="ok2" style="height:56%"></i><i class="ok2" style="height:53%"></i><i class="ok2" style="height:51%"></i><i class="ok2" style="height:57%"></i><i class="ok2" style="height:54%"></i></div>
+          <div class="sx"><span>wk1</span><span>wk4</span><span>wk8</span></div>
+        </div>
+      </div>
+      <div class="box analogy" style="margin-top:16px">
+        <div class="tag">◆ The week-7 spike is the whole argument</div>
+        <p>The model vendor shipped an upgrade under the pipeline. Flag rate and edit rate both jumped <em>that week</em> — because every run is stamped with its prompt-set and model version, one glance separated &ldquo;our inputs changed&rdquo; from &ldquo;the model changed underneath us.&rdquo; Rolled the model pin back, re-ran the golden set against the new version, shipped it properly the week after. <strong>Without the version stamp, that&rsquo;s a month of &ldquo;it feels worse lately.&rdquo;</strong> Drift has exactly two sources — your inputs change, or your model does — and the stamp is what tells them apart.</p>
+      </div>
+    </section>
+
+    <!-- 4 · LOOPS -->
+    <section id="loops">
+      <div class="sec-head"><span class="sec-no">4</span><h2>When loops arrive — observing real agency</h2></div>
+      <p class="sec-sub">This pipeline has a fixed shape, so you can read the code to know what happened. The moment an agent chooses its own next step — a loop, not a pipeline — <b>the trace becomes the only ground truth.</b> That&rsquo;s why observability is a prerequisite for autonomy, not a follow-up.</p>
+      <ul class="clean">
+        <li><b>Steps per task, against a step budget.</b> A loop that usually finishes in 6 steps and suddenly takes 19 is telling you something no error log will.</li>
+        <li><b>Termination reason, as a first-class field.</b> Goal reached · budget hit · stuck. The <em>ratio</em> of those three is the health of the loop; &ldquo;budget hit&rdquo; trending up means the task or the tools changed.</li>
+        <li><b>Tool-call error and retry rates, per tool.</b> Loops hide flaky tools by retrying around them — invisible in output quality, obvious in the trace, and it&rsquo;s where the cost goes.</li>
+        <li><b>Cost ceiling and kill-switch per task.</b> A runaway loop is a bounded incident, not an open one — the same instinct as the allow-list, applied to spend.</li>
+        <li><b>Escalation rate.</b> What fraction of tasks the loop hands to a human. Zero is as suspicious as fifty percent — it means the loop stopped knowing when it&rsquo;s out of its depth.</li>
+      </ul>
+      <div class="box key">
+        <div class="tag">◆ The principle</div>
+        <p>&ldquo;A pipeline earns autonomy in stages: every span it logs today is the evidence that lets you loosen the control flow tomorrow. You don&rsquo;t start with a free agent and add monitoring — <strong>you start with a monitored workflow and add freedom.</strong>&rdquo;</p>
+      </div>
+    </section>
+
+    <!-- 5 · EVALS GATE RELEASES -->
+    <section id="releases">
+      <div class="sec-head"><span class="sec-no">5</span><h2>Agent evaluation — and how a change actually ships</h2></div>
+      <p class="sec-sub">A prompt edit or a model swap changes behavior exactly like a code change — so it ships down the same road: versioned, tested against a fixed bar, rolled out gradually, rolled back by pin. Call it a release studio for prompts.</p>
+      <ol class="mech">
+        <li><b>Golden set — the fixed bar.</b> ~30 past runs with the <em>human-approved</em> outputs as ground truth, plus planted-failure cases: a fabricated value the judge must flag, an injection attempt the pipeline must ignore. Real inputs, not synthetic ones — the golden set is the product&rsquo;s memory of what &ldquo;right&rdquo; looks like.</li>
+        <li><b>Offline eval in CI.</b> Every prompt or model change re-runs the golden set before merge. Score agreement with the approved outputs; score the judge&rsquo;s verdicts against the planted failures. A regression blocks the merge exactly like a failing unit test — no meeting, no vibes.</li>
+        <li><b>Shadow.</b> The new version runs beside the old on live releases, ships nothing, and its outputs are diffed and judged. Non-determinism is why this step exists: you&rsquo;re measuring the distribution, not one lucky output.</li>
+        <li><b>Canary.</b> 10% of runs, gated on the two SLOs that matter: judge flag rate and human edit rate. Reviewers at the gate are your canary detectors, and they&rsquo;re already looking.</li>
+        <li><b>Rollout, pinned.</b> Every run stamps its prompt-set + model version (section 1), so rollback is changing a pin — and the week-7 story in section 3 is this machinery paying for itself.</li>
+      </ol>
+      <div class="box key">
+        <div class="tag">◆ The flywheel — the part that matters most</div>
+        <p>Every human edit at the gate is a <strong>free labeled example</strong>: the reviewer&rsquo;s correction <em>is</em> the ground truth, and it flows straight into the golden set. The human gate isn&rsquo;t just a safety control — <strong>it&rsquo;s the data engine that makes next month&rsquo;s pipeline better than this month&rsquo;s.</strong> Most teams bolt evals on after; wiring the gate to feed them is the difference between having a review step and having a learning loop.</p>
+      </div>
+      <div class="box say">
+        <div class="tag">🎯 If asked &ldquo;how would you evaluate agents at scale?&rdquo;</div>
+        <p class="line">&ldquo;Same road code takes. A golden set of human-approved runs plus planted failures, re-run in CI on every prompt or model change; then shadow, then a canary gated on flag rate and edit rate; rollback is a version pin. And the golden set grows itself — every correction a reviewer makes at the gate becomes tomorrow&rsquo;s eval case.&rdquo;</p>
+      </div>
+    </section>
+
+    <!-- 6 · HARD QUESTIONS -->
+    <section id="obsqa">
+      <div class="sec-head"><span class="sec-no">6</span><h2>Hard questions</h2></div>
+      <div class="qa">
+        <div class="row"><div class="q"><span class="m">Q</span>&ldquo;How would you know if this degrades six months from now?&rdquo;</div><div class="a">Trend the quality layer per version stamp — judge flag rate and human edit rate, alarmed on deviation. Drift has two sources, inputs or model, and the stamp tells them apart in one glance. → §3</div></div>
+        <div class="row"><div class="q"><span class="m">Q</span>&ldquo;How do you evaluate something non-deterministic?&rdquo;</div><div class="a">Never on one output — on the <b>distribution</b>. Agreement with human-approved goldens across the whole set, shadow diffs on live traffic, and SLOs on rates rather than instances. One weird output is noise; a moved rate is a signal. → §5</div></div>
+        <div class="row"><div class="q"><span class="m">Q</span>&ldquo;The judge grades the pipeline, evals grade the judge — isn&rsquo;t that circular?&rdquo;</div><div class="a"><b>Humans are the anchor.</b> The golden outputs are human-approved, the planted failures are human-authored, and the edit rate is a human acting. Model grades model, but every chain terminates at a person on the record.</div></div>
+        <div class="row"><div class="q"><span class="m">Q</span>&ldquo;What would you build first?&rdquo;</div><div class="a">The trace and the version stamp — before any new capability. You can&rsquo;t gate, canary, audit, or roll back what you can&rsquo;t see and can&rsquo;t pin. Observability is the substrate every other control stands on. → §1</div></div>
+        <div class="row"><div class="q"><span class="m">Q</span>&ldquo;Isn&rsquo;t this heavy for a comms tool?&rdquo;</div><div class="a">The meter is sized to the blast radius, and most of it is a by-product — the multi-agent split already emits one clean span per agent. The point isn&rsquo;t this pipeline; it&rsquo;s that <b>the same meter is what lets an enterprise say yes to the next twenty.</b></div></div>
+      </div>
+
+      <div class="closer">
+        <h2>Why observability is the whole game</h2>
+        <p>Most people can describe an agent. Some can describe guardrails. Almost none bring <b>the operating model</b>: what you watch after go-live, who watches each layer, how drift is caught, and how a prompt change ships behind an eval gate with a rollback pin. That&rsquo;s the difference between &ldquo;I built a demo&rdquo; and <b>&ldquo;I know how to run this in production.&rdquo;</b></p>
+      </div>
+
+      <div class="foot">
+        Dashboard numbers are illustrative, modeled on the REL-4821 worked example; the trace shape, signal layers, and release path are the real operating pattern.
+      </div>
+    </section>
+
+  </div><!-- /obs -->
+
+  <script>
+  (function(){
+    var tabs=[{t:"tab-flow",p:"flow"},{t:"tab-obs",p:"obs"}];
+    function show(pid){
+      tabs.forEach(function(x){
+        var tab=document.getElementById(x.t), pan=document.getElementById(x.p);
+        if(!tab||!pan) return;
+        var on=(x.p===pid);
+        tab.setAttribute("aria-selected",on?"true":"false");
+        pan.hidden=!on;
+      });
+      window.scrollTo({top:0,behavior:"auto"});
+    }
+    tabs.forEach(function(x){
+      var el=document.getElementById(x.t);
+      if(el) el.addEventListener("click",function(){show(x.p);});
+    });
+    var obsAnchors=["obs","onerun","layers","fleet","loops","releases","obsqa"];
+    function syncFromHash(){
+      var h=(location.hash||"").replace("#","");
+      if(obsAnchors.indexOf(h)>-1){ show("obs"); }
+      else if(h==="flow"||h==="demo"){ show("flow"); }
+    }
+    document.querySelectorAll('#obs nav.jump a').forEach(function(a){
+      a.addEventListener("click",function(){ show("obs"); });
+    });
+
+    /* ================= the walkthrough ================= */
+    var S=[
+    {
+      n:1, key:"Paste the link", actor:"human", title:"Paste the link",
+      badge:'<span class="actor"><span class="dot d-human"></span>Person</span><span class="actor"><span class="dot d-code"></span>Code</span>',
+      runs:"runs once",
+      whyKind:"code",
+      why:'<b>Code, not a model.</b> A link either matches the pattern or it doesn’t, and a ticket ID has to come out character-perfect. That is a regex, not a judgement call — so no model runs in this stage at all.',
+      midLab:"The code — no model here", midKind:"code", midHtml:'<div class="cde"><div class="ch">what runs</div><ol>'+'<li>Check the link against a regex, <b>in the browser</b>. A bad one fires zero network calls.</li>'+'<li>Pull the <code>pageId</code> out of the path.</li>'+'<li><code>GET</code> the page in raw storage format — not the rendered version, which strips the ticket macros.</li>'+'<li class="key">Regex out every ticket ID: <code>/[A-Z]{2,10}-\\d+/g</code> — 7 found.</li>'+'</ol></div>'+'<div class="note"><b>Step 3 is the one worth defending.</b> The rendered page looks nicer, but rendering silently strips the ticket macros — and those macros are the only place the IDs live.</div>',
+      inLab:"What you do", inHtml:
+        '<div class="urlbar"><span class="lock">☉</span><span>wiki.internal/display/PLAT/REL-4821+Core+22.13.0-30</span></div>'+
+        '<div class="chips"><span class="chip">Paste</span><span class="chip">Run</span></div>'+
+        '<p style="font-size:.87rem;color:var(--ink-soft);margin:13px 0 0;line-height:1.5">That is the entire input for the whole run. No config, no ticket list, no options.</p>',
+      outLab:"Handled by code", outCls:"na", outHtml:
+        '<ul class="steps">'+
+        '<li><span class="ck">✓</span><span>Checks the link in the browser. A bad one shows an error and fires <b>zero</b> network calls.</span></li>'+
+        '<li><span class="ck">✓</span><span>Fetches the release page.</span></li>'+
+        '<li><span class="ck">✓</span><span>Finds every ticket ID on it with a <b>regex</b> — 7 on this release.</span></li>'+
+        '</ul>'+
+        '<div class="chips"><span class="chip">PLAT-2207</span><span class="chip">PLAT-2211</span><span class="chip">PLAT-2214</span><span class="chip">PLAT-2219</span><span class="chip">PLAT-2225</span><span class="chip">PLAT-2231</span><span class="chip">PLAT-2233</span></div>'+
+        '<div class="note">Nothing else worth showing here — it is ordinary software doing ordinary software things. <b>The interesting question is why the IDs are found here and not by the agent in the next stage.</b></div>',
+      drawer:[
+        {t:"Why this way", h:'<p>The ticket IDs are the one thing in the whole pipeline that must be <b>exactly</b> right — a wrong ID means the wrong ticket gets documented. So they are pulled out by code <em>before</em> any model is called, and the next agent’s prompt explicitly tells it not to look for them. <b>The model cannot fabricate a ticket number it was never asked to produce.</b></p><p style="margin-top:10px">One more choice worth a sentence: the page is fetched in its raw storage format rather than the pretty rendered version, because rendering silently strips the ticket macros — and those macros are where the IDs live.</p>'},
+        {t:"Common questions", h:'<p class="qq">"Why isn’t this a model call? Because a link either matches the pattern or it doesn’t, and an ID has to be exact. I only spend a model call where the input is genuinely ambiguous — a pipeline is judged as much on where it <em>doesn’t</em> use a model as where it does."</p>'},
+        {t:"AI concepts", h:'<div class="cq"><div class="c"><span class="cn">Deterministic gate</span><div class="cd">Screen the input with plain code before any model runs, so bad input never reaches an agent.</div></div><div class="c"><span class="cn">Model-free by default</span><div class="cd">Every stage starts with "can code do this?" The model is the exception, not the default.</div></div><div class="c"><span class="cn">Format fidelity</span><div class="cd">Feed the lossless version of a source, not the pretty one — cleaning too early destroys the details you will be asked about.</div></div></div>'}
+      ]
+    },
+    {
+      n:2, key:"Read the page", actor:"llm", title:"Agent 1 · Read the release page",
+      badge:'<span class="actor"><span class="dot d-llm"></span>LLM agent</span>',
+      runs:"runs once",
+      whyKind:"llm",
+      why:'<b>The model, for four fields only.</b> "Promoted to prod the following Sunday" is not something a regex turns into a date. So the agent gets the prose and hands back the release metadata — and nothing else.',
+      midLab:"The prompt", midKind:"llm", midHtml:'<div class="pmt"><div class="pmh"><span class="pd"></span><span class="pd"></span><span class="pd"></span><span class="pt">system prompt</span><span class="vb">verbatim</span></div>'+'<pre class="pmb">You are parsing a change-request / release-notes page\nfor a software release.\n\n<span class="kw">Extract:</span>\n1. Release version string (e.g. <span class="st">"Core 22.13.0-30"</span>)\n2. Change / release identifier from the page title\n   or URL (e.g. <span class="st">"REL-1234"</span>)\n3. Staging deployment date\n   <span class="cm">(ISO date if found, otherwise null)</span>\n4. Production deployment date\n   <span class="cm">(ISO date if found, otherwise null)</span>\n\n<span class="neg">Do NOT try to find issue-tracker IDs — those are\nalready extracted separately via regex before this call.</span>\n\n<span class="neg">Respond with valid JSON only. No markdown, no explanation.</span>\n<span class="st">{ "version":"...", "changeId":"REL-XXXX",\n  "stageDate":"2025-06-14"|null,\n  "prodDate":"2025-06-21"|null }</span></pre></div>'+'<div class="pmf"><b>Verbatim, with the constraints coloured.</b> Amber = a negative instruction. The <em>Do NOT find IDs</em> line is why the model can never invent a ticket number — it was never asked to produce one.</div>',
+      inLab:"In", inHtml:
+        '<div class="tkt"><div class="th"><span class="tk">Release page</span><span class="tt">text</span></div>'+
+        '<div class="tb">“…<b>Core 22.13.0-30</b> will be deployed to staging on <b>Sun 14 June</b> and promoted to prod <b>the following Sunday</b>…”</div></div>'+
+        '<p style="font-size:.87rem;color:var(--ink-soft);margin:13px 0 0;line-height:1.5">Every release page is written by a different engineer, in a different shape. That is what makes this a model’s job.</p>',
+      outLab:"Out", outHtml:
+        '<div class="relcard">'+
+        '<div class="rh">Release REL-4821</div>'+
+        '<div class="rr"><span class="rk">Version</span><span class="rv">Core 22.13.0-30</span></div>'+
+        '<div class="rr"><span class="rk">Change ID</span><span class="rv">REL-4821</span></div>'+
+        '<div class="rr"><span class="rk">Staging deploy</span><span class="rv">14 Jun 2026</span></div>'+
+        '<div class="rr"><span class="rk">Production deploy</span><span class="rv">21 Jun 2026</span></div>'+
+        '</div>'+
+        '<div class="note good"><b>The tickets are already in hand.</b> Code found all 7 in stage 1. This agent was told, in its prompt, <em>not</em> to look for ticket IDs — so its only job is the four fields above.</div>',
+      drawer:[
+        {t:"Why this way", h:'<p>This is the pattern worth naming out loud: <b>one stage, split by job.</b> Code does the part that must be exact; the model does the part that needs interpreting. And where the model is unsure it returns <code>null</code> and code falls back to the URL path — <b>uncertainty has a safe exit that isn’t invention.</b></p>'},
+        {t:"Common questions", h:'<p class="qq">"Why take the IDs away from the model? Because an ID has to be character-perfect and a model is probabilistic. Anything that must be exact goes to code — the model only gets the parts where meaning matters, like turning ‘the following Sunday’ into a date."</p>'},
+        {t:"AI concepts", h:'<div class="cq"><div class="c"><span class="cn">Hybrid deterministic + LLM</span><div class="cd">Code for what must be exact, model for what needs interpretation. The highest-value pattern in the pipeline.</div></div><div class="c"><span class="cn">Grounding</span><div class="cd">It only ever reports what is on a page it was handed — never recall, so no blank space to fill with invention.</div></div><div class="c"><span class="cn">Structured output</span><div class="cd">"Valid JSON only" turns a chatty generator into something the next line of code can parse.</div></div><div class="c"><span class="cn">Graceful fallback</span><div class="cd">A defined answer for "I don’t know". Without one, a model under pressure guesses.</div></div></div>'}
+      ]
+    },
+    {
+      n:3, key:"Classify tickets", actor:"llm", title:"Agent 2 · Classify the tickets",
+      badge:'<span class="actor"><span class="dot d-llm"></span>LLM agent &times;7</span>',
+      runs:"once per ticket",
+      whyKind:"llm",
+      why:'<b>The model, because this is a judgement.</b> Deciding whether a ticket matters to a customer means reading an engineer’s free text and deciding what it means. It runs <b>once per ticket — 7 separate calls, no batching</b>, so one ticket can never bleed into another.',
+      midLab:"The prompt", midKind:"llm", midHtml:'<div class="pmt"><div class="pmh"><span class="pd"></span><span class="pd"></span><span class="pd"></span><span class="pt">system prompt</span><span class="vb">verbatim</span></div>'+'<pre class="pmb">You are a product analyst reviewing issue-tracker\ntickets for an API platform.\nYour job: decide whether a ticket is a customer-facing\nchange.\n\n<span class="pos">CUSTOMER-FACING (include) if it involves:</span>\n- New fields added to an API request or response\n- Changed behavior of existing API fields\n- New enum values integrators must handle\n- New features / flags visible to customer integrations\n\n<span class="neg">NOT customer-facing (exclude) if it&#39;s:</span>\n- Internal refactoring or tech debt with no API change\n- Internal analytics, reporting, or data pipelines\n- Backend performance work with no interface change\n- Internal tooling or developer experience\n\nFor customer-facing tickets, extract every field-level\nchange:\n- surface, changeType\n  <span class="st">(new_field | behavior_change | new_enum | removed)</span>\n- <span class="st">fieldName, values, trigger, scope, before/after,\n  featureFlag</span></pre></div>'+'<div class="pmf"><b>Two lists, not one.</b> Green = include, amber = exclude. Without the exclude list a model over-includes — it would rather say yes than drop something. That pair is the whole classifier.</div>',
+      inLab:"In — one ticket at a time", inHtml:
+        '<div class="tkt"><div class="th"><span class="tk">PLAT-2207</span><span class="tt">Story</span></div>'+
+        '<div class="tb">Return <b>accountRegion</b> on the response so downstream can see which region handled the request. Only present when the request carries the location object. Values <b>01–07</b>. Behind flag REGION_RESP.</div></div>'+
+        '<p style="font-size:.87rem;color:var(--ink-soft);margin:13px 0 0;line-height:1.5">Written by an engineer, for engineers. The fuzziest input in the pipeline — and the strongest case for a model.</p>',
+      outLab:"Out — all 7, classified", outHtml:
+        '<div class="tlist">'+
+        '<div class="row cf"><span class="id">PLAT-2207</span><span class="ds">New response field · accountRegion</span><span class="badge b-cf">Customer-facing</span></div>'+
+        '<div class="row cf"><span class="id">PLAT-2211</span><span class="ds">New enum value on statusReason</span><span class="badge b-cf">Customer-facing</span></div>'+
+        '<div class="row cf"><span class="id">PLAT-2214</span><span class="ds">Behaviour change · retry window widened</span><span class="badge b-cf">Customer-facing</span></div>'+
+        '<div class="row"><span class="id">PLAT-2219</span><span class="ds">Logging refactor · no API change</span><span class="badge b-int">Internal</span></div>'+
+        '<div class="row"><span class="id">PLAT-2225</span><span class="ds">Analytics pipeline rework</span><span class="badge b-int">Internal</span></div>'+
+        '<div class="row"><span class="id">PLAT-2231</span><span class="ds">Database index · performance only</span><span class="badge b-int">Internal</span></div>'+
+        '<div class="row"><span class="id">PLAT-2233</span><span class="ds">Test harness upgrade</span><span class="badge b-int">Internal</span></div>'+
+        '</div>'+
+        '<div class="tally"><span><b>3</b> go to customers</span><span>&middot;</span><span><b>4</b> filtered out</span></div>'+
+        '<div class="note">For each customer-facing one it also pulls out the field detail — name, values, what triggers it, who it affects — which is what the next agent writes from.</div>',
+      drawer:[
+        {t:"Why this way", h:'<p>That filter is the judgement a person used to make by opening every ticket. The include and exclude lists in the prompt turn it from a vibe into a <b>stated decision boundary you can argue with</b> — and without the exclude list, models over-include, because they would rather say yes than drop something.</p>'},
+        {t:"Common questions", h:'<p class="qq">"Why not send all seven tickets in one call? Because batching is where cross-contamination happens — the model attributes ticket A’s field to ticket B. One ticket per call, so there is nothing to confuse it with."</p><p class="qq" style="margin-top:11px">"Why write an exclude list at all? Because without one, models over-include. They would rather say yes than risk dropping something — so the boundary has to be stated, not implied."</p>'},
+        {t:"AI concepts", h:'<div class="cq"><div class="c"><span class="cn">Per-item isolation</span><div class="cd">One ticket per call, never a batch. It cannot mix up two tickets if it only ever sees one.</div></div><div class="c"><span class="cn">Fan-out</span><div class="cd">The same agent run 7 times side by side — the pipeline scales with the release instead of one slow mega-call.</div></div><div class="c"><span class="cn">Constrained classification</span><div class="cd">Written include <em>and</em> exclude criteria, so the boundary is stated rather than guessed.</div></div></div>'}
+      ]
+    },
+    {
+      n:4, key:"Write the docs", actor:"llm", title:"Agent 3 · Write the doc pages",
+      badge:'<span class="actor"><span class="dot d-llm"></span>LLM agent &times;3</span>',
+      runs:"once per feature",
+      whyKind:"llm",
+      why:'<b>The model, because this is writing.</b> Turning structured facts into a page a customer-success manager can actually use. It fills a <b>fixed 9-section template</b> — a form, not a blank page.',
+      midLab:"The prompt", midKind:"llm", midHtml:'<div class="pmt"><div class="pmh"><span class="pd"></span><span class="pd"></span><span class="pd"></span><span class="pt">system prompt</span><span class="vb">verbatim</span></div>'+'<pre class="pmb">You are writing a pre-deployment communication page\nfor &lt;PRODUCT&gt;.\n<span class="cm">Audience: customer-success managers who relay this to\ntheir customers.</span>\n\n<span class="kw">Generate HTML with these sections (use &lt;h2&gt;):</span>\n1. Why the Change      2. What&#39;s Changing (high-level)\n3. What Is the Change  4. Where Is the Change\n5. Integrations Impacted   6. Customer Usage Impact\n7. Customer Integration Impact\n     <span class="neg">(or "no changes required" if backward-compatible)</span>\n8. Tentative Delivery Dates    9. Discussion\n\nFor field tables use a fixed\n<span class="st">Field / Type / When It Fires / Scope</span> schema.\n<span class="neg">Return only the inner HTML body.\nNo &lt;html&gt;/&lt;body&gt;/&lt;head&gt; tags.</span></pre></div>'+'<div class="pmf"><b>Both amber lines are load-bearing.</b> The <em>“no changes required”</em> escape stops it inventing integration steps to fill a section; <em>no html/body/head</em> keeps the output valid when the wiki wraps it.</div>',
+      inLab:"In — structured facts", inHtml:
+        '<div class="relcard">'+
+        '<div class="rh">PLAT-2207 · what changed</div>'+
+        '<div class="rr"><span class="rk">Surface</span><span class="rv">response</span></div>'+
+        '<div class="rr"><span class="rk">Field</span><span class="rv">accountRegion</span></div>'+
+        '<div class="rr"><span class="rk">Values</span><span class="rv">01–07</span></div>'+
+        '<div class="rr"><span class="rk">Fires when</span><span class="rv">location object on request</span></div>'+
+        '<div class="rr"><span class="rk">Prod date</span><span class="rv">21 Jun 2026</span></div>'+
+        '</div>'+
+        '<p style="font-size:.87rem;color:var(--ink-soft);margin:13px 0 0;line-height:1.5">The fuzziness was already resolved upstream. This agent never sees the raw ticket text.</p>',
+      outLab:"Out — the published page", outHtml:
+        '<div class="doc">'+
+        '<div class="dh"><div class="crumb">PLAT / Releases / REL-4821 /</div><div class="dt">accountRegion — new response field</div></div>'+
+        '<div class="db">'+
+        '<h4>3. What Is the Change</h4><p>A new optional field, <b>accountRegion</b>, is returned on the response so downstream systems can read which region handled the request.</p>'+
+        '<table class="ft"><tr><th>Field</th><th>Type</th><th>When it fires</th><th>Scope</th></tr>'+
+        '<tr><td>accountRegion</td><td>string, <span class="bad">01–09</span></td><td>Only when the request carries the location object</td><td>All accounts</td></tr></table>'+
+        '<h4>7. Customer Integration Impact</h4><p><span class="ok">No changes required.</span> The field is additive and optional — existing integrations are unaffected.</p>'+
+        '<h4>8. Tentative Delivery Dates</h4><p>Staging 14 Jun 2026 · Production 21 Jun 2026</p>'+
+        '</div></div>'+
+        '<div class="note">Three of these, one per customer-facing change. <b>And there is a mistake in this one</b> — the highlighted range. The ticket said 01–07. Hold that thought.</div>',
+      drawer:[
+        {t:"Why this way", h:'<p>Two deliberate constraints. The <b>9-section skeleton</b> means the model fills a form rather than free-writing, so every page is comparable to the last. And the <b>"or say no changes required"</b> rule matters more than it looks — without a sanctioned way to write "nothing to do here," a model invents integration steps just to avoid leaving a section blank.</p><p style="margin-top:10px">It returns body HTML only, and code sanitises it before anything reaches the wiki. Model output never publishes straight through.</p>'},
+        {t:"Common questions", h:'<p class="qq">"Isn’t a rigid template limiting? That’s the feature. A model filling a known form has far less room to drift than one writing prose, and every page comes out comparable to the last."</p><p class="qq" style="margin-top:11px">"Why spell out ‘no changes required’? Because a model hates leaving a section blank. If you don’t give it a sanctioned way to say nothing changed, it invents integration steps to fill the space."</p>'},
+        {t:"AI concepts", h:'<div class="cq"><div class="c"><span class="cn">Template-constrained generation</span><div class="cd">A fixed skeleton to fill instead of a blank page. Structure is a hallucination control, not just formatting.</div></div><div class="c"><span class="cn">Sanctioned empty answer</span><div class="cd">An approved way to say "nothing to report". Models fabricate hardest when the alternative is a blank section.</div></div><div class="c"><span class="cn">Output sanitisation</span><div class="cd">Clean generated markup at the seam before it reaches a real system.</div></div></div>'}
+      ]
+    },
+    {
+      n:5, key:"Write the email", actor:"llm", title:"Agent 4 · Write the notification email",
+      badge:'<span class="actor"><span class="dot d-llm"></span>LLM agent</span>',
+      runs:"runs once",
+      whyKind:"llm",
+      why:'<b>The model, because the reader is not an engineer.</b> A CSM wants one email organised by <em>what changed</em>, not seven ticket summaries. Reorganising for an audience is judgement — this is the one agent that sees all three changes at once.',
+      midLab:"The prompt", midKind:"llm", midHtml:'<div class="pmt"><div class="pmh"><span class="pd"></span><span class="pd"></span><span class="pd"></span><span class="pt">system prompt</span><span class="vb">verbatim</span></div>'+'<pre class="pmb">You are composing a customer-success notification email\nfor a &lt;PRODUCT&gt; release.\n<span class="cm">Audience: customer-success managers who brief their\ncustomers.</span>\n\n<span class="kw">Requirements:</span>\n<span class="neg">- Write actual content, not just links.</span>\n<span class="neg">- Group changes by TYPE, not by ticket:</span>\n  <span class="st">"New Fields on API Response" / "...Request" /\n  "Behavior Changes"</span>\n- For each field: name, what it does, when it fires,\n  who&#39;s affected.\n- Use &lt;table&gt; with inline styles\n  <span class="cm">(email clients strip external CSS).</span>\n\n<span class="neg">Respond in this EXACT format — no JSON, no markdown:</span>\n<span class="st">SUBJECT: &lt;subject line&gt;\n---\n&lt;complete HTML email body with inline styles&gt;</span></pre></div>'+'<div class="pmf"><b>Four negatives here.</b> Not just links, not by ticket, not JSON, not markdown. The exact-format block is the one that matters — JSON carrying an HTML email breaks on escaping; a delimiter cannot.</div>',
+      inLab:"In — all 3 changes", inHtml:
+        '<div class="chips" style="margin-top:0"><span class="chip">PLAT-2207 new response field</span><span class="chip">PLAT-2211 new enum value</span><span class="chip">PLAT-2214 behaviour change</span></div>'+
+        '<p style="font-size:.87rem;color:var(--ink-soft);margin:14px 0 0;line-height:1.5">Everything fanned out in stage 3 now fans back in. One call, one email.</p>',
+      outLab:"Out — the drafted email", outHtml:
+        '<div class="mail">'+
+        '<div class="mh">'+
+        '<div class="mr"><span class="mk">To</span><span>csm-notify@internal</span></div>'+
+        '<div class="mr"><span class="mk">From</span><span>release-comms@internal</span></div>'+
+        '<div class="msub">Core 22.13.0 — 3 customer-facing changes, production 21 Jun</div>'+
+        '</div>'+
+        '<div class="mb">'+
+        '<h4>New fields on the API response</h4><p><b>accountRegion</b> — returned when the request carries the location object. Values 01–07. Additive, no integration change needed.</p>'+
+        '<h4>New enum values</h4><p><b>statusReason</b> gains one value integrators should handle gracefully.</p>'+
+        '<h4>Behaviour changes</h4><p>The retry window widens. Live in production <span class="bad">20 Jun 2026</span>.</p>'+
+        '</div></div>'+
+        '<div class="note">Grouped by <b>type of change</b>, not by ticket. And this one has its own mistake — the highlighted date. The release page said 21 June.</div>',
+      drawer:[
+        {t:"Why this way", h:'<p>The engineering call worth pointing at: everywhere else the pipeline uses JSON — here it doesn’t. JSON carrying a whole HTML email breaks constantly on quote-escaping. A <code>SUBJECT / --- / body</code> delimiter you split on cannot break. <b>Picking the robust format over the fashionable one</b> is exactly the judgement worth showing.</p>'},
+        {t:"Common questions", h:'<p class="qq">"Why not JSON here, like everywhere else? Because JSON carrying a whole HTML email breaks constantly on quote-escaping. I picked the format for how it fails, not how modern it looks — a delimiter you split on cannot break."</p>'},
+        {t:"AI concepts", h:'<div class="cq"><div class="c"><span class="cn">Synthesis step</span><div class="cd">After fanning out, fan back in — one call that sees every result and makes the single artefact a human wants.</div></div><div class="c"><span class="cn">Robust output contract</span><div class="cd">Choose the parsing format for how it <em>fails</em>, not how modern it looks.</div></div><div class="c"><span class="cn">Audience conditioning</span><div class="cd">Naming the reader in the prompt changes the whole shape of the output.</div></div></div>'}
+      ]
+    },
+    {
+      n:6, key:"Review it", actor:"llm", title:"Agent 5 · Review it — the judge",
+      badge:'<span class="actor"><span class="dot d-llm"></span>LLM agent</span>',
+      runs:"runs before you see anything",
+      whyKind:"llm",
+      why:'<b>The model, because this is a meaning question.</b> "Does this sentence misrepresent what the ticket said?" is not something a rule catches. Rules check the countable; the model checks the meaning. It is a <b>fresh call that wrote none of this</b> — and it can only flag, never edit.',
+      midLab:"The prompt", midKind:"llm", midHtml:'<div class="pmt"><div class="pmh"><span class="pd"></span><span class="pd"></span><span class="pd"></span><span class="pt">system prompt</span><span class="vb">verbatim</span></div>'+'<pre class="pmb">You are a release-comms reviewer. You are given:\n  <span class="st">(a)</span> the SOURCE — the release page and the linked\n      tickets (ground truth),\n  <span class="st">(b)</span> the GENERATED documentation pages, and\n  <span class="st">(c)</span> the GENERATED notification email.\n\n<span class="neg">Check (b) and (c) against (a) ONLY.\nDo not add or rewrite content.\nFLAG issues, do not fix them.</span>\n\n<span class="kw">Check for:</span>\n- Fabrication:  any field, value, date, or change NOT\n  traceable to a ticket\n- Omission:     a customer-facing change in the tickets\n  missing from docs/email\n- Consistency:  docs vs email disagree; version/dates\n  don&#39;t match the release page\n- Completeness: any of the 9 doc sections empty or left\n  as a placeholder\n- Format:       broken tables / HTML; email missing\n  inline styles\n- Tone:         anything not appropriate for an external\n  customer audience\n\n<span class="neg">Respond with valid JSON only:</span>\n<span class="st">{ "readyToPublish": true | false,\n  "issues": [ { "artifact": "doc:&lt;feature&gt; | email",\n                "severity": "high | med | low",\n                "problem": "...",\n                "suggestedFix": "..." } ] }</span></pre></div>'+'<div class="pmf"><b>Three constraints in one block.</b> <em>Against (a) only</em> stops it judging against its own taste, <em>do not add or rewrite</em> and <em>flag, do not fix</em> mean the judge can never introduce a new error.</div>',
+      inLab:"In — source vs. drafts", inHtml:
+        '<ul class="steps" style="margin-top:0">'+
+        '<li><span class="ck">a</span><span><b>The source</b> — the release page and all 7 tickets. The ground truth.</span></li>'+
+        '<li><span class="ck">b</span><span><b>The 3 doc pages</b> just written.</span></li>'+
+        '<li><span class="ck">c</span><span><b>The email</b> just written.</span></li>'+
+        '</ul>'+
+        '<div class="note">Its only instruction: <b>check b and c against a. Flag issues — do not fix them.</b></div>',
+      outLab:"Out — the verdict", outHtml:
+        '<div class="verdict"><span class="vp">Not ready</span><span>2 issues found before a person looked</span></div>'+
+        '<div class="flag"><div class="fh"><span class="fa">doc: accountRegion</span><span class="sev s-high">High</span></div>'+
+        '<div class="fp">Doc states values <b>01–09</b>. PLAT-2207 defines <b>01–07</b>. The range does not trace to any ticket.</div>'+
+        '<div class="fx">→ Use 01–07 per PLAT-2207.</div></div>'+
+        '<div class="flag"><div class="fh"><span class="fa">email</span><span class="sev s-med">Medium</span></div>'+
+        '<div class="fp">Email says production <b>20 Jun</b>; the release page and the docs say <b>21 Jun</b>.</div>'+
+        '<div class="fx">→ Use 21 Jun 2026.</div></div>'+
+        '<div class="note">It caught both mistakes you just watched get made — one invented value, one internal contradiction.</div>',
+      drawer:[
+        {t:"Why this way", h:'<p>The name to say out loud is <b>LLM-as-judge</b>. It works because it is a different call with a different job and different inputs: the writer was aiming at a target, the judge only compares two documents. And because it can <b>only flag, never edit</b>, its worst possible failure is a false alarm you dismiss in a second — it cannot introduce a new error. <b>Adding it strictly reduces risk.</b></p>'},
+        {t:"Common questions", h:'<p class="qq">"Isn’t that the model marking its own homework? No — it never saw the writing instructions. It holds the source and the result and looks for daylight between them, and it can’t publish or edit. It’s a checker, not the author grading itself."</p><p class="qq" style="margin-top:11px">"What if the judge is wrong too? Then the human gate catches it. The judge is a layer, not the guarantee — a missed flag leaves me exactly where I was before I added it."</p><p class="qq" style="margin-top:11px">"How did you know it was any good? I watched what the human still fixed after it passed. That gap was my eval signal, and it told me which checks to tighten."</p>'},
+        {t:"AI concepts", h:'<div class="cq"><div class="c"><span class="cn">LLM-as-judge</span><div class="cd">A separate call whose only job is to criticise output against a source of truth.</div></div><div class="c"><span class="cn">Flag, don’t fix</span><div class="cd">The checker reports, never rewrites — which is what makes it risk-reducing rather than another place errors enter.</div></div><div class="c"><span class="cn">Grounded verification</span><div class="cd">"Check against the source only." Without that clamp it starts judging against its own idea of a good document.</div></div><div class="c"><span class="cn">Defence in depth</span><div class="cd">A layer, not the guarantee. The human gate still sits behind it.</div></div></div>'}
+      ]
+    },
+    {
+      n:7, key:"Approve & ship", actor:"human", title:"You approve, then it ships",
+      badge:'<span class="actor"><span class="dot d-human"></span>Person</span><span class="actor"><span class="dot d-code"></span>Code</span>',
+      runs:"runs once",
+      whyKind:"you",
+      why:'<b>You, then code — no model touches the send.</b> The drafts arrive with the judge’s flags already attached, so review is faster, not slower. Publishing and emailing are ordinary code behind a person’s approval.',
+      midLab:"The code — no model here", midKind:"code", midHtml:'<div class="cde"><div class="ch">what runs on approve</div><ol>'+'<li>Create the wiki pages under the release parent.</li>'+'<li>Send through the <b>MCP email server</b> — credentials live there, never in the app.</li>'+'<li class="key">Check every recipient against an <b>internal-domain allow-list</b>.</li>'+'<li>If the send fails, publishing still succeeds.</li>'+'</ol></div>'+'<div class="note warn"><b>The riskiest action carries the tightest guardrail.</b> It physically cannot email outside the company — and it never runs without a person’s click.</div>',
+      inLab:"What you see", inHtml:
+        '<div class="approve">'+
+        '<div class="ah">2 flags on this draft</div>'+
+        '<div class="fix"><span class="sev s-high">High</span><span>values</span><span class="was">01–09</span><span>→</span><span class="now">01–07</span></div>'+
+        '<div class="fix"><span class="sev s-med">Med</span><span>prod date</span><span class="was">20 Jun</span><span>→</span><span class="now">21 Jun</span></div>'+
+        '<div class="btnrow"><span class="btnfake">Approve &amp; publish</span><span class="btnfake ghost">Keep editing</span></div>'+
+        '</div>'+
+        '<p style="font-size:.87rem;color:var(--ink-soft);margin:13px 0 0;line-height:1.5">Everything is editable in place. Nothing before this point has left the building.</p>',
+      outLab:"Out — shipped", outHtml:
+        '<div class="ship">'+
+        '<div class="sr"><span class="ck">✓</span><span>3 pages published</span><span class="sub">under REL-4821</span></div>'+
+        '<div class="sr"><span class="ck">✓</span><span>1 email sent</span><span class="sub">csm-notify@internal</span></div>'+
+        '<div class="sr"><span class="ck">✓</span><span>Both flags resolved by you</span><span class="sub">before send</span></div>'+
+        '</div>'+
+        '<div class="note good"><b>The tightest guardrail sits on the riskiest action.</b> Recipients are checked against an internal-domain allow-list — it physically cannot email outside the company. Credentials live in the MCP email server, never in the app.</div>'+
+        '<div class="note">And if the email fails, the pages still publish. <b>A mail outage never costs you the documentation.</b></div>',
+      drawer:[
+        {t:"Why this way", h:'<p>Near a production release, <b>predictability beats autonomy</b>. The AI drafts and checks; a person is accountable for what customers see. Separating publish from send means one failing step doesn’t fail the run.</p>'},
+        {t:"Common questions", h:'<p class="qq">"Why not let it send automatically once the judge says it’s clean? Because the judge is a layer, not a guarantee, and this is customer-facing comms next to a production release. The cost of a human minute is much lower than the cost of a wrong email to every CSM."</p>'},
+        {t:"AI concepts", h:'<div class="cq"><div class="c"><span class="cn">Human-in-the-loop gate</span><div class="cd">One reviewable checkpoint between generation and any irreversible action.</div></div><div class="c"><span class="cn">Tool use via MCP</span><div class="cd">Agents act through a standard tool interface; secrets sit in the tool server, not the app.</div></div><div class="c"><span class="cn">Allow-list guardrail</span><div class="cd">Constrain the <em>action</em>, not just the text — the blast radius is bounded by code.</div></div><div class="c"><span class="cn">Graceful degradation</span><div class="cd">Partial success beats an all-or-nothing pipeline.</div></div></div>'}
+      ]
+    }];
+
+    var TOK={human:{c:"var(--amber)",s:"var(--amber-soft)",i:"var(--amber)"},code:{c:"var(--green)",s:"var(--green-soft)",i:"var(--green)"},llm:{c:"var(--indigo)",s:"var(--indigo-soft)",i:"var(--indigo-deep)"}};
+    var cur=0, openTab=-1;
+    var strip=document.getElementById("strip");
+    var panel=document.getElementById("panel");
+
+    S.forEach(function(s,i){
+      var b=document.createElement("button");
+      b.type="button"; b.className="a-"+s.actor;
+      b.setAttribute("aria-label","Stage "+s.n+": "+s.key);
+      b.innerHTML='<span class="nd"><span class="bul">'+s.n+'</span><span class="bar"></span></span><span class="lab">'+s.key+'</span>';
+      b.addEventListener("click",function(){ cur=i; openTab=-1; render(); });
+      strip.appendChild(b);
+    });
+
+    function render(){
+      cur=Math.max(0,Math.min(S.length-1,cur));
+      var s=S[cur];
+      Array.prototype.forEach.call(strip.children,function(b,i){
+        b.classList.toggle("on",i===cur);
+        b.classList.toggle("done",i<cur);
+      });
+      var drawTabs="", drawBody="";
+      s.drawer.forEach(function(d,i){
+        drawTabs+='<button type="button" data-i="'+i+'" aria-expanded="'+(openTab===i?"true":"false")+'">'+d.t+'</button>';
+      });
+      if(openTab>-1 && s.drawer[openTab]) drawBody='<div class="dbody">'+s.drawer[openTab].h+'</div>';
+      panel.style.setProperty("--stage",TOK[s.actor].c);
+      panel.style.setProperty("--stage-soft",TOK[s.actor].s);
+      panel.style.setProperty("--stage-ink",TOK[s.actor].i);
+      panel.classList.remove("enter"); void panel.offsetWidth; panel.classList.add("enter");
+      panel.innerHTML=
+        '<div class="phead"><span class="pn">'+s.n+'</span>'+
+          '<h3>'+s.title+'</h3>'+s.badge+'<span class="runs">'+s.runs+'</span></div>'+
+        '<div class="pwhy"><span class="k '+s.whyKind+'">'+(s.whyKind==="llm"?"Why a model":s.whyKind==="code"?"Why code":"Why you")+'</span><span>'+s.why+'</span></div>'+
+        '<div class="pgrid">'+
+          '<div class="side"><div class="slab in">'+s.inLab+'</div>'+s.inHtml+'</div>'+
+          '<div class="side mid"><div class="slab mi">'+s.midLab+'</div>'+s.midHtml+'</div>'+
+          '<div class="side"><div class="slab '+(s.outCls||"out")+'">'+s.outLab+'</div>'+s.outHtml+'</div>'+
+        '</div>'+
+        '<div class="drawer"><div class="dtabs">'+drawTabs+'</div>'+drawBody+'</div>';
+      panel.querySelectorAll(".dtabs button").forEach(function(b){
+        b.addEventListener("click",function(){
+          var i=parseInt(b.getAttribute("data-i"),10);
+          openTab=(openTab===i)?-1:i; render();
+        });
+      });
+      var pb=panel.querySelector("pre.pmb");
+      if(pb && pb.scrollHeight>pb.clientHeight+4){
+        var pc=pb.closest(".pmt"); pc.classList.add("more");
+        var sh=document.createElement("div"); sh.className="scrollhint"; sh.textContent="scroll for the rest"; pc.appendChild(sh);
+        pb.addEventListener("scroll",function(){ pc.classList.toggle("more", pb.scrollTop+pb.clientHeight < pb.scrollHeight-6); },{passive:true});
+      }
+      document.getElementById("prev").disabled=(cur===0);
+      document.getElementById("next").disabled=(cur===S.length-1);
+      document.getElementById("cnt").textContent="Stage "+s.n+" of "+S.length;
+    }
+    document.getElementById("prev").addEventListener("click",function(){cur--;openTab=-1;render();});
+    document.getElementById("next").addEventListener("click",function(){cur++;openTab=-1;render();});
+    document.addEventListener("keydown",function(e){
+      var fp=document.getElementById("flow"); if(!fp||fp.hidden) return;
+      var t=e.target||{}; if(t.tagName==="INPUT"||t.tagName==="TEXTAREA") return;
+      if(e.key==="ArrowLeft"){cur--;openTab=-1;render();}
+      else if(e.key==="ArrowRight"){cur++;openTab=-1;render();}
+    });
+    render();
+    syncFromHash();
+  })();
+  </script>
+
+</div>
+
+</body></html>

@@ -1,0 +1,423 @@
+<!doctype html><html lang="en"><head><meta charset=utf8><meta name=viewport content="width=device-width,initial-scale=1"><style>:root{color-scheme:light}body{margin:0;padding:0;font:14px -apple-system,BlinkMacSystemFont,sans-serif;background:#faf9f5;color:#141413}img{max-width:100%}</style></head><body><!--sn-backbar--><div style="all:initial;display:block;background:#1B2B4B;padding:11px 20px"><a href="/work/two-pipelines/" style="all:initial;cursor:pointer;color:#FBFCFD;font:600 15px/1.3 'Gill Sans','Segoe UI',sans-serif;text-decoration:underline;text-underline-offset:3px">Back to the summary on Siddarth Nyati's portfolio</a></div><!--/sn-backbar-->
+<title>Two Pipelines, One Method</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Familjen+Grotesk:wght@500;600;700&family=Public+Sans:wght@400;500;600&family=IBM+Plex+Mono:wght@400;500&display=swap">
+
+<style>
+  :root{
+    --ink:#101418; --ink-soft:#3A424B; --muted:#69727C;
+    --ground:#F2F3F5; --surface:#FFFFFF; --surface-2:#F7F8FA; --surface-3:#EAECEF;
+    --line:#D5D9DE; --line-soft:#E6E9EC;
+    --violet:#3E3A8C; --violet-ink:#2E2B69; --violet-wash:#E8E7F4;
+    --signal:#B45309; --signal-wash:#FBEEE0;
+    --shadow:0 1px 2px rgba(16,20,24,.05),0 12px 30px -18px rgba(16,20,24,.25);
+    --display:"Familjen Grotesk","Helvetica Neue",Arial,sans-serif;
+    --body:"Public Sans",-apple-system,"Segoe UI",sans-serif;
+    --mono:"IBM Plex Mono",ui-monospace,Menlo,monospace;
+  }
+  @media (prefers-color-scheme:dark){
+    :root:not([data-theme="light"]){
+      --ink:#EAECEF; --ink-soft:#B6BCC3; --muted:#89929B;
+      --ground:#0E1114; --surface:#161A1E; --surface-2:#1C2126; --surface-3:#232930;
+      --line:#2C333A; --line-soft:#232930;
+      --violet:#9A94E8; --violet-ink:#B6B1F0; --violet-wash:#1B1A33;
+      --signal:#E8A055; --signal-wash:#2C2013;
+      --shadow:0 1px 2px rgba(0,0,0,.4),0 12px 30px -18px rgba(0,0,0,.8);
+    }
+  }
+  :root[data-theme="dark"]{
+    --ink:#EAECEF; --ink-soft:#B6BCC3; --muted:#89929B;
+    --ground:#0E1114; --surface:#161A1E; --surface-2:#1C2126; --surface-3:#232930;
+    --line:#2C333A; --line-soft:#232930;
+    --violet:#9A94E8; --violet-ink:#B6B1F0; --violet-wash:#1B1A33;
+    --signal:#E8A055; --signal-wash:#2C2013;
+    --shadow:0 1px 2px rgba(0,0,0,.4),0 12px 30px -18px rgba(0,0,0,.8);
+  }
+
+  *{box-sizing:border-box;}
+  body{margin:0;background:var(--ground);color:var(--ink);font-family:var(--body);
+       font-size:17px;line-height:1.6;-webkit-font-smoothing:antialiased;}
+  .wrap{max-width:64rem;margin:0 auto;padding:0 1.5rem 5rem;}
+
+  header.top{padding:3rem 0 1.5rem;}
+  .kick{font-family:var(--mono);font-size:.72rem;letter-spacing:.14em;text-transform:uppercase;
+        color:var(--violet);margin:0 0 .9rem;}
+  h1{font-family:var(--display);font-weight:700;font-size:clamp(2.2rem,5.5vw,3.4rem);
+     line-height:1.02;letter-spacing:-.028em;margin:0 0 1rem;text-wrap:balance;}
+  .thesis{font-size:1.18rem;color:var(--ink-soft);max-width:40em;margin:0;}
+  .thesis b{color:var(--ink);font-weight:600;}
+
+  nav.jump{position:sticky;top:0;z-index:20;background:color-mix(in srgb,var(--ground) 92%,transparent);
+           backdrop-filter:blur(10px);border-top:1px solid var(--line);border-bottom:1px solid var(--line);
+           margin-top:2rem;}
+  .jump-in{max-width:64rem;margin:0 auto;padding:.6rem 1.5rem;display:flex;gap:.35rem;
+           align-items:center;overflow-x:auto;scrollbar-width:none;}
+  .jump-in::-webkit-scrollbar{display:none;}
+  .jump-in .lbl{flex:0 0 auto;font-family:var(--mono);font-size:.66rem;letter-spacing:.1em;
+                text-transform:uppercase;color:var(--muted);margin-right:.5rem;}
+  .jump-in a{flex:0 0 auto;font-family:var(--mono);font-size:.75rem;color:var(--ink-soft);
+             text-decoration:none;padding:.3rem .55rem;border:1px solid var(--line);border-radius:4px;
+             background:var(--surface);}
+  .jump-in a:hover,.jump-in a:focus-visible{color:var(--violet);border-color:var(--violet);outline:none;}
+
+  section{padding-top:3.5rem;scroll-margin-top:3.5rem;}
+  .act{font-family:var(--mono);font-size:.72rem;letter-spacing:.12em;text-transform:uppercase;
+       color:var(--violet);margin:0 0 .5rem;}
+  h2{font-family:var(--display);font-weight:600;font-size:2rem;letter-spacing:-.022em;
+     line-height:1.14;margin:0 0 .8rem;text-wrap:balance;}
+  h3{font-family:var(--display);font-weight:600;font-size:1.2rem;letter-spacing:-.015em;
+     margin:2.4rem 0 .6rem;}
+  p{margin:0 0 1rem;max-width:40em;}
+  .lead{font-size:1.06rem;color:var(--ink-soft);}
+  ul{max-width:40em;padding-left:1.15rem;margin:0 0 1rem;}
+  li{margin-bottom:.4rem;}
+  li::marker{color:var(--violet);}
+  strong{font-weight:600;}
+  code{font-family:var(--mono);font-size:.85em;background:var(--surface-3);
+       border:1px solid var(--line-soft);padding:.06em .32em;border-radius:3px;}
+
+  figure{margin:2rem 0;background:var(--surface);border:1px solid var(--line);border-radius:8px;
+         padding:1.6rem 1.4rem 1.1rem;box-shadow:var(--shadow);}
+  figure svg{display:block;width:100%;max-width:100%;height:auto;}
+  figcaption{margin-top:1rem;font-size:.92rem;color:var(--ink-soft);max-width:44em;
+             padding-top:.9rem;border-top:1px solid var(--line-soft);}
+  figcaption b{color:var(--ink);}
+
+  .table-scroll{overflow-x:auto;margin:1.6rem 0;}
+  table{width:100%;border-collapse:collapse;font-size:.94rem;min-width:42rem;}
+  th{font-family:var(--mono);font-size:.66rem;font-weight:500;letter-spacing:.1em;
+     text-transform:uppercase;color:var(--muted);text-align:left;padding:0 1rem .55rem 0;
+     border-bottom:1.5px solid var(--ink);vertical-align:bottom;}
+  td{padding:.8rem 1rem .8rem 0;border-bottom:1px solid var(--line-soft);vertical-align:top;
+     color:var(--ink-soft);}
+  td:first-child{color:var(--ink);font-weight:600;}
+  tbody tr:last-child td{border-bottom:1px solid var(--line);}
+  .yes{color:var(--violet);font-weight:600;}
+  .no{color:var(--signal);font-weight:600;}
+  .num{font-family:var(--mono);font-variant-numeric:tabular-nums;font-size:.94em;}
+
+  .stats{display:grid;grid-template-columns:repeat(auto-fit,minmax(11rem,1fr));gap:.9rem;margin:1.8rem 0;}
+  .stat{background:var(--surface);border:1px solid var(--line);border-radius:7px;padding:1rem 1.1rem;}
+  .stat b{display:block;font-family:var(--display);font-size:1.5rem;font-weight:700;
+          letter-spacing:-.02em;color:var(--ink);line-height:1.1;margin-bottom:.25rem;}
+  .stat span{font-size:.83rem;color:var(--muted);display:block;line-height:1.4;}
+
+  .call{border-left:3px solid var(--violet);background:var(--violet-wash);padding:1.1rem 1.3rem;
+        border-radius:0 6px 6px 0;margin:1.8rem 0;}
+  .call.sig{border-left-color:var(--signal);background:var(--signal-wash);}
+  .call h4{font-family:var(--body);font-size:.74rem;font-weight:700;letter-spacing:.09em;
+           text-transform:uppercase;color:var(--violet);margin:0 0 .5rem;}
+  .call.sig h4{color:var(--signal);}
+  .call p{margin:0 0 .6rem;max-width:42em;}
+  .call p:last-child{margin-bottom:0;}
+
+  footer{border-top:1px solid var(--line);margin-top:4rem;padding-top:1.4rem;
+         font-family:var(--mono);font-size:.72rem;color:var(--muted);max-width:46em;}
+
+  @media (prefers-reduced-motion:reduce){*{animation:none!important;transition:none!important;}}
+</style>
+
+<header class="top">
+  <div class="wrap" style="padding-bottom:0">
+    <p class="kick">Siddarth Nyati · the mechanism behind the five gates</p>
+    <h1>Two Pipelines,<br>One Method</h1>
+    <p class="thesis">One I built and shipped inside an enterprise, on a platform with real controls. One I built alone, where nobody else was going to catch my mistakes — so I had to build the quality system myself. <b>Neither is complete on its own. The method is what carries across.</b></p>
+  </div>
+</header>
+
+<nav class="jump">
+  <div class="jump-in">
+    <span class="lbl">jump</span>
+    <a href="#pipeline">the pipeline</a>
+    <a href="#gate">human review</a>
+    <a href="#evals">evals</a>
+    <a href="#cost">cost</a>
+    <a href="#guardrails">guardrails</a>
+    <a href="#honest">what's missing</a>
+  </div>
+</nav>
+
+<div class="wrap">
+
+<section id="pipeline">
+  <p class="act">Act one · the enterprise system</p>
+  <h2>A release-communications pipeline, built and deployed</h2>
+  <p class="lead">A release page goes in. Customer-facing documentation and a notification to the client-facing teams come out. Four narrow model steps, one human gate, and a single scoped tool with permission to send anything.</p>
+
+  <figure>
+    <svg viewBox="0 0 1040 300" role="img" aria-label="A six-stage release pipeline: intake, parse, classify each ticket, draft documents and email, a human review gate, then publish through one scoped tool. A dashed loop shows the regression set that was never built from the human's edits.">
+      <defs>
+        <marker id="ar" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse">
+          <path d="M 0 0 L 10 5 L 0 10 z" fill="currentColor"/>
+        </marker>
+        <marker id="arS" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse">
+          <path d="M 0 0 L 10 5 L 0 10 z" fill="var(--signal)"/>
+        </marker>
+      </defs>
+
+      <g fill="none" stroke="currentColor" stroke-width="1.4">
+        <rect x="20"  y="60" width="140" height="72" rx="6"/>
+        <rect x="190" y="60" width="140" height="72" rx="6"/>
+        <rect x="360" y="60" width="140" height="72" rx="6"/>
+        <rect x="530" y="60" width="140" height="72" rx="6"/>
+        <rect x="870" y="60" width="140" height="72" rx="6"/>
+      </g>
+      <rect x="700" y="52" width="140" height="88" rx="6" fill="none" stroke="var(--signal)" stroke-width="2.4"/>
+
+      <g fill="currentColor" font-family="Public Sans, sans-serif" text-anchor="middle">
+        <text x="90"  y="90"  font-size="13.5" font-weight="600">Intake</text>
+        <text x="90"  y="108" font-size="10.5" opacity=".72">release page,</text>
+        <text x="90"  y="121" font-size="10.5" opacity=".72">fetched by ID</text>
+
+        <text x="260" y="90"  font-size="13.5" font-weight="600">Parse</text>
+        <text x="260" y="108" font-size="10.5" opacity=".72">regex for IDs,</text>
+        <text x="260" y="121" font-size="10.5" opacity=".72">model for the rest</text>
+
+        <text x="430" y="90"  font-size="13.5" font-weight="600">Classify</text>
+        <text x="430" y="108" font-size="10.5" opacity=".72">customer-facing</text>
+        <text x="430" y="121" font-size="10.5" opacity=".72">or internal?</text>
+
+        <text x="600" y="90"  font-size="13.5" font-weight="600">Draft</text>
+        <text x="600" y="108" font-size="10.5" opacity=".72">docs + notification,</text>
+        <text x="600" y="121" font-size="10.5" opacity=".72">own output contract</text>
+
+        <text x="940" y="90"  font-size="13.5" font-weight="600">Publish</text>
+        <text x="940" y="108" font-size="10.5" opacity=".72">one scoped tool,</text>
+        <text x="940" y="121" font-size="10.5" opacity=".72">the only send path</text>
+      </g>
+      <g fill="var(--signal)" font-family="Public Sans, sans-serif" text-anchor="middle">
+        <text x="770" y="86"  font-size="13.5" font-weight="700">Human gate</text>
+        <text x="770" y="104" font-size="10.5">edit before</text>
+        <text x="770" y="117" font-size="10.5">anything ships</text>
+      </g>
+
+      <g stroke="currentColor" stroke-width="1.4" marker-end="url(#ar)" fill="none">
+        <line x1="160" y1="96" x2="184" y2="96"/>
+        <line x1="330" y1="96" x2="354" y2="96"/>
+        <line x1="500" y1="96" x2="524" y2="96"/>
+        <line x1="670" y1="96" x2="694" y2="96"/>
+        <line x1="840" y1="96" x2="864" y2="96"/>
+      </g>
+
+      <g fill="currentColor" font-family="IBM Plex Mono, monospace" font-size="10" text-anchor="middle" opacity=".75">
+        <text x="430" y="44">× N tickets, in parallel</text>
+        <text x="600" y="44">× M documents</text>
+      </g>
+      <g stroke="currentColor" stroke-width="1" opacity=".35" fill="none">
+        <line x1="360" y1="52" x2="500" y2="52"/>
+        <line x1="530" y1="52" x2="670" y2="52"/>
+      </g>
+
+      <rect x="330" y="212" width="300" height="54" rx="6" fill="none" stroke="var(--signal)"
+            stroke-width="1.6" stroke-dasharray="6 5" opacity=".85"/>
+      <g fill="var(--signal)" font-family="Public Sans, sans-serif" text-anchor="middle">
+        <text x="480" y="235" font-size="12.5" font-weight="600">Regression set</text>
+        <text x="480" y="252" font-size="10.5" opacity=".9">never built</text>
+      </g>
+
+      <path d="M 770 140 L 770 190 L 640 190 L 640 226" stroke="var(--signal)" stroke-width="1.6"
+            stroke-dasharray="6 5" fill="none" marker-end="url(#arS)" opacity=".85"/>
+      <path d="M 330 239 L 250 239 L 250 140" stroke="var(--signal)" stroke-width="1.6"
+            stroke-dasharray="6 5" fill="none" marker-end="url(#arS)" opacity=".85"/>
+
+      <g fill="var(--signal)" font-family="IBM Plex Mono, monospace" font-size="9.5" opacity=".9">
+        <text x="782" y="182">every edit is a labelled failure</text>
+        <text x="150" y="182" text-anchor="start">gate every prompt change</text>
+      </g>
+    </svg>
+    <figcaption><b>The solid path shipped. The dashed loop is the one I didn't close.</b> Four narrow steps rather than one, because they produce different output shapes, they fan out across tickets and documents in parallel, and — the part that matters most — the seams between them are the only places a human gate can go. Every edit a reviewer made before publishing was a labelled production failure. I wasn't capturing them.</figcaption>
+  </figure>
+
+  <h3>Why four steps instead of one call</h3>
+  <ul>
+    <li><strong>Focus.</strong> A prompt with one job hallucinates less than a prompt carrying four.</li>
+    <li><strong>Output shape.</strong> A parse, a label, a document and a formatted message can't share one schema. The notification uses a delimiter format rather than JSON, because escaping HTML inside JSON is brittle — each step gets the contract that fits its payload.</li>
+    <li><strong>Fan-out.</strong> Classification runs per ticket and drafting per document, in parallel. A monolith can't.</li>
+    <li><strong>Localised failure.</strong> When the output is wrong you can see which step was wrong.</li>
+    <li><strong>The seam.</strong> A single call has nowhere to put a human.</li>
+  </ul>
+
+  <div class="call">
+    <h4>The design decision I'd defend hardest</h4>
+    <p>It is deliberately <strong>not autonomous</strong>. My code decides the sequence; the model reasons inside each step and never chooses what runs next. This runs close to a production release, so predictability was worth more than flexibility. Autonomy earns its place where the path can't be enumerated — support triage, a coding agent. Publishing a release note isn't that shape.</p>
+  </div>
+</section>
+
+<section id="gate">
+  <p class="act">The seam</p>
+  <h2>The human gate, and the metric hiding inside it</h2>
+  <p class="lead">A gate is not an eval, and conflating the two is how teams feel safe while flying blind.</p>
+  <p><strong>A gate catches errors one at a time on the way out. An eval tells you whether version N+1 is better or worse than version N.</strong> I had the first and not the second, which meant that when I changed a prompt, I had no way of knowing whether I'd quietly broken something that used to work.</p>
+  <p>What I'd build first, and it costs almost nothing: capture the diff between what the model produced and what the human published. That gives two things at once — a regression set that builds itself from real production inputs, and <strong>edit rate</strong> as an online metric that falls as the system improves. Edit rate is also the answer to "when do you remove the human": by class of output, once it has been low and stable long enough to trust, and never all at once.</p>
+</section>
+
+<section id="evals">
+  <p class="act">Act two · the system where I owned the whole quality problem</p>
+  <h2>Four kinds of test, matched to four kinds of mistake</h2>
+  <p class="lead">On my own editorial pipeline there was no reviewer but me, so the checking had to be built rather than staffed. The organising rule I wrote for it:</p>
+
+  <div class="call">
+    <h4>The principle</h4>
+    <p style="font-size:1.12rem"><strong>Each layer is evaluated by the cheapest method that can catch its failure mode.</strong></p>
+  </div>
+
+  <div class="table-scroll">
+    <table>
+      <thead><tr><th>When the contract is…</th><th>Test with</th><th>In practice</th><th>Cost</th></tr></thead>
+      <tbody>
+        <tr><td>Objective</td><td>Deterministic rules</td><td>Nine encoded rules that run as a script and exit non-zero on failure</td><td>Free, seconds, no network</td></tr>
+        <tr><td>Labelled</td><td>Golden-set scoring</td><td>A classifier scored against a hand-labelled catalogue; the gate is a hard threshold</td><td><span class="num">~$0.01</span> smoke, <span class="num">~$0.10</span> full</td></tr>
+        <tr><td>Editorial</td><td>Judge against a written rubric</td><td>Six boolean checks and a three-way verdict the orchestrator branches on</td><td><span class="num">~$0.02</span> a run</td></tr>
+        <tr><td>Personal taste</td><td>Human gate + user signal</td><td>A person picks; downstream feedback demotes bad output</td><td>Minutes, and it doesn't scale</td></tr>
+      </tbody>
+    </table>
+  </div>
+
+  <div class="stats">
+    <div class="stat"><b>48/48</b><span>golden-set baseline — and a saturated set has stopped discriminating, so the next move is harder cases</span></div>
+    <div class="stat"><b>≥95%</b><span>gate on the accuracy that changes the product; the rest is reported, not gated</span></div>
+    <div class="stat"><b>~90%</b><span>of drafts that come back <code>revise</code> pass on the second attempt</span></div>
+    <div class="stat"><b>p50 5.4s</b><span>latency reported next to accuracy and cost, because an eval that ignores latency ships the wrong model</span></div>
+  </div>
+
+  <h3>Where to put the accuracy target</h3>
+  <p>"How accurate is it" is the wrong question — accurate at <em>what</em>, and what does an error there cost? I made the same call twice in unrelated domains. On a document-processing platform in a regulated healthcare setting, the confidence threshold routed low-confidence extractions to a human, biased toward precision because auto-filing a wrong authorisation is worse than making a person look at more documents. On the editorial pipeline, one classification dimension is a hard gate because getting it wrong breaks the output, and a second is reported only because getting it wrong changes nothing.</p>
+  <p>One instance is an anecdote. Two is a way of working.</p>
+
+  <h3>Judging what a rule can't check</h3>
+  <p>Some output has no single right answer, and the honest response isn't to give up on measuring it — it's to layer cheap checks ahead of expensive judgement so the costly step only sees what survived.</p>
+
+  <figure>
+    <svg viewBox="0 0 1040 320" role="img" aria-label="Five stacked filters of decreasing width: prompt-side bans at zero cost, structured generation at zero cost, a model judge at about a tenth of a cent per item, a human pick costing minutes, and user correction after the fact. Cost per item rises down the stack while the volume reaching each layer falls.">
+      <defs>
+        <marker id="arD" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse">
+          <path d="M 0 0 L 10 5 L 0 10 z" fill="currentColor"/>
+        </marker>
+      </defs>
+
+      <g stroke="currentColor" stroke-width="1.4" fill="none">
+        <rect x="120" y="24"  width="800" height="44" rx="5"/>
+        <rect x="180" y="80"  width="680" height="44" rx="5"/>
+      </g>
+      <rect x="250" y="136" width="540" height="44" rx="5" fill="none" stroke="var(--violet)" stroke-width="2"/>
+      <rect x="330" y="192" width="380" height="44" rx="5" fill="none" stroke="var(--signal)" stroke-width="2"/>
+      <g stroke="currentColor" stroke-width="1.4" fill="none">
+        <rect x="410" y="248" width="220" height="44" rx="5"/>
+      </g>
+
+      <g font-family="Public Sans, sans-serif" text-anchor="middle">
+        <text x="520" y="52"  font-size="13" font-weight="600" fill="currentColor">Prompt-side bans — catch it while it's still text</text>
+        <text x="520" y="108" font-size="13" font-weight="600" fill="currentColor">Structured generation — constrain what can be produced</text>
+        <text x="520" y="164" font-size="13" font-weight="600" fill="var(--violet)">Model judge against a written rubric</text>
+        <text x="520" y="220" font-size="13" font-weight="600" fill="var(--signal)">Human pick — nothing auto-publishes</text>
+        <text x="520" y="276" font-size="13" font-weight="600" fill="currentColor">User correction, after the fact</text>
+      </g>
+
+      <g font-family="IBM Plex Mono, monospace" font-size="10.5" fill="currentColor" opacity=".8" text-anchor="start">
+        <text x="936" y="52">$0</text>
+        <text x="876" y="108">$0</text>
+        <text x="806" y="164">~$0.001 each</text>
+        <text x="726" y="220">minutes</text>
+        <text x="646" y="276">free, but late</text>
+      </g>
+
+      <line x1="60" y1="30" x2="60" y2="286" stroke="currentColor" stroke-width="1.4"
+            marker-end="url(#arD)" opacity=".7"/>
+      <g font-family="IBM Plex Mono, monospace" font-size="10" fill="currentColor" opacity=".75">
+        <text x="52" y="150" text-anchor="middle" transform="rotate(-90 52 150)">cost per item rises</text>
+      </g>
+    </svg>
+    <figcaption><b>Cheapest first, so the expensive judgement only runs on what survives.</b> The narrowing is the point: a banned composition caught as text costs nothing, the same thing caught after generation costs a real image, and the same thing caught by a person costs minutes. This is simultaneously a quality argument and a cost argument, which is why it belongs to the product owner rather than the engineer.</figcaption>
+  </figure>
+
+  <div class="call">
+    <h4>Expect the pushback, and take it seriously</h4>
+    <p>"Isn't a model judge just marking its own homework?" It would be if it were scoring prose on general quality. It's checking one output against an external document — the written standard is the ground truth, not the model. I keep it boolean rather than scored, I grade named dimensions separately rather than asking for one holistic score, I deliberately refused an "uncertain" verdict because models use it to avoid committing, and there's a human gate downstream that continuously samples whether the judge is being too lenient.</p>
+    <p>Judge bias is real and documented — position, verbosity, self-preference. Most of that literature concerns comparing two candidate outputs to each other. Comparing one output to a fixed rubric is a different and smaller failure surface.</p>
+  </div>
+</section>
+
+<section id="cost">
+  <p class="act">Because a platform's constraint is capacity, not ideas</p>
+  <h2>Cost as a product decision</h2>
+  <p class="lead">Normal software costs the same whether one person uses it or a million. These don't. Someone has to own the cost per unit of value, and that someone is the product owner.</p>
+
+  <div class="stats">
+    <div class="stat"><b>3 axes</b><span>separate caps for text, retrieval and image generation — one shared budget lets any axis silently drain the others</span></div>
+    <div class="stat"><b>44%</b><span>saved by routing the expensive model only to the surface people actually look at</span></div>
+    <div class="stat"><b>25%</b><span>saved by not re-buying information already owned — an archive checked before any paid retrieval</span></div>
+    <div class="stat"><b>15% → 0</b><span>timeout rate on long calls, fixed by streaming: same tokens billed, same wall-clock, one line of code</span></div>
+  </div>
+
+  <h3>Three things this taught me that transfer directly</h3>
+  <ul>
+    <li><strong>Caps are policy, not just safety.</strong> Raising a cap until it stops firing removes the signal that you're spending more than designed. Pair the cap with a salvage path — finish and flag rather than losing the run — and you keep the signal and the work.</li>
+    <li><strong>Report on the axis that can move.</strong> When one number spikes 30% you should know immediately which stage to open, not spend a day narrowing it down.</li>
+    <li><strong>A caching or routing standard belongs at the platform layer, not in each application.</strong> Set it once behind a gateway and every team inherits it without changing their code. That's the difference between optimising an app and being a platform.</li>
+  </ul>
+</section>
+
+<section id="guardrails">
+  <p class="act">Containment</p>
+  <h2>Guardrails, and the risk I'd name before being asked</h2>
+  <p class="lead">You can ask a model nicely not to do something, or you can arrange things so it can't. Only the second one is a control.</p>
+
+  <div class="table-scroll">
+    <table>
+      <thead><tr><th>Layer</th><th>What it does</th><th>In the pipeline</th></tr></thead>
+      <tbody>
+        <tr><td>Output</td><td>Validate before anything is shown or sent</td><td>Sanitisation before publish; schema validation on every structured step</td></tr>
+        <tr><td>Tool scope</td><td>Limit what the system can do at all</td><td>A single scoped tool is the only send path — the model cannot notify arbitrarily</td></tr>
+        <tr><td>Deployment</td><td>Inherit the firm's controls rather than reinvent them</td><td>Hosted on the internal self-service platform, behind enterprise MFA</td></tr>
+        <tr><td>Input</td><td>Treat ingested content as data, never instruction</td><td class="no">Not built. See below.</td></tr>
+      </tbody>
+    </table>
+  </div>
+
+  <div class="call sig">
+    <h4>The gap I'd close first</h4>
+    <p><strong>Indirect prompt injection.</strong> These steps read pages and ticket descriptions written by other people, then generate customer-facing documentation and send a notification. Anyone who can write a ticket description can put text in front of a model that also has a send capability. There was no input guardrail against that.</p>
+    <p>Two things limited the blast radius by architecture rather than by intent: the human gate on the path to anything customer-facing, and the fact that the only send path is one narrowly scoped tool. Those are two of the four real mitigations. The others — structurally separating fetched content from instructions, and filtering output for exfiltration — are what I'd add, alongside logging attempts so it becomes a detection signal rather than a silently blocked request.</p>
+    <p>No prompt-level defence is complete. That's precisely why the containment has to be architectural.</p>
+  </div>
+</section>
+
+<section id="honest">
+  <p class="act">Act three</p>
+  <h2>Neither one is complete, and that's the argument</h2>
+  <p class="lead">No single role hands you the whole surface. The enterprise system gave me deployment, scoped tools, real controls and a human gate. It didn't give me evals or cost engineering — so I built something where I'd have to own those myself.</p>
+
+  <div class="table-scroll">
+    <table>
+      <thead><tr><th></th><th>Release pipeline <span style="font-weight:400;color:var(--muted)">· enterprise</span></th><th>Editorial pipeline <span style="font-weight:400;color:var(--muted)">· built alone</span></th></tr></thead>
+      <tbody>
+        <tr><td>Multi-step decomposition, output contracts</td><td class="yes">yes</td><td class="yes">yes</td></tr>
+        <tr><td>Human review gate before anything ships</td><td class="yes">yes</td><td class="yes">two of them</td></tr>
+        <tr><td>Deployed on an enterprise platform, behind MFA</td><td class="yes">yes</td><td class="no">no</td></tr>
+        <tr><td>Tool scoping as a security control</td><td class="yes">yes</td><td class="no">not needed</td></tr>
+        <tr><td>Evals with a verdict the orchestrator branches on</td><td class="no">no</td><td class="yes">yes</td></tr>
+        <tr><td>Golden set gating every change</td><td class="no">no</td><td class="yes">yes</td></tr>
+        <tr><td>Cost caps and per-stage cost reporting</td><td class="no">no</td><td class="yes">yes</td></tr>
+        <tr><td>Model routing by consequence</td><td class="no">no</td><td class="yes">yes</td></tr>
+        <tr><td>Retry, backoff, fallback, salvage</td><td class="no">no</td><td class="yes">yes</td></tr>
+        <tr><td>Per-step traceability and resumable runs</td><td class="no">no</td><td class="yes">yes</td></tr>
+        <tr><td>Grounding verified at a gate</td><td class="no">no</td><td class="yes">yes</td></tr>
+        <tr><td>Input guardrail against injection</td><td class="no">no</td><td class="no">no</td></tr>
+      </tbody>
+    </table>
+  </div>
+
+  <div class="call">
+    <h4>Why this matters for a central platform</h4>
+    <p>The column on the left is what a team gets when it builds inside an organisation that already has controls. The column on the right is what a team has to build for itself when nobody else will catch its mistakes. <strong>A central AI platform's job is to make the right-hand column something spoke teams inherit rather than rebuild</strong> — an eval harness, a cost standard, a trace format, a routing rule — so that shipping responsibly is the cheap path rather than the disciplined one.</p>
+    <p>That's the same argument as the five gates, one level down: gates decide what should be built, this decides what every build gets for free.</p>
+  </div>
+</section>
+
+<footer>
+  <p>Systems described at mechanism level. Product names, internal hostnames, ticket prefixes and team names are abstracted throughout; nothing here reproduces internal architecture, specifications or figures. The editorial pipeline is a personal project — it runs and publishes weekly; the consumer application it feeds is pre-MVP.</p>
+</footer>
+</div>
+
+</body></html>
